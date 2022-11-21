@@ -5,6 +5,7 @@
 ### Since 21/11
 - Sofia d'Atri
 - Michele Dalle Rive
+- Nicolo' Tafta
 
 ### Since 22/11
 - Jeferson Morales Mariciano
