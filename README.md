@@ -6,6 +6,6 @@
 - Sofia d'Atri
 - Michele Dalle Rive
 - Nicoló Tafta
-
+- Loredana De Filippo
 ### Since 22/11
 - Jeferson Morales Mariciano
