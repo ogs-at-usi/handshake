@@ -1,9 +1,10 @@
-# sa3-project
-SA3 Final Group Porject
+# Software Atelier 3 final group project
 
 ## Team members:
-- 
-- d'Atri Sofia
-- 
-- 
-- 
+
+### Since 21/11
+- Sofia d'Atri
+- Michele Dalle Rive
+
+### Since 22/11
+- Jeferson Morales Mariciano
