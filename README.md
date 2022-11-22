@@ -3,11 +3,11 @@
 ## Team members
 
 ### Since 21/11
-- Sofia d'Atri
-- Michele Dalle Rive
-- Nicoló Tafta
-- Loredana De Filippo
+- Sofia d'Atri: [datris@usi.ch](mailto:datris@usi.ch)
+- Michele Dalle Rive: [dallem@usi.ch](mailto:dallem@usi.ch)
+- Nicoló Tafta: [taftan@usi.ch](mailto:taftan@usi.ch)
+- Loredana De Filippo: [defill@usi.ch](mailto:defill@usi.ch)
 ### Since 22/11
-- Jeferson Morales Mariciano
+- Jeferson Morales Mariciano: [moralj@usi.ch](mailto:moralj@usi.ch)
 
 ## Project details
