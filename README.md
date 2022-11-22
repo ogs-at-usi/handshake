@@ -18,6 +18,6 @@
 Messaging website
 
 ### Main features
-1.
-2.
+1. Send and receive messages! Create an account, find your friends and start chatting right away!
+2. 
 3.
