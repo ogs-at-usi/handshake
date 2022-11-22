@@ -12,12 +12,30 @@
 
 ## Project details
 
+
 ### Project name
+
 
 ### Concept
 Messaging website
 
 ### Main features
-1. Send and receive messages! Create an account, find your friends and start chatting right away!
-2. 
-3.
+1. Login with email and password
+2. Send message,to another user thanks the user name, in real time
+3. Send message, to a bunch or people in a group, in real time
+4. Each message has properties:
+  - Time has been sent showed
+  - Name of the sender(in groups)
+  - Read status or received status
+  - message can be:
+    - Plain text
+    - file (images formats, video formats, .txt, .zip
+    - Game
+5. The chat has properties:
+  - Single or group
+  - Background Image changeble
+  - Backup the messages in locale
+  - Upload file
+6. Game has properties:
+  - singleplayer or multiplayer
+  
