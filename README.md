@@ -11,3 +11,13 @@
 - Jeferson Morales Mariciano: [moralj@usi.ch](mailto:moralj@usi.ch)
 
 ## Project details
+
+### Project name
+
+### Concept
+Messaging website
+
+### Main features
+1.
+2.
+3.
