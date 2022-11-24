@@ -12,6 +12,7 @@
 
 ## Database Server
 - MongoDB
+- ![ER Diagram](ER.png)
 
 ## Features
 - Homepage
