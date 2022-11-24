@@ -1,0 +1,25 @@
+{
+  "name": "ejsc",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bruce965/ejsc.git"
+  },
+  "bin": {
+    "ejsc": "./bin/ejsc"
+  },
+  "author": "Fabio Iotti <fabiogiopla@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bruce965/ejsc/issues"
+  },
+  "homepage": "https://github.com/bruce965/ejsc",
+  "dependencies": {
+    "ejs": "^2.3.4"
+  }
+}

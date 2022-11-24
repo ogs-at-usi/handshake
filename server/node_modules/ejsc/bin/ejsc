@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+var ejsc = require('../lib/ejsc.js');
+var fs = require('fs');
+var os = require('os');
+var path = require('path');
+var process = require('process');
+
+var input = process.argv[2];
+var output = process.argv[3];
+var context = process.argv[4];
+
+if (!input) {
+	var packageJson = require('../package.json');
+	console.log([
+		"Version " + packageJson.version,
+		"Syntax:   " + packageJson.name + " <file> [output] [data]",
+		"",
+		"Examples:",
+		"  " + packageJson.name + " myPage.html.ejs",
+		"    Compiles 'myPage.html.ejs' to 'myPage.html'.",
+		"  " + packageJson.name + " template.ejs compiled.html",
+		"    Compiles 'template.ejs' to 'compiled.html'.",
+		"  " + packageJson.name + " myPage.ejs myPage.html \"{ \\\"value\\\": 123 }\"",
+		"    Compiles 'myPage.ejs' passing the specified object as global context."
+	].join(os.EOL));
+	process.exit(5);
+}
+
+if (!output) {
+	output = input.substring(0, input.length - path.extname(input).length);
+	
+	if (input == output) {
+		console.error("Unable to compile, wouldn't know where to save.");
+		process.exit(1);
+	}
+}
+
+if (context)
+	context = JSON.parse(context);
+else
+	context = {};
+
+var compiled = ejsc.compile(input, context);
+fs.writeFileSync(output, compiled, { encoding: 'utf-8', flag: 'w' });
+process.exit(0);
