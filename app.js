@@ -5,9 +5,9 @@ const logger = require('morgan');
 const methodOverride = require('method-override');
 const multer = require('multer');
 const ejsc = require('ejsc-views');
-const fs = require('fs-extra');
-const app = express();  //init framework
-const initDB = require('./models');
+require('dotenv').config();
+
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));    // parse application/x-www-form-urlencoded
@@ -15,15 +15,14 @@ app.use(express.json({ limit: '4MB' }));    // parse application/json
 app.use(multer().none());   //parse multipart/form-data
 app.use(express.static(path.join(__dirname, 'public'), { index: "index.html" }));
 app.set('view engine', 'html');
-ejsc.compile(views_dir = "views", output_dir = "public/js", details = false);
+
+ejsc.compile('views', 'public/js', false);
 
 // TODO - controllers
 app.use('/auth', require('./routes/auth'));
 
 // TODO - add routes here
 
-// default fallback handlers
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
