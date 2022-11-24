@@ -12,18 +12,13 @@
     "ejsc": "node ejs-compile.js"
   },
   "dependencies": {
-    "ejs": "^3.1.8",
     "ejsc-views": "^1.0.7",
     "express": "^4.18.2",
-    "fs-extra": "^10.1.0",
-    "glob-fs": "^0.1.7",
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
@@ -31,7 +26,6 @@
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "mocha": "^10.1.0",
-    "prettier": "^2.8.0",
-    "rimraf": "^3.0.2"
+    "prettier": "^2.8.0"
   }
 }
