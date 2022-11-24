@@ -3,10 +3,9 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const multer = require('multer');
-
 const ejsc = require('ejsc-views');
+require('dotenv').config();
 
-// init framework
 const app = express();
 
 app.use(logger('dev'));
@@ -22,14 +21,10 @@ app.set('view engine', 'html');
 
 ejsc.compile('views', 'public/js', false);
 
-// co
-
 // TODO - controllers
 
 // TODO - add routes here
 
-// default fallback handlers
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
