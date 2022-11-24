@@ -4,8 +4,18 @@ function generateJWT(userID) {
   return jwt.sign({userID}, process.env.JWT_SECRET, { expiresIn: "5m" });
 }
 
-function verifyJWT(token, callback) {
-  return jwt.verify(token, process.env.JWT_SECRET, callback);
+async function verifyJWT(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(decoded);
+    });
+  });
 }
 
-export { generateJWT, verifyJWT };
+module.exports = {
+  generateJWT,
+  verifyJWT
+}
