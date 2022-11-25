@@ -18,6 +18,7 @@ app.set('view engine', 'html');
 ejsc.compile(views_dir = "views", output_dir = "public/js", details = false);
 
 // TODO - controllers
+app.use('/auth', require('./routes/auth'));
 
 // TODO - add routes here
 
