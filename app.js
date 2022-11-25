@@ -5,15 +5,22 @@ const logger = require('morgan');
 const methodOverride = require('method-override');
 const multer = require('multer');
 const ejsc = require('ejsc-views');
+const cookieParser = require('cookie-parser');
+
 require('dotenv').config();
 
 const app = express();
 
 app.use(logger('dev'));
-app.use(express.urlencoded({ extended: false }));    // parse application/x-www-form-urlencoded
-app.use(express.json({ limit: '4MB' }));    // parse application/json
-app.use(multer().none());   //parse multipart/form-data
-app.use(express.static(path.join(__dirname, 'public'), { index: "index.html" }));
+app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+app.use(express.json({ limit: '4MB' })); // parse application/json
+app.use(multer().none()); // parse multipart/form-data
+app.use(cookieParser())
+
+app.use(
+  express.static(path.join(__dirname, 'public'), { index: 'index.html' })
+);
+
 app.set('view engine', 'html');
 
 ejsc.compile('views', 'public/js', false);
@@ -40,13 +47,9 @@ app.use(function (err, req, res, next) {
 // start server
 app.set('port', process.env.PORT || 8888);
 
-<<<<<<< HEAD
-const server = require('http').createServer(app);
-=======
 const { User } = require('./models/user');
 new User({ name: 'test', password: 'test', email: '' }).save();
 let server = require('http').createServer(app);
->>>>>>> 0816cfb (removed tests adding)
 server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
 });
