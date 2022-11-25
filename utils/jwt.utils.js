@@ -21,14 +21,7 @@ function generateJWT(userID) {
 }
 
 async function verifyJWT(token) {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(decoded);
-    });
-  });
+  return jwt.verify(token, process.env.JWT_SECRET);
 }
 
 function generateRefreshJWT(userID) {}
