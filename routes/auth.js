@@ -95,4 +95,20 @@ router.post('/logout', (req, res) => {
     });
 });
 
+router.post('/register', (req, res) => {
+  const { email, username, password } = req.body;
+  if (!email || !username || !password) {
+    return res.status(400).json({
+      message: 'Email, username and password are required',
+    });
+  }
+
+  // Create user in the db
+  // const user = await createUser(email, username, password)
+
+  res.status(201).json({
+    message: 'User created successfully',
+  });
+});
+
 module.exports = router;
