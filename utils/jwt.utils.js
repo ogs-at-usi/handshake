@@ -1,22 +1,25 @@
 const jwt = require('jsonwebtoken');
+const constants = require('../constants/auth.constants');
 
 const JWT_TOKEN_COOKIE = {
   httpOnly: true,
   sameSite: 'strict',
   secure: process.env.NODE_ENV === 'production',
   // expires in 5 minutes
-  maxAge: 5 * 60 * 1000,
+  maxAge: constants.JWT_MAX_AGE,
 };
 
 const REFRESH_TOKEN_COOKIE = {
   httpOnly: true,
   sameSite: 'strict',
   secure: process.env.NODE_ENV === 'production',
-  maxAge: 7 * 24 * 60 * 60 * 1000,
+  maxAge: constants.REFRESH_MAX_AGE,
 };
 
 function generateJWT(userID) {
-  return jwt.sign({ userID }, process.env.JWT_SECRET, { expiresIn: '5m' });
+  return jwt.sign({ userID }, process.env.JWT_SECRET, {
+    expiresIn: constants.JWT_MAX_AGE / 1000,
+  });
 }
 
 async function verifyJWT(token) {
@@ -25,7 +28,7 @@ async function verifyJWT(token) {
 
 function generateRefreshJWT(userID) {
   const refreshToken = jwt.sign({ userID }, process.env.REFRESH_SECRET, {
-    expiresIn: '7d',
+    expiresIn: constants.REFRESH_MAX_AGE / 1000,
   });
 
   const refresh = {

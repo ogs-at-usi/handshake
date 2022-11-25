@@ -7,6 +7,7 @@ const {
   JWT_TOKEN_COOKIE,
   refreshJWT,
 } = require('../utils/jwt.utils');
+const constants = require('../constants/auth.constants');
 const router = express.Router();
 
 router.post('/login', (req, res) => {
@@ -47,8 +48,8 @@ router.post('/login', (req, res) => {
   const refresh = generateRefreshJWT(user._id);
 
   res
-    .cookie('token', token, JWT_TOKEN_COOKIE)
-    .cookie('refresh', refresh, REFRESH_TOKEN_COOKIE)
+    .cookie(constants.JWT_COOKIE_NAME, token, JWT_TOKEN_COOKIE)
+    .cookie(constants.REFRESH_COOKIE_NAME, refresh, REFRESH_TOKEN_COOKIE)
     .status(200)
     .json({
       message: 'Login successful',
@@ -56,7 +57,7 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/refresh', (req, res) => {
-  const refreshToken = req.cookies.refresh || req.body?.refreshToken;
+  const refreshToken = req.cookies[constants.REFRESH_COOKIE_NAME];
   if (!refreshToken) {
     return res.status(401).json({
       message: 'Refresh token is required',
@@ -66,8 +67,8 @@ router.post('/refresh', (req, res) => {
   try {
     const { token, refresh } = refreshJWT(refreshToken);
     res
-      .cookie('token', token, JWT_TOKEN_COOKIE)
-      .cookie('refresh', refresh, REFRESH_TOKEN_COOKIE)
+      .cookie(constants.JWT_COOKIE_NAME, token, JWT_TOKEN_COOKIE)
+      .cookie(constants.REFRESH_COOKIE_NAME, refresh, REFRESH_TOKEN_COOKIE)
       .status(200)
       .json({
         message: 'Refresh successful',
@@ -80,7 +81,7 @@ router.post('/refresh', (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  const refreshToken = req.cookies.refresh;
+  const refreshToken = req.cookies[constants.REFRESH_COOKIE_NAME];
   if (refreshToken) {
     // TODO - delete the refresh token from the database
     // await deleteRefreshToken(refreshToken);
