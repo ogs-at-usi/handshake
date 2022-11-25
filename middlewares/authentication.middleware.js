@@ -1,15 +1,15 @@
 const {verifyJWT} = require('../utils/jwt.utils');
 
-const authenticate = (req, res, next) => {
-  const token = req.headers?.authorization || req.cookies?.token;
+const authenticate = async (req, res, next) => {
+  const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
   try {
-    req.user_id = verifyJWT(token);
+    req.userID = await verifyJWT(token);
     next();
-  } catch (err) {
-    res.status(403).json({ message: 'Unauthorized' });
+  } catch (e) {
+    res.status(401).json({ message: 'Unauthorized' });
   }
 };
 
