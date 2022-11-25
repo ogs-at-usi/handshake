@@ -1,7 +1,10 @@
-const {verifyJWT} = require('../utils/jwt.utils');
+const { verifyJWT } = require('../utils/jwt.utils');
+const constants = require('../constants/auth.constants');
 
 const authenticate = async (req, res, next) => {
-  const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+  const token =
+    req.cookies[constants.JWT_COOKIE_NAME] ||
+    req.headers.authorization?.split(' ')[1];
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
