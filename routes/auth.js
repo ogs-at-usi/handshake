@@ -1,13 +1,6 @@
 const express = require('express');
 const { comparePassword } = require('../utils/auth.utils');
-const {
-  generateJWT,
-  generateRefreshJWT,
-  REFRESH_TOKEN_COOKIE,
-  JWT_TOKEN_COOKIE,
-  refreshJWT,
-} = require('../utils/jwt.utils');
-const constants = require('../constants/auth.constants');
+const { generateJWT, generateRefreshJWT, REFRESH_TOKEN_COOKIE, JWT_TOKEN_COOKIE } = require('../utils/jwt.utils');
 const router = express.Router();
 
 router.post('/login', (req, res) => {
@@ -46,69 +39,14 @@ router.post('/login', (req, res) => {
 
   const token = generateJWT(user._id);
   const refresh = generateRefreshJWT(user._id);
-
+  // return the response with a HTTP only cookie JWT and a HTTP only cookie refresh
   res
-    .cookie(constants.JWT_COOKIE_NAME, token, JWT_TOKEN_COOKIE)
-    .cookie(constants.REFRESH_COOKIE_NAME, refresh, REFRESH_TOKEN_COOKIE)
+    .cookie('token', token, JWT_TOKEN_COOKIE)
+    .cookie('refresh', refresh, REFRESH_TOKEN_COOKIE)
     .status(200)
     .json({
       message: 'Login successful',
     });
-});
-
-router.post('/refresh', (req, res) => {
-  const refreshToken = req.cookies[constants.REFRESH_COOKIE_NAME];
-  if (!refreshToken) {
-    return res.status(401).json({
-      message: 'Refresh token is required',
-    });
-  }
-
-  try {
-    const { token, refresh } = refreshJWT(refreshToken);
-    res
-      .cookie(constants.JWT_COOKIE_NAME, token, JWT_TOKEN_COOKIE)
-      .cookie(constants.REFRESH_COOKIE_NAME, refresh, REFRESH_TOKEN_COOKIE)
-      .status(200)
-      .json({
-        message: 'Refresh successful',
-      });
-  } catch (e) {
-    return res.status(401).json({
-      message: 'Invalid refresh token',
-    });
-  }
-});
-
-router.post('/logout', (req, res) => {
-  const refreshToken = req.cookies[constants.REFRESH_COOKIE_NAME];
-  if (refreshToken) {
-    // TODO - delete the refresh token from the database
-    // await deleteRefreshToken(refreshToken);
-  }
-  res
-    .clearCookie('token', JWT_TOKEN_COOKIE)
-    .clearCookie('refresh', REFRESH_TOKEN_COOKIE)
-    .status(200)
-    .json({
-      message: 'Logout successful',
-    });
-});
-
-router.post('/register', (req, res) => {
-  const { email, username, password } = req.body;
-  if (!email || !username || !password) {
-    return res.status(400).json({
-      message: 'Email, username and password are required',
-    });
-  }
-
-  // Create user in the db
-  // const user = await createUser(email, username, password)
-
-  res.status(201).json({
-    message: 'User created successfully',
-  });
 });
 
 module.exports = router;
