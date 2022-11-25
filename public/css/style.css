@@ -36,6 +36,11 @@ button {
 
 }
 
+form {
+    width: 100%;
+
+}
+
 header {
     display: flex;
     flex-direction: row;
@@ -48,7 +53,8 @@ header {
 /* section: menu */
 
 #menu {
-    flex-grow: 3;
+    max-width: 20vw;
+    flex-grow: 2;
 }
 
 #menu header {
@@ -72,7 +78,7 @@ header {
 }
 
 #menu input {
-    width: 15vw;
+    width: 80%;
     height: 3vh;
 }
 
@@ -96,7 +102,7 @@ header {
 
 /* section chat */
 #chat {
-    flex-grow: 4;
+    flex-grow: 6;
     display: flex;
     flex-direction: column;
 }
