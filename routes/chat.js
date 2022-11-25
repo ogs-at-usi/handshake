@@ -31,3 +31,12 @@
 //
 // });
 //
+//
+// router.post("/chat", async function (req, res) {
+//
+//     const other_user = req.body.other_user;
+//
+//     const new_chat = await createChat(other_user);
+//
+//     res.json(new_chat);
+// })
