@@ -4,6 +4,8 @@ const path = require('path');
 const logger = require('morgan');
 const multer = require('multer');
 const ejsc = require('ejsc-views');
+const cookieParser = require('cookie-parser');
+
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +14,7 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(express.json({ limit: '4MB' })); // parse application/json
 app.use(multer().none()); // parse multipart/form-data
+app.use(cookieParser())
 
 app.use(
   express.static(path.join(__dirname, 'public'), { index: 'index.html' })
