@@ -42,9 +42,6 @@ app.set('port', process.env.PORT || 8888);
 let server = require('http').createServer(app);
 server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
-
-  const { User } = require('./models/user');
-  new User({ name: 'test', password: 'test', email: '' }).save();
 });
 
 // TODO websocket server
