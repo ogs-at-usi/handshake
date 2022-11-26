@@ -14,10 +14,26 @@
 
 
 ### Project name
+HandShake
 
+### Vision
+Worried that WhatsApp will steal your data? None of your friends use Signal? Scared that Telegram will delete your account if you don't constantly use it?
 
-### Concept
-Messaging website
+Then **HandShake** is the solution for you!
+
+A brand-new messaging service that is a thousand times better than our competitors:
+- it is prettier,
+- it doesn't steal your data,
+- it is being developed with ♡ by the ogs @ USI.
+
+Not only you can send text messages, audio messages, pictures and videos, but you can also play games in the chat!
+
+*"I can do that on other messaging apps!!"*
+
+Sure, but have you ever played Breakout against your friend with the texts you sent each other? Yeah, *thought so*.
+Well, you'll be able to do that, if you use HandShake!
+
+Download **HandShake** and join millions of other users today.
 
 ### Main features
 1. Login with email and password

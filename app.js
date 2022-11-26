@@ -21,7 +21,7 @@ ejsc.compile(views_dir = "views", output_dir = "public/js", details = false);
 
 // TODO - add routes here
 
-//default fallback handlers
+// default fallback handlers
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error('Not Found');
@@ -37,8 +37,9 @@ app.use(function (err, req, res, next) {
   });
 });
 
-//start server
+// start server
 app.set('port', process.env.PORT || 8888);
+
 let server = require('http').createServer(app);
 server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
