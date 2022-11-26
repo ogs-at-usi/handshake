@@ -25,7 +25,11 @@ function init (server) {
             });
 
             socket.on('sendData', function (data, chatId)   {
-                io.to(chatId).emit('message', data);
+                io.to(chatId).emit('message', data, chatId);
+            });
+
+            socket.on('joinRoom', function (chatId) {
+                socket.join(chatId);
             });
         });
     }
