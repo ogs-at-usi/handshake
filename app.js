@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const app = express();
+const initDB = require('./models');
 
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
