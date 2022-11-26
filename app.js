@@ -27,6 +27,7 @@ ejsc.compile('views', 'public/js', false);
 
 // TODO - controllers
 app.use('/auth', require('./routes/auth'));
+app.use('/api', require('./routes/chat'));
 
 // TODO - add routes here
 
