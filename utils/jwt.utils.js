@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const constants = require('../constants/auth.constants');
+const { RefreshToken } = require('../models/refreshToken');
+const { ObjectId } = require('mongodb');
 
 const JWT_TOKEN_COOKIE = {
   httpOnly: true,
@@ -26,19 +28,16 @@ async function verifyJWT(token) {
   return jwt.verify(token, process.env.JWT_SECRET);
 }
 
-function generateRefreshJWT(userID) {
+async function generateRefreshJWT(userID) {
   const refreshToken = jwt.sign({ userID }, process.env.REFRESH_SECRET, {
     expiresIn: constants.REFRESH_MAX_AGE / 1000,
   });
 
-  const refresh = {
-    userID,
-    refreshToken,
-  };
-
-  // TODO - update the database with the refresh token
-  // await saveRefreshToken(refresh);
-  console.log(refresh);
+  await RefreshToken.findOneAndUpdate(
+    { user: ObjectId(userID) },
+    { user: ObjectId(userID), token: refreshToken },
+    { upsert: true, new: true }
+  ).exec();
 
   return refreshToken;
 }
@@ -47,17 +46,22 @@ function verifyRefreshJWT(refreshToken) {
   return jwt.verify(refreshToken, process.env.REFRESH_SECRET);
 }
 
-function refreshJWT(refreshToken) {
-  const userID = verifyRefreshJWT(refreshToken);
+async function refreshJWT(refreshToken) {
+  const { userID } = verifyRefreshJWT(refreshToken);
 
-  // TODO check in the database if the user's refresh token is the one we have
-  const dbRefreshToken = refreshToken; // await getRefreshToken(userID);
-  if (dbRefreshToken !== refreshToken) {
+  const dbRefreshToken = await RefreshToken.findOne({
+    user: new ObjectId(userID),
+  }).exec();
+  if (
+    !dbRefreshToken ||
+    dbRefreshToken.token !== refreshToken ||
+    dbRefreshToken.expiresAt < Date.now()
+  ) {
     throw new Error('Invalid refresh token');
   }
 
   const token = generateJWT(userID);
-  const refresh = generateRefreshJWT(userID);
+  const refresh = await generateRefreshJWT(userID);
   return { token, refresh };
 }
 
