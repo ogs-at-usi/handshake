@@ -8,4 +8,4 @@ const groupSchema = new Schema({
     chat: { type: Schema.Types.ObjectId, ref: 'Chat' },
 });
 
-module.exports.Group = mongoose.model('Group', userSchema);
+module.exports.Group = mongoose.model('Group', groupSchema);
