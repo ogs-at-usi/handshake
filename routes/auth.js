@@ -23,9 +23,8 @@ router.post('/login', async (req, res) => {
   }
 
   // get the user that has username = username or email = username
-  console.log(username);
   const user = await User.findOne({
-    $or: [{ username }, { email: username }],
+    $or: [{ name: username }, { email: username }],
   }).exec();
 
   if (!user) {
@@ -107,7 +106,7 @@ router.post('/register', (req, res) => {
 
   const user = User.create({
     email,
-    username,
+    name: username,
     password: hashPassword(password),
   });
 
