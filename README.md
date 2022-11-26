@@ -36,6 +36,8 @@ Messaging website
   - Background Image changeble
   - Backup the messages in locale
   - Upload file
+  - See the last access of the user
+  - See when user is typing
 6. Game has properties:
   - singleplayer or multiplayer
   
