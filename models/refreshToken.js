@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const RefreshToken = mongoose.Model(
+const RefreshToken = mongoose.model(
   'RefreshToken',
   new Schema({
     token: String,
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    user: { type: Schema.Types.ObjectId, ref: 'User', unique: true },
     expiresAt: Date,
   })
 );
