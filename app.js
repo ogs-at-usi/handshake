@@ -7,6 +7,7 @@ const multer = require('multer');
 const ejsc = require('ejsc-views');
 const fs = require('fs-extra');
 const app = express();  //init framework
+const initDB = require('./models');
 
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));    // parse application/x-www-form-urlencoded
@@ -42,10 +43,11 @@ let server = require('http').createServer(app);
 server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
 
-  const { getUser } = require('./model/api').api;
-
+  const { User } = require('./models/user');
+  new User({ name: 'test', password: 'test', email: '' }).save();
 });
 
 // TODO websocket server
 
+initDB();
 server.listen(app.get('port'));

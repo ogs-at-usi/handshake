@@ -17,19 +17,20 @@ const api = function () {
      * @param {string} uid unique id of user 
      * @returns Promise = user or null
      */
-    function getUser(uid) {
+    async function readUser(uid) {
         const query = { _id: ObjectId(uid) };
-        return model.USER.findOne(query);
+        const user_db = await model.UserModel.findOne(query);
+        return new User(user_db);
     };
 
     /**
      * Add a user to the database
-     * @param {User} user
+     * @param {Obj} user name, password, email
      * @returns Promise({acknowledged, insertedId})
      */
-    function addUser({ name, password, email }) {
+    async function createUser({ name, password, email }) {
         const user = { name, password, email };
-        return model.USER.insertOne(user);
+        return await model.USER.insertOne(user);
     };
 
     /**
@@ -38,7 +39,7 @@ const api = function () {
      * @param {User} user 
      * @returns Promise({matchedCount, modifiedCount, upsertedId, acknowledged})
      */
-    function updateMessage(uid, { name, password, email }) {
+    async function updateUser(uid, { name, password, email }) {
         const query = { _id: ObjectId(uid) };
         const update = { $set: { name, password, email } };
         return model.USER.updateOne(query, update);
@@ -49,9 +50,9 @@ const api = function () {
      * @param {string} uid 
      * @returns Promise({deletedCount, acknowledged})
      */
-    function deleteMessage(uid) {
+    async function deleteUser(uid) {
         const query = { _id: ObjectId(uid) };
-        return model.USER.deleteOne(query);
+        return await model.USER.deleteOne(query);
     };
     //#endregion
 
@@ -73,19 +74,19 @@ const api = function () {
      * @param {string} uid unique id of message 
      * @returns Promise with message or null
      */
-    function getMessage(uid) {
+    async function readMessage(uid) {
         const query = { _id: ObjectId(uid) };
-        return model.MESSAGE.findOne(query);
+        return await model.MESSAGE.findOne(query);
     };
 
     /**
-     * Add a message to the database
+     * Create a message to the database
      * @param {Message} message
      * @returns Promise({acknowledged, insertedId}) of add ack message
      */
-    function addMessage({ sender, chat, type, content, sent_at, delivered_at, seen }) {
+    async function createMessage({ sender, chat, type, content, sent_at, delivered_at, seen }) {
         const message = { sender, chat, type, content, sent_at, delivered_at, seen };
-        return model.USER.insertOne(message);
+        return await model.USER.insertOne(message);
     };
 
     /**
@@ -94,10 +95,10 @@ const api = function () {
      * @param {Message} message 
      * @returns Promise({matchedCount, modifiedCount, upsertedId, acknowledged})
      */
-    function updateMessage(uid, { sender, chat, type, content, sent_at, delivered_at, seen }) {
+    async function updateMessage(uid, { sender, chat, type, content, sent_at, delivered_at, seen }) {
         const query = { _id: ObjectId(uid) };
         const update = { $set: { sender, chat, type, content, sent_at, delivered_at, seen } };
-        return model.USER.updateOne(query, update);
+        return await model.USER.updateOne(query, update);
     };
 
     /**
@@ -134,25 +135,52 @@ const api = function () {
      * Retrieve chat and its messages by id from the database 
      * @param {string} uid 
      */
-    async function getChat(uid) {
+    async function readChat(uid) {
+        const chat = await model.CHAT.findOne({ _id: ObjectId(uid) });
+        const members = await (model.USER_CHAT.find({ chat: ObjectId(uid) })).toArray();
+        return chat.is_group ? await readGroup(uid, chat) : new Chat({ _id: chat._id, members });
+    };
+
+    async function readGroup(uid, chat) {
         const query = { _id: ObjectId(uid) };
-        const chat = await model.CHAT.find
-        //return model.CHAT.findOne(query
+        const group_db = await model.GROUP.findOne(query);
+        return new Group({ _id: group_db._id, title: group_db.title, description: group_db.description, user, messages });
+    }
+
+    async function createChat() {
+
+    }
+
+    async function updateChat() {
+    }
+
+    async function deleteChat() {
+    }
+
+    async function getChatMembers() {
+        const query = { _id: ObjectId(uid) };
+
+    }
+
+    async function getChatMessages(uid) {
+        const query = { chat: ObjectId(uid) };
+        return await model.MESSAGE.find(query);
+    };
+
+    async function getUserChats(uid, user) {
+        const query = { user: ObjectId(uid) };
+        const id_chats = (await model.USER_CHAT.find(query)).toArray();
+        return id_chats.map(id_chat => readChat(id_chat, user));
     };
 
     //#endregion
-
-    function getUserChats(uid_user) {
-        const query = { user: ObjectId(uid) };
-        return model.USER_CHAT.find(query);
-    }
     //#endregion
 
     return {
-        getUser, addUser, updateUser: updateMessage, deleteUser: deleteMessage,
-        getMessage, addMessage, updateMessage, deleteMessage,
-        getChat,
-        getChats,
+        readUser, createUser, updateUser, deleteUser,
+        readMessage, createMessage, updateMessage, deleteMessage,
+        readChat, createChat, updateChat, deleteChat,
+        getUserChats,
     };
 }();
 
