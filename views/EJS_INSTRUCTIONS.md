@@ -22,7 +22,7 @@ The one on the right contains the chat view with the text messages.
 To add both columns to the main page, follow these instructions.
 
 ## Structure of the left column
-To add the left column to the main page, use `getElementById("container")` to access the main element of the `index.html` page. 
+To add the left column to the main page, use `querySelector("body")` to access the body of the `index.html` page. 
 
 Then overwrite its `innerHTML` with the file named `contactlist.ejs`. Remember to pass it:
 - the user's profile picture.
@@ -30,10 +30,10 @@ Then overwrite its `innerHTML` with the file named `contactlist.ejs`. Remember t
 
 The view will automatically append all the contacts to the bottom of the list. 
 
-If you want to manually add a new contact or groupchat, use `querySelector("#container #menu main")` to access the list of contacts, then add to its `innerHTML` the file `contact.ejs`.
+If you want to manually add a new contact or groupchat, use `querySelector("#menu main")` to access the list of contacts, then add to its `innerHTML` the file `contact.ejs`.
 
 ## Structure of the right column
-To add the left column to the main page, use `getElementById("container")` to access the main element of the `index.html` page. 
+To add the left column to the main page, use `querySelector("body")` to access the body of the `index.html` page. 
 
 IMPORTANT: only do this after you have already added the left column.
 
@@ -43,4 +43,4 @@ When pressing on a contact or a groupchat, its relative chat should open. To do 
 
 The view will automatically append all the messages to the bottom of the chat. 
 
-If you want to manually add a new message, use `querySelector("#container #chat main")` to access the list of messages, then add to its `innerHTML` the file `message.ejs`.
+If you want to manually add a new message, use `querySelector("#chat main")` to access the list of messages, then add to its `innerHTML` the file `message.ejs`.
