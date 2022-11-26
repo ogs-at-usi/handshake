@@ -1,3 +1,6 @@
+# secrets
+.secret
+
 # Logs
 logs
 *.log
