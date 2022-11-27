@@ -5,7 +5,12 @@ const RefreshToken = mongoose.model(
   'RefreshToken',
   new Schema({
     token: String,
-    user: { type: Schema.Types.ObjectId, ref: 'User', unique: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      unique: true,
+      required: true,
+    },
     expiresAt: Date,
   })
 );
