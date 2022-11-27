@@ -118,6 +118,6 @@ router.post('/chat', async function (req, res) {
     res.json(chat);
   } else {
     // join
-    res.status(409).json(commonChats);
+    res.status(204).json(commonChats);
   }
 });
