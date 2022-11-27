@@ -6,6 +6,7 @@ env:
 extends: [standard, prettier]
 root: true
 overrides: []
+ignorePatterns: [ "views.js" ]
 parserOptions:
   ecmaVersion: latest
 rules: {}
