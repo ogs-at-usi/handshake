@@ -22,10 +22,12 @@ const Message = mongoose.model(
       type: String,
       enum: Object.values(MessageType),
       default: MessageType.text,
+      required: true,
     },
     content: {
       type: String,
       default: null,
+      required: true,
     },
     sentAt: Date,
     deliveredAt: Date,
