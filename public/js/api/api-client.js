@@ -25,8 +25,8 @@ axiosInstance.interceptors.response.use(
 
 window.api = {
   axios: axiosInstance,
-  getChats: () => axiosInstance.get('/chats'),
-  getMessages: (chatID) => axiosInstance.get(`/messages/${chatID}`),
-  getUsers: (filter) => axiosInstance.get(`/users?filter=${filter}`),
+  auth: {},
   createChat: (otherUserID) => axiosInstance.post('/chats', { otherUserID }),
+  sendMessage: (chatID, message) =>
+    axiosInstance.post(`/chats/${chatID}/messages`, { message }),
 };
