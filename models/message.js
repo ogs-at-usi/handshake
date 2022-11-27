@@ -16,8 +16,8 @@ const MessageType = Object.freeze({
 const Message = mongoose.model(
   'Message',
   new Schema({
-    sender: { type: Schema.Types.ObjectId, ref: 'User' },
-    chat: { type: Schema.Types.ObjectId, ref: 'Chat' },
+    sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    chat: { type: Schema.Types.ObjectId, ref: 'Chat', required: true },
     type: {
       type: String,
       enum: Object.values(MessageType),
@@ -34,10 +34,6 @@ const Message = mongoose.model(
     seen: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   })
 );
-
-Message.methods.wasViewedBy = (userID) => {
-    return this.seen.contains(userID);
-}
 
 module.exports = {
     MessageType,

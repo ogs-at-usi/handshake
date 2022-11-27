@@ -11,7 +11,7 @@ const groupSchema = new Schema({
     type: String,
     required: false,
   },
-  chat: { type: Schema.Types.ObjectId, ref: 'Chat' },
+  chat: { type: Schema.Types.ObjectId, ref: 'Chat', required: true },
 });
 
 module.exports.Group = mongoose.model('Group', groupSchema);
