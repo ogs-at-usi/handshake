@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { RefreshToken } = require('./refreshToken');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -11,6 +12,9 @@ const userSchema = new Schema({
   email: String,
 
   chats: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
+});
+userSchema.pre('remove', { document: true, query: true }, function (next) {
+  RefreshToken.deleteMany({ user: this._id }, next);
 });
 
 module.exports.User = mongoose.model('User', userSchema);
