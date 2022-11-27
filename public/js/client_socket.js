@@ -1,23 +1,41 @@
 const { api } = require("../../models/api");
-
 const socket = io();
 
 
 
 
 
-socket.on("sendData", function (data, chatId) {
+
+
+function sendData(data, chatId) {
+    socket.emit("sendData", data, chatId);
+}
+
+function joinRoom(chatId) {
+    socket.emit("joinRoom", chatId);
+}
+
+
+
+socket.on("receiveData", function (data, chatId) {
 
     // refresh data in chat
-   
+    api.getChat(chatId).then((chat) => {
+        chat.messages = data;
+    });
+
 
 });
 
-socket.on("message", function (data) {
-    
-        // refresh data in chat
-    
-});
+
+
+module.exports = {
+    sendData,
+    joinRoom,
+};
+
+
+
 
 
 

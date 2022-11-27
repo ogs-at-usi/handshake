@@ -25,11 +25,12 @@ function init (server) {
             });
 
             socket.on('sendData', function (data, chatId)   {
-                io.to(chatId).emit('message', data, chatId);
+                io.to(chatId).emit('receiveData', data, chatId);
             });
 
             socket.on('joinRoom', function (chatId) {
                 socket.join(chatId);
+                addChatToUser(user, chatId);
             });
         });
     }
@@ -42,6 +43,18 @@ function reconectingRooms(user, socket) {
             socket.join(userChat.chat._id.toString());
             console.log('✅ Client ' + user._id + ' joined chat ' + userChat.chat._id);
         });
+    });
+}
+
+function addChatToUser(user, chatId) {
+    UserChat.findOne({user: ObjectId(user._id), chat: ObjectId(chatId)}).then((userChat) => {
+        if (!userChat) {
+            UserChat.create({user: ObjectId(user._id), chat: ObjectId(chatId)}).then((userChat) => {
+                console.log('✅ Client ' + user._id + ' joined chat ' + chatId);
+            });
+        } else {
+            console.log('✅ Client ' + user._id + ' joined chat ' + chatId);
+        }
     });
 }
 
