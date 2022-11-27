@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const mongodbURI = 'mongodb://localhost:27017/handshake';
+const mongodbURI = process.env.MONGODB_URI;
 /* EXTERNAL DATABASE SERVER CONNECTION
 const mongodb_uri_atlas = 'mongodb+srv://handshake.mnxzbzv.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority';
 const fs = require('fs');
