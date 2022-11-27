@@ -3,7 +3,6 @@ const request = require('supertest')('http://localhost:8888');
 const should = require('should');
 const { hashPassword } = require('../utils/auth.utils');
 const { User } = require('../models/user');
-const setupDB = require('../models');
 const constants = require('../constants/auth.constants');
 
 describe('Authentication/Authorization tests', () => {
@@ -12,11 +11,14 @@ describe('Authentication/Authorization tests', () => {
   const createdUsers = [];
 
   before(async () => {
+    require('dotenv').config();
+    const setupDB = require('../models');
     await setupDB();
     // Create a user in the database
     createdUsers.push(
       await User.create({
         name: 'test',
+        email: 'test@gmail.com',
         password: hashPassword('password'),
       })
     );
