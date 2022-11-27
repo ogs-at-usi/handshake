@@ -8,11 +8,14 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   password: String,
-  email: String,
-
-  chats: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
 });
+
 userSchema.pre('remove', { document: true, query: true }, function (next) {
   RefreshToken.deleteMany({ user: this._id }, next);
 });
