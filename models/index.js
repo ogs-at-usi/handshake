@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const mongodbURI = process.env.MONGODB_URI;
 /* EXTERNAL DATABASE SERVER CONNECTION
 const mongodb_uri_atlas = 'mongodb+srv://handshake.mnxzbzv.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority';
 const fs = require('fs');
@@ -13,7 +12,7 @@ const client = new MongoClient(mongodb_uri, {
 
 async function setupDB() {
   try {
-    await mongoose.connect(mongodbURI, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
