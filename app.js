@@ -40,12 +40,17 @@ app.use(function (err, req, res, next) {
 // start server
 app.set('port', process.env.PORT || 8888);
 
-let server = require('http').createServer(app);
+const server = require('http').createServer(app);
 server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
 });
 
-// TODO websocket server
+
+
 
 initDB();
+
+const ws = require('./web_socket');
+ws.init(server);
+
 server.listen(app.get('port'));

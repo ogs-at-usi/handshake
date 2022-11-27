@@ -2,8 +2,8 @@ const { model, ObjectId } = require('./index');
 
 const api = function () {
 
-    //#region CRUD
-    //#region USER
+    // #region CRUD
+    // #region USER
     /*
     {
         _id: ObjectId,
@@ -54,9 +54,9 @@ const api = function () {
         const query = { _id: ObjectId(uid) };
         return await model.USER.deleteOne(query);
     };
-    //#endregion
+    // #endregion
 
-    //#region MESSAGE
+    // #region MESSAGE
     /*
     {
         _id: ObjectId,
@@ -110,9 +110,9 @@ const api = function () {
         const query = { _id: ObjectId(uid) };
         return model.USER.deleteOne(query);
     };
-    //#endregion
+    // #endregion
 
-    //#region CHAT
+    // #region CHAT
     /*
     Chat object
     {
@@ -173,8 +173,8 @@ const api = function () {
         return id_chats.map(id_chat => readChat(id_chat, user));
     };
 
-    //#endregion
-    //#endregion
+    // #endregion
+    // #endregion
 
     return {
         readUser, createUser, updateUser, deleteUser,
