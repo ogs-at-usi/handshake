@@ -1,4 +1,4 @@
-const { describe, it, before, after } = require('mocha');
+const { describe, it, before, beforeEach, after } = require('mocha');
 const request = require('supertest')('http://localhost:8888');
 const should = require('should');
 const { hashPassword } = require('../utils/auth.utils');
@@ -9,20 +9,27 @@ const constants = require('../constants/auth.constants');
 describe('Authentication/Authorization tests', () => {
   const loginEndpoint = '/auth/login';
 
-  let createdUser = null;
+  const createdUsers = [];
 
   before(async () => {
     await setupDB();
     // Create a user in the database
-    createdUser = await User.create({
-      name: 'test',
-      password: hashPassword('password'),
-    });
+    createdUsers.push(
+      await User.create({
+        name: 'test',
+        password: hashPassword('password'),
+      })
+    );
   });
 
   after(async () => {
     // Remove the user from the database
-    return createdUser.remove();
+    await Promise.all(createdUsers.map((user) => user.remove()));
+  });
+
+  beforeEach((done) => {
+    done();
+    // setTimeout(done, 500);
   });
 
   describe('Authentication', () => {
@@ -154,6 +161,7 @@ describe('Authentication/Authorization tests', () => {
           });
       });
     });
+
     describe('Register', () => {
       it('should return 400 if username is missing', (done) => {
         request
@@ -215,6 +223,141 @@ describe('Authentication/Authorization tests', () => {
             done();
           });
       });
+      it('should return 201 if the user is created', (done) => {
+        request
+          .post('/auth/register')
+          .send({
+            username: 'test2',
+            password: 'password',
+            email: 'test2@gmail.com',
+          })
+          .expect(201)
+          .end(async (err, res) => {
+            if (err) return done(err);
+            should(res.body).have.property(
+              'message',
+              'User created successfully'
+            );
+            createdUsers.push(await User.findOne({ name: 'test2' }).exec());
+            done();
+          });
+      });
+      it('should be able to login with the new user', (done) => {
+        request
+          .post('/auth/login')
+          .send({ username: 'test2', password: 'password' })
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            should(res.body).have.property('message', 'Login successful');
+            done();
+          });
+      });
+    });
+
+    describe('Refresh token', () => {
+      it('should return 401 if the refresh token is missing', (done) => {
+        request
+          .post('/auth/refresh')
+          .expect(401)
+          .end((err, res) => {
+            if (err) return done(err);
+            should(res.body).have.property(
+              'message',
+              'Refresh token is required'
+            );
+            done();
+          });
+      });
+      it('should return 401 if the refresh token is invalid', (done) => {
+        request
+          .post('/auth/refresh')
+          .set('Cookie', [`${constants.REFRESH_COOKIE_NAME}=invalid`])
+          .expect(401)
+          .end((err, res) => {
+            if (err) return done(err);
+            should(res.body).have.property('message', 'Invalid refresh token');
+            done();
+          });
+      });
+      it('should return 200 if the refresh token is valid', (done) => {
+        request
+          .post('/auth/login')
+          .send({ username: 'test', password: 'password' })
+          .expect(200)
+          .end(async (err, res) => {
+            if (err) return done(err);
+            const refreshToken = res.headers['set-cookie'][1]
+              .split('=')[1]
+              .split(';')[0];
+            request
+              .post('/auth/refresh')
+              .set('Cookie', [
+                `${constants.REFRESH_COOKIE_NAME}=${refreshToken}`,
+              ])
+              .expect(200)
+              .end((err, res) => {
+                if (err) return done(err);
+                should(res.body).have.property('message', 'Refresh successful');
+                done();
+              });
+          });
+      });
+      // it('should return a new JWT', (done) => {
+      //   request
+      //     .post('/auth/login')
+      //     .send({ username: 'test', password: 'password' })
+      //     .expect(200)
+      //     .end(async (err, res) => {
+      //       if (err) return done(err);
+      //       const JWT = res.headers['set-cookie'][0]
+      //         .split('=')[1]
+      //         .split(';')[0];
+      //       const refreshToken = res.headers['set-cookie'][1]
+      //         .split('=')[1]
+      //         .split(';')[0];
+      //       request
+      //         .post('/auth/refresh')
+      //         .set('Cookie', [
+      //           `${constants.REFRESH_COOKIE_NAME}=${refreshToken}`,
+      //         ])
+      //         .expect(200)
+      //         .end((err, res2) => {
+      //           if (err) return done(err);
+      //           should(
+      //             res2.headers['set-cookie'][0].split('=')[1].split(';')[0]
+      //           ).not.equal(JWT);
+      //           done();
+      //         });
+      //     });
+      // });
+      // it('should return a new refresh token', (done) => {
+      //   request
+      //     .post('/auth/login')
+      //     .send({ username: 'test', password: 'password' })
+      //     .expect(200)
+      //     .end(async (err, res) => {
+      //       if (err) return done(err);
+      //       const refreshToken = res.headers['set-cookie'][1]
+      //         .split('=')[1]
+      //         .split(';')[0];
+      //       setTimeout(() => {
+      //         request
+      //           .post('/auth/refresh')
+      //           .set('Cookie', [
+      //             `${constants.REFRESH_COOKIE_NAME}=${refreshToken}`,
+      //           ])
+      //           .expect(200)
+      //           .end((err, res2) => {
+      //             if (err) return done(err);
+      //             should(
+      //               res2.headers['set-cookie'][1].split('=')[1].split(';')[0]
+      //             ).not.equal(refreshToken);
+      //             done();
+      //           });
+      //       }, 100);
+      //     });
+      // });
     });
   });
 
