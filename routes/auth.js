@@ -88,8 +88,8 @@ router.post('/logout', async (req, res) => {
     } catch (e) {}
   }
   res
-    .clearCookie('token', JWT_TOKEN_COOKIE)
-    .clearCookie('refresh', REFRESH_TOKEN_COOKIE)
+    .clearCookie(constants.JWT_COOKIE_NAME, { httpOnly: true })
+    .clearCookie(constants.REFRESH_COOKIE_NAME, { httpOnly: true })
     .status(200)
     .json({
       message: 'Logout successful',
