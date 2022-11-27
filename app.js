@@ -48,9 +48,7 @@ app.use(function (err, req, res, next) {
 // start server
 app.set('port', process.env.PORT || 8888);
 
-const { User } = require('./models/user');
-new User({ name: 'test', password: 'test', email: '' }).save();
-let server = require('http').createServer(app);
+const server = require('http').createServer(app);
 server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
 });
