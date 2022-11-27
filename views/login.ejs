@@ -9,7 +9,7 @@
         <section id="login_form" class="position-relative">
             <h2>Already a user?</h2>
             <br>
-            <form class="text-center">
+            <form class="text-center" action= "/auth/login" method = "post">
                 <input name="username" type="text" placeholder="Username">
                 <br>
                 <br>
@@ -23,7 +23,7 @@
         <section id="signup_form" class="position-relative">
             <h2>Join HandShake now.</h2>
             <br>
-            <form class="text-center">
+            <form class="text-center" action="auth/register" method="post">
                 <input name="username" type="text" placeholder="Username">
                 <input name="email" type="text" placeholder="E-mail">
 

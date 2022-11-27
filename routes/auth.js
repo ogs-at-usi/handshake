@@ -13,6 +13,7 @@ const { RefreshToken } = require('../models/refreshToken');
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
+  
   // retrieve username and password from request
   // username could be either the username or email
   const { username, password } = req.body;
