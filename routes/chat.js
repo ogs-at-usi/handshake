@@ -36,7 +36,7 @@ router.get('/messages/:chatID', async function (req, res) {
       })
       .exec();
 
-    if (userChat && userChat.chat && userChat.chat.messages) {
+    if (userChat?.chat?.messages) {
       res.json(userChat.chat.messages);
     } else {
       res.status(422).end();
@@ -87,15 +87,15 @@ router.post('/chat', async function (req, res) {
     .exec();
   otherUserChats = otherUserChats.map((userChat) => userChat.chat);
 
-  let UserChats = await UserChat.find({
+  let userChats = await UserChat.find({
     user: user._id,
   })
     .populate('chat')
     .exec();
-  UserChats = UserChats.map((userChat) => userChat.chat);
+  userChats = userChats.map((userChat) => userChat.chat);
 
-  const commonChats = otherUserChats.filter((value) =>
-    UserChats.includes(value)
+  const commonChats = otherUserChats.filter(
+    (value) => userChats.indexOf(value) !== -1
   );
 
   if (commonChats.length === 0) {
@@ -118,6 +118,6 @@ router.post('/chat', async function (req, res) {
     res.json(chat);
   } else {
     // join
-    res.json(commonChats);
+    res.status(409).json(commonChats);
   }
 });
