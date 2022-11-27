@@ -13,26 +13,27 @@ const MessageType = Object.freeze({
 });
 
 
-const Message = mongoose.Model('Message', new Schema({
-    sender: { type: Schema.Types.ObjectId, ref: 'User' },
-    chat: { type: Schema.Types.ObjectId, ref: 'Chat' },
+const Message = mongoose.model(
+  'Message',
+  new Schema({
+    sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    chat: { type: Schema.Types.ObjectId, ref: 'Chat', required: true },
     type: {
-        type: String,
-        enum: Object.values(MessageType),
-        default: MessageType.text
+      type: String,
+      enum: Object.values(MessageType),
+      default: MessageType.text,
+      required: true,
     },
     content: {
-        type: String,
-        default: null
+      type: String,
+      default: null,
+      required: true,
     },
     sentAt: Date,
     deliveredAt: Date,
-    seen: [{ type: Schema.Types.ObjectId, ref: 'User' }]
-}));
-
-Message.methods.wasViewedBy = (userID) => {
-    return this.seen.contains(userID);
-}
+    seen: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  })
+);
 
 module.exports = {
     MessageType,
