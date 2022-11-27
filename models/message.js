@@ -1,17 +1,15 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
 const MessageType = Object.freeze({
-    text: 'TEXT',
-    audio: 'AUDIO',
-    image: 'IMAGE',
-    video: 'VIDEO',
-    document: 'DOCUMENT',
-    location: 'LOCATION',
-    game: 'GAME'
+  text: 'TEXT',
+  audio: 'AUDIO',
+  image: 'IMAGE',
+  video: 'VIDEO',
+  document: 'DOCUMENT',
+  location: 'LOCATION',
+  game: 'GAME',
 });
-
 
 const Message = mongoose.model(
   'Message',
@@ -36,6 +34,6 @@ const Message = mongoose.model(
 );
 
 module.exports = {
-    MessageType,
-    Message
-}
+  MessageType,
+  Message,
+};
