@@ -40,7 +40,13 @@ app.use(function (err, req, res, next) {
 // start server
 app.set('port', process.env.PORT || 8888);
 
+<<<<<<< HEAD
 const server = require('http').createServer(app);
+=======
+const { User } = require('./models/user');
+new User({ name: 'test', password: 'test', email: '' }).save();
+let server = require('http').createServer(app);
+>>>>>>> 0816cfb (removed tests adding)
 server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
 });
