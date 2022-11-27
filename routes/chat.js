@@ -95,7 +95,10 @@ router.post('/chat', async function (req, res) {
   userChats = userChats.map((userChat) => userChat.chat);
 
   const commonChats = otherUserChats.filter(
-    (value) => userChats.indexOf(value) !== -1
+    (value) =>
+      userChats.findIndex(
+        (uc) => uc._id.toString() === value._id.toString()
+      ) !== -1
   );
 
   if (commonChats.length === 0) {
