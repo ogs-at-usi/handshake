@@ -79,8 +79,11 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: yarn
 
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+
       - name: Install packages
         run: yarn
 
       - name: Run tests
-        run: yarn run test
+        run: yarn run start:test

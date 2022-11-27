@@ -11,7 +11,6 @@ describe('Authentication/Authorization tests', () => {
   const createdUsers = [];
 
   before(async () => {
-    require('dotenv').config();
     const setupDB = require('../models');
     await setupDB();
     // Create a user in the database
