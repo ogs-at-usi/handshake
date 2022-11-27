@@ -7,7 +7,7 @@
 # More details at https://github.com/eslint/eslint
 # and https://eslint.org
 
-name: Code style
+name: Continuous Integration
 
 on:
   push:
