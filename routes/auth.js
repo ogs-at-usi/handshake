@@ -96,7 +96,7 @@ router.post('/logout', async (req, res) => {
     });
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   const { email, username, password } = req.body;
   if (!email || !username || !password) {
     return res.status(400).json({
@@ -104,21 +104,27 @@ router.post('/register', (req, res) => {
     });
   }
 
-  const user = User.create({
-    email,
-    name: username,
-    password: hashPassword(password),
-  });
+  try {
+    const user = await User.create({
+      email,
+      name: username,
+      password: hashPassword(password),
+    });
 
-  if (!user) {
+    if (!user) {
+      return res.status(400).json({
+        message: 'Something went wrong',
+      });
+    }
+
+    res.status(201).json({
+      message: 'User created successfully',
+    });
+  } catch (e) {
     return res.status(400).json({
-      message: 'Could not create the user',
+      message: 'Username or email already taken',
     });
   }
-
-  res.status(201).json({
-    message: 'User created successfully',
-  });
 });
 
 module.exports = router;
