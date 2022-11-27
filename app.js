@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 
 require('dotenv').config();
 
+
 const app = express();
 const initDB = require('./models');
 
@@ -55,6 +56,5 @@ server.on('listening', function () {
 });
 
 // TODO websocket server
-
 initDB();
 server.listen(app.get('port'));
