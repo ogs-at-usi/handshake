@@ -7,8 +7,12 @@ const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 
+
+
+
 router.get('/chats', async function (req, res) {
   // const test = "5e63c3a5e4232e4cd0274ac2";
+  console.log("GINO");
   const chats = await UserChat.find({
     user: new ObjectId(req.userID),
   })
@@ -16,7 +20,13 @@ router.get('/chats', async function (req, res) {
     .exec();
 
   res.json(chats.map((userChat) => userChat.chat));
+
+  res.render('index.html', { user: req.userID });
+  // res.redirect('/');
+
+  
 });
+
 
 router.get('/messages/:chatID', async function (req, res) {
   if (!ObjectID.isValid(req.params.chatID)) {
@@ -59,6 +69,7 @@ router.get('/users', async function (req, res) {
 });
 
 router.post('/chat', async function (req, res) {
+  
   const otherID = req.body.otherID;
 
   if (!ObjectID.isValid(otherID)) {

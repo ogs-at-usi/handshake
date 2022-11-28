@@ -23,9 +23,19 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+
+
+
+
+
 window.api = {
   axios: axiosInstance,
   auth: {},
+  login: (username, password) => {
+    console.log('login');
+    return axiosInstance.post('/auth/login', {
+      username,
+      password,})}, 
   createChat: (otherUserID) => axiosInstance.post('/chats', { otherUserID }),
   sendMessage: (chatID, message) =>
     axiosInstance.post(`/chats/${chatID}/messages`, { message }),

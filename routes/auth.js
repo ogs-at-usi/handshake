@@ -47,13 +47,21 @@ router.post('/login', async (req, res) => {
   const token = generateJWT(user._id);
   const refresh = await generateRefreshJWT(user._id);
 
+
+
   res
     .cookie(constants.JWT_COOKIE_NAME, token, JWT_TOKEN_COOKIE)
     .cookie(constants.REFRESH_COOKIE_NAME, refresh, REFRESH_TOKEN_COOKIE)
     .status(200)
     .json({
+      
       message: 'Login successful',
     });
+
+    
+
+
+
 });
 
 router.post('/refresh', async (req, res) => {
