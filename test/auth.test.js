@@ -11,6 +11,9 @@ describe('Authentication/Authorization tests', () => {
   const createdUsers = [];
 
   before(async () => {
+    if (!process.env.MONGODB_URI) {
+      require('dotenv').config();
+    }
     const setupDB = require('../models');
     await setupDB();
     // Create a user in the database
