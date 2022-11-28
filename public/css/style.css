@@ -151,7 +151,7 @@ header {
 .card {
     background-color: var(--color-primary);
     width: fit-content;
-    max-width: 30vw;
+    max-width: 40vw;
 }
 
 .timestamp {
@@ -161,7 +161,7 @@ header {
 
 .card-image {
     border-radius: 1vh;
-    width: 10vw;
+    max-width: 20vw;
 }
 
 .self {
