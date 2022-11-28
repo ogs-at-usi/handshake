@@ -1,6 +1,5 @@
 
 
-
 function loadMain(){
     
     const body = document.querySelector('body');
@@ -25,5 +24,26 @@ function loadLogin(){
 
 
 function init(){
+
     loadLogin();
+
+    const loginForm = document.querySelector('#loginForm');
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.querySelector('#username_login').value;
+        const password = document.querySelector('#password_login').value;
+
+        // impo
+        api.login(username, password).then((response) => {
+            console.log(response);
+            loadMain();
+        }
+        ).catch((error) => {
+            console.log(error);
+        }
+        );
+
+    });
+
+
 }
