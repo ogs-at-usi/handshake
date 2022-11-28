@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        node: [ 14 ]
+        node-version: [ 14 ]
 
     permissions:
       contents: read
@@ -42,7 +42,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.node-version }}
           cache: yarn
 
       - name: Install packages
@@ -62,8 +62,8 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        node: [ 14 ]
-        mongodb: [ '4.4' ]
+        node-version: [ 14 ]
+        mongodb-version: [ 4.6 ]
 
     permissions:
       contents: read
@@ -77,13 +77,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
+          node-version: ${{ matrix.node-version }}
 
       - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.8.0
+        uses: supercharge/mongodb-github-action@docker-network
         with:
-          mongodb-version: ${{ matrix.mongodb }}
           mongodb-port: 27017
           mongodb-db: handshake
 
@@ -92,3 +90,5 @@ jobs:
 
       - name: Run tests
         run: yarn run start:test
+        env:
+          MONGODB_URI: mongodb://localhost:27017/handshake
