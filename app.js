@@ -15,7 +15,7 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(express.json({ limit: '4MB' })); // parse application/json
 app.use(multer().none()); // parse multipart/form-data
-app.use(cookieParser())
+app.use(cookieParser());
 
 app.use(
   express.static(path.join(__dirname, 'public'), { index: 'index.html' })

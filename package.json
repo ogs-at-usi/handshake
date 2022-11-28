@@ -7,8 +7,12 @@
   "scripts": {
     "start": "node app.js",
     "dev": "DEBUG=router:* nodemon --delay 1 --ignore public/ app.js",
-    "test": "mocha",
-    "lint": "eslint .",
+    "test": "MONGODB_URI=mongodb://localhost:27017/handshake mocha",
+    "start:test": "(node app.js &) && MONGODB_URI=mongodb://localhost:27017/handshake mocha",
+    "style:lint": "eslint '**/*.js'",
+    "style:lint:fix": "eslint --fix '**/*.js'",
+    "style:prettier": "prettier --check '**/*.js'",
+    "style:prettier:fix": "prettier --write '**/*.js'",
     "ejsc": "node ejs-compile.js"
   },
   "dependencies": {

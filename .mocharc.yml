@@ -3,6 +3,6 @@ R: spec
 ui: bdd
 trace-warnings: true
 exit: true
-timeout: 5000
+timeout: 15000
 reporter: spec
 recursive: true
