@@ -12,11 +12,10 @@ const client = new MongoClient(mongodb_uri, {
 
 async function setupDB() {
   try {
-    const {connection} = await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    connection.set('maxTimeMS', 15000);
   } catch (err) {
     console.error(err);
   }

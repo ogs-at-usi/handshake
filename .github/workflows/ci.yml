@@ -63,6 +63,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         node: [ 14 ]
+        mongodb: [ 4.4 ]
 
     permissions:
       contents: read
@@ -81,6 +82,9 @@ jobs:
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: ${{ matrix.mongodb }}
+          mongodb-port: 27017
 
       - name: Install packages
         run: yarn
