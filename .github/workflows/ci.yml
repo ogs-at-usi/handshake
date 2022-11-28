@@ -1,0 +1,97 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# ESLint is a tool for identifying and reporting on patterns
+# found in ECMAScript/JavaScript code.
+# More details at https://github.com/eslint/eslint
+# and https://eslint.org
+
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  code-style:
+    name: Run style checks
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node-version: [ 14 ]
+
+    permissions:
+      contents: read
+      security-events: write
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+
+      - name: Install packages
+        run: yarn
+
+      - name: Run ESLint
+        run: yarn run style:lint
+
+      - name: Run Prettier
+        run: yarn run style:prettier
+
+  testing:
+    name: Run tests
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        node-version: [ 14 ]
+        mongodb-version: [ 4.6 ]
+
+    permissions:
+      contents: read
+      security-events: write
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Initialize environment variables
+        run: cp -n ${GITHUB_WORKSPACE}/env.template ${GITHUB_WORKSPACE}/.env
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@docker-network
+        with:
+          mongodb-port: 27017
+          mongodb-db: handshake
+
+      - name: Install packages
+        run: yarn
+
+      - name: Run tests
+        run: yarn run start:test
+        env:
+          MONGODB_URI: mongodb://localhost:27017/handshake

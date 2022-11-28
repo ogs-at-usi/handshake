@@ -1,72 +1,60 @@
-
-
-
-//require framework and middleware dependencies
+// require framework and middleware dependencies
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-const methodOverride = require('method-override');
-const multer  = require('multer');
-
+const multer = require('multer');
 const ejsc = require('ejsc-views');
+const cookieParser = require('cookie-parser');
 
-const fs = require('fs-extra');
+require('dotenv').config();
 
-
-
-//init framework
 const app = express();
-
-
+const initDB = require('./models');
 
 app.use(logger('dev'));
-app.use(express.urlencoded({ extended: false }));    // parse application/x-www-form-urlencoded
-app.use(express.json({limit: '4MB'}));    // parse application/json
-app.use(multer().none());   //parse multipart/form-data
+app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+app.use(express.json({ limit: '4MB' })); // parse application/json
+app.use(multer().none()); // parse multipart/form-data
+app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, 'public'), {index: "index.html"}));
-
+app.use(
+  express.static(path.join(__dirname, 'public'), { index: 'index.html' })
+);
 
 app.set('view engine', 'html');
 
-ejsc.compile(views_dir = "views", output_dir = "public/js", details = false);
-
-//co
+ejsc.compile('views', 'public/js', false);
 
 // TODO - controllers
-
+app.use('/auth', require('./routes/auth'));
+app.use('/api', require('./routes/chat'));
 
 // TODO - add routes here
 
-//default fallback handlers
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+app.use(function (req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(function (err, req, res, _) {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    error: err,
   });
+});
 
-    app.use(function(err, req, res, next) {
-      res.status(err.status || 500);
-      res.json({
-        message: err.message,
-        error: err
-      });
-    });
-
-
-//start server
+// start server
 app.set('port', process.env.PORT || 8888);
 
-var server = require('http').createServer(app);
+const server = require('http').createServer(app);
 
-server.on('listening', function() {
+server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
 });
 
 // TODO websocket server
 
+initDB();
 server.listen(app.get('port'));
-
-
-
