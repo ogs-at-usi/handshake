@@ -9,12 +9,12 @@
 }
 
 body {
+    background-color: var(--color-background);
+    
     display: flex;
     flex-direction: row;
-    background-color: var(--color-background);
     overflow-x: hidden;
     flex-wrap: wrap;
-    align-content: space-between;
 
     width: 100vw;
     max-width: 100vw;
