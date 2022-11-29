@@ -29,6 +29,7 @@ input {
     border-style: none;
     border-radius: 20px;
     padding: 1vh;
+    font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 button {
@@ -152,11 +153,18 @@ header {
     background-color: var(--color-primary);
     width: fit-content;
     max-width: 40vw;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+.card-text {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+
 }
 
 .timestamp {
     text-align: right;
     padding-right: 1vw;
+    font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .card-image {
