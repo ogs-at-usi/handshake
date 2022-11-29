@@ -21,112 +21,52 @@
     <link href="css/style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
-    <section id="menu">
-        <header>
-            <h1>HandShake</h1>
-            <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
-        </header>
+<body class="justify-content-between">
 
-        <nav>
+    <div id="title">
+        <h1>HandShake</h1>
+        <h2><a class="btn btn-outline-light" href="">About us</a></h2>
+    </div>
 
-            <form id="search-bar" action="">
-                <input type="text" placeholder="Search..." />
-                <button>🔎</button>
+    
+    <section id="login">
+        <section id="login_form" class="position-relative">
+            <h2>Already a user?</h2>
+            <br>
+            <form class="text-center">
+                <input name="username" type="text" placeholder="Username">
+                <br>
+                <br>
+                <input name="password" type="password" placeholder="Password">
+                <br>
+                <br>
+                <button class="btn btn-outline-light .mx-auto">Log in</button>
             </form>
-        </nav>
-        <main>
-            <div class="contact">
-                <img class="pfp" src="icons/default_gc_pfp.png" alt="pfp" />
-                <h3>OGs @ USI</h3>
-                <p></p>
-                <p class="notification"></p>
-                <p></p>
+        </section>
 
-            </div>
-            <div class="contact">
-                <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
-                <h3>Pautasso</h3>
-                <p></p>
-                <p class="notification">1</p>
-                <p></p>
-
-            </div>
-            <div class="contact">
-                <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
-                <h3>Mom</h3>
-                <p></p>
-                <p class="notification"></p>
-                <p></p>
-
-            </div>
-
-        </main>
-    </section>
-    <section id="chat">
-        <!-- contains all messages -->
-
-        <header>
-            <img class="pfp" src="icons/default_gc_pfp.png" alt="pfp" />
-
-            <h2>OGs @ USI</h2>
-        </header>
-        <main class="d-flex flex-column">
-
-            <!-- append messages inside here -->
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">michele</h5>
-                    <p class="card-text">Guys how is your work going? Remember we have to present on Monday so do you best.</p>
-                </div>
-                <p class="timestamp">14:27</p>
-            </div>
+        <section id="signup_form" class="position-relative">
+            <h2>Join HandShake now.</h2>
             <br>
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">loredana</h5>
-                    <p class="card-text">good :D</p>
-                </div>
-                <p class="timestamp">14:28</p>
-            </div>
-            <br>
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">jef</h5>
-                    <p class="card-text">im doing the database lmao</p>
-                </div>
-                <p class="timestamp">14:30</p>
-            </div>
-            <br>
-            
-            <div class="card self">
-                <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <img class="card-image" src="icons/default_pfp.png"/>
-                    <p></p>
-                    <p class="card-text">sorry everyone i was baking a cake</p>
-                </div>
-                <p class="timestamp">15:38</p>
-            </div>
-            <br>
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">nico</h5>
-                    <p class="card-text">classic sofia</p>
-                </div>
-                <p class="timestamp">15:39</p>
-            </div>
-            <br>
-        </main>
-        <footer>
-            <form id="search-bar" action="">
-                <input type="text" name="message" placeholder="Write something..." />
-                <button>💬</button>
+            <form class="text-center">
+                <input name="username" type="text" placeholder="Username">
+                <input name="email" type="text" placeholder="E-mail">
+
+                <br>
+                <br>
+                <input name="password" type="password" placeholder="Password">
+                <input name="confirm_password" type="password" placeholder="Confirm password">
+
+                <br>
+                <br>
+                <button class="btn btn-outline-light .mx-auto">Sign up</button>
             </form>
-        </footer>
-
+        </section>
+        
     </section>
 
+    <footer id="login_page_footer">
+        <p>made with ♡ by the <a class="link-light" href="https://github.com/ogs-at-usi/sa3-project" target="_blank">ogs @ USI</a></p>
+    </footer>
 </body>
 
 </html>
