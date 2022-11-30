@@ -12,7 +12,7 @@ body {
     background-color: var(--color-background);
 
     display: flex;
-    flex-direction: row;
+    /*flex-direction: row;*/
     overflow-x: hidden;
     flex-wrap: wrap;
 
@@ -63,6 +63,7 @@ header {
 
 /* section: menu */
 
+/*
 #menu {
     width: 20vw;
 }
@@ -70,6 +71,7 @@ header {
 #menu header {
     justify-content: space-between;
 }
+*/
 
 #menu nav {
     background-color: var(--color-primary);
@@ -113,7 +115,7 @@ header {
 /* section chat */
 #chat {
     display: flex;
-    width: 80vw;
+    /*width: 80vw;*/
 
     flex-direction: column;
 }
@@ -131,15 +133,19 @@ header {
 #chat footer {
     background-color: var(--color-secondary);
     margin-top: auto;
+    margin-left: 0;
     padding: 1vh;
     height: 8vh;
+    width: 100%;
+
+    /*
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between;*/
 }
 
 #chat input {
-    width: 70vw;
+    width: 70%;
     height: 5vh;
 }
 
