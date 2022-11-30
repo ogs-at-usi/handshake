@@ -100,10 +100,12 @@ header {
 }
 
 .contact {
+    /*
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    */
     height: 7vh;
     padding: 1vh;
 }
