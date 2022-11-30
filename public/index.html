@@ -23,12 +23,12 @@
 
 <body class="justify-content-between d-flex flex-column h-100">
     <section id="menu" class="col-12 col-md-4 col-lg-3">
-        <header class="justify-content-between">
+        <header class="justify-content-between align-items-center d-flex flex-row">
             <h1>HandShake</h1>
             <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
         </header>
 
-        <nav>
+        <nav class="align-items-center d-flex flex-row">
 
             <form id="search-bar" action="">
                 <input type="text" placeholder="Search..." />
@@ -37,26 +37,49 @@
         </nav>
         <main>
             <div class="contact justify-content-between d-flex flex-row align-items-center">
-                <img class="pfp" src="icons/default_gc_pfp.png" alt="pfp" />
-                <h3>OGs @ USI</h3>
-                <p class="notification">1</p>
+                <div class="col-3">
+
+                    <img class="pfp" src="icons/default_gc_pfp.png" alt="pfp" />
+                </div>
+                <div class="col-8">
+
+                    <h3>OGs @ USI</h3>
+                </div>
+                <div class="col-1">
+                    <p class="notification badge rounded-pill bg-danger">1</p>
+                </div>
+            </div>
+
+            <div class="contact justify-content-between d-flex flex-row align-items-center">
+                <div class="col-3">
+
+                    <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
+                </div>
+                <div class="col-8">
+                    <h3>Pautasso</h3>
+                </div>
+                <div class="col-1">
+                    <p class="notification badge rounded-pill bg-danger"></p>
+                </div>
+
             </div>
             <div class="contact justify-content-between d-flex flex-row align-items-center">
-                <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
-                <h3>Pautasso</h3>
-                <p class="notification">1</p>
-            </div>
-            <div class="contact justify-content-between d-flex flex-row align-items-center">
-                <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
-                <h3>Mom</h3>
-                <p class="notification"></p>
+                <div class="col-3">
+                    <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
+                </div>
+                <div class="col-8">
+                    <h3>Mom</h3>
+                </div>
+                <div class="col-1">
+                    <p class="notification badge rounded-pill bg-danger"></p>
+                </div>
             </div>
         </main>
     </section>
-    <section id="chat" class="col-12 col-md-8 col-lg-9">
+    <section id="chat" class="col-12 col-md-8 col-lg-9 d-flex flex-column">
         <!-- contains all messages -->
 
-        <header>
+        <header class="align-items-center d-flex flex-row">
             <img class="pfp" src="icons/default_gc_pfp.png" alt="pfp" />
 
             <h2>OGs @ USI</h2>
