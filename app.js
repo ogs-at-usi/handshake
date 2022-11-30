@@ -10,7 +10,7 @@ require('dotenv').config();
 
 const app = express();
 const initDB = require('./models');
-const server_socket = require('../serverSocket');
+const server_socket = require('./serverSocket');
 
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
