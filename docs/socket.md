@@ -1,28 +1,69 @@
-## Socket User & Server
+
+# Socket User & Server
 
 
-### Login 
-1. User insert the username and password  and Post(user,pwd) to AUTH (login)
-2. User receive the cookie (JWT, RT)
-3. The cookies are sent to the server 
-4. User establish a connection to the Socket and the socket.userId = userId
-5. The userId will join all the room of the chats, socket.join(chatId)
-6. Socket emit('chats:read', chats) 
- 	- chats is a list of chat of the user
+## Login 
 
-### Send Message
-1. User send an http request  Post /chat/:chatID/messages
-			- messages is  { type, content}
-2.  socket emit to the room, io.to(chatId).emit('messages:create', 'message');
+### Auth Socket Middleware
+At the login the client has in the header of the requests the Auth Cookies.
+
+The ``JWT_COOKIE_NAME`` will be saved:
+``` js
+const jwtToken = socket.request.cookies[authConstants.JWT_COOKIE_NAME]; 
+``` 
+Try to verify the credentials of the user  with the function ```  verifyJWT(jwtToken) ```  and store it  ``socket.userID = userID``
 
 
-### Retrieve contact 
-1. User send an http request POST /chat:
-2. If the user does not have a chat with the other user:
-  		- The socket of the users will be added in the room socket.join(chatId)
-  		- socket.emit ('chats:create')
+### Joining rooms
+User connects to all the rooms ``socket.join(chatID)`` for each ``chatID `` in chats of the user.
+
+###   Socket emit
+Socket emit the list of the chat of the user
+``socket.emit('chats:read'`, chats)``
+
+chats:
+``` json
+{
+	"chats": {
+		"_id": "id",
+		"members": "int"
+		"messages": "int"
+		"isGroup": "bool"
+		}
+}
+```
+
+
+## Send Message
+On sending messages socket will emit the message for the users inside of the room of the chat.
+
+``` js 
+io.to(charID).emit('messages:create', 'message')
+```
+message:
+``` json
+{
+  "message": {
+    "type": "text",
+    "content": "mystringcontent",
+  }
+}
+```
+
+
+## New chat 
+
+If the user does not have a chat with the other user:
+	-      Socket of all the user involed in the chat are added in the room
+``` js
+io.in(userID).in(userID).join(chatID)
+```
+ socket will emit the ``chats:create``
+```js
+ socket.emit ('chats:create')
+ ```
 	
 
 
-### Future feature
+## Future feature
 - messages:read a flag if the message has been readed already.
