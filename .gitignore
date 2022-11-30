@@ -1,3 +1,6 @@
+# secrets
+.secret
+
 # Logs
 logs
 *.log
@@ -96,13 +99,13 @@ dist
 # Comment in the public line in if your project uses Gatsby and not Next.js
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
+views.js
 
 # vuepress build output
 .vuepress/dist
 
 # vuepress v2.x temp and cache directory
 .temp
-.cache
 
 # Docusaurus cache and generated files
 .docusaurus
@@ -121,6 +124,10 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+.vscode
+
+# Idea
+.idea
 
 # yarn v2
 .yarn/cache

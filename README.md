@@ -14,28 +14,48 @@
 
 
 ### Project name
+HandShake
 
+### Vision
+Worried that WhatsApp will steal your data? None of your friends use Signal? Scared that Telegram will delete your account if you don't constantly use it?
 
-### Concept
-Messaging website
+Then **HandShake** is the solution for you!
+
+A brand-new messaging service that is a thousand times better than our competitors:
+- it is prettier,
+- it doesn't steal your data,
+- it is being developed with ♡ by the ogs @ USI.
+
+Not only you can send text messages, audio messages, pictures and videos, but you can also play games in the chat!
+
+*"I can do that on other messaging apps!!"*
+
+Sure, but have you ever played Breakout against your friend with the texts you sent each other? Yeah, *thought so*.
+Well, you'll be able to do that, if you use HandShake!
+
+Download **HandShake** and join millions of other users today.
 
 ### Main features
 1. Login with email and password
-2. Send message,to another user thanks the user name, in real time
-3. Send message, to a bunch or people in a group, in real time
-4. Each message has properties:
-  - Time has been sent showed
+2. Send messages to other users, thanks to the username, in real time
+3. Send messages to a group of people, in real time
+4. Each message has these properties:
+  - Time which it has been sent
   - Name of the sender(in groups)
   - Read status or received status
   - message can be:
     - Plain text
-    - file (images formats, video formats, .txt, .zip
+    - file (images formats, video formats, .txt, .zip)
     - Game
-5. The chat has properties:
-  - Single or group
-  - Background Image changeble
-  - Backup the messages in locale
+5. The chat has these properties:
+  - Single chat or group chat
+  - Changeble background Images
   - Upload file
 6. Game has properties:
   - singleplayer or multiplayer
+
+### Future features
+- Homepage
+- Aliases for users
   
+
