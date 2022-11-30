@@ -10,6 +10,7 @@ require('dotenv').config();
 
 const app = express();
 const initDB = require('./models');
+const server_socket = require('../serverSocket');
 
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
@@ -55,6 +56,7 @@ server.on('listening', function () {
 });
 
 // TODO websocket server
-WebSocket.init(server);
+// eslint-disable-next-line no-undef
+serverSocket.init(server);
 initDB();
 server.listen(app.get('port'));
