@@ -1,3 +1,4 @@
+
 /*
 To make it JSON:
 
@@ -14,7 +15,6 @@ const u = new User(JSON.parse(myjsonresponse));
 > u;
 < User { _id: null, name: 'John', email: null, chats: null }
 */
-
 class User {
     // password not included, never used, only to retrieve token
     _id = null;
