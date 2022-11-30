@@ -15,18 +15,18 @@ Try to verify the credentials of the user  with the function ```  verifyJWT(jwtT
 
 
 ### Joining rooms
-User connects to all the rooms ``socket.join(chatID)`` for each ``chatID `` in chats of the user.
+User connects to all the rooms ``socket.join(chatID)`` for each ``chatID `` in chat of the user.
 
 ###   Socket emit
 Socket emit the list of the chat of the user
-``socket.emit('chats:read'`, chats)``
+``socket.emit('chats:read'`, chat)``
 
-chats:
+chat:
 ``` json
 {
 	"chats": {
 		"_id": "id",
-		"members": "int"
+		"members": "[userID]"
 		"messages": "int"
 		"isGroup": "bool"
 		}
