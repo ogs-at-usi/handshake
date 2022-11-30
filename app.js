@@ -55,6 +55,6 @@ server.on('listening', function () {
 });
 
 // TODO websocket server
-
+WebSocket.init(server);
 initDB();
 server.listen(app.get('port'));
