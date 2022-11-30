@@ -6,19 +6,13 @@
 2. User receive the cookie (JWT, RT)
 3. The cookies are sent to the server 
 4. User establish a connection to the Socket and the socket.userId = userId
-5. Socket emit('chats:read', chats) where chats is a list of chat of the user
-
-
-
-4. Join room 'userID' socket.useID
-5. Retrieve user's chats 
-6. For each chat, join it (chat_id)
-7. Server Emit 'chats' to socket
-
+5. The userId will join all the room of the chats, socket.join(chatId)
+6. Socket emit('chats:read', chats) 
+ 	- chats is a list of chat of the user
 
 ### Send message
-1. Post /chat/:chatID/messages
-			- { type, content}
+1. User send an http request to Post /chat/:chatID/messages
+			- messages is  { type, content}
 			- Store the message in the DB
 2.  socket emit to the room
 
