@@ -14,7 +14,7 @@
 1. User send an http request to Post /chat/:chatID/messages
 			- messages is  { type, content}
 			- Store the message in the DB
-2.  socket emit to the room
+2.  socket emit to the room, io.to(chatId).emit('messages:create', 'message');
 
 
 ### Create room
