@@ -57,7 +57,7 @@ chat:
 When a message is created via [route POST /chats/:chatId/messages](routes.md), the server socket will emit `messages:create` for all the members of the chat room.
 
 ``` js 
-io.to(chatId).emit('messages:create', msgjson)
+io.to(chatId).emit('messages:create', msgjson);
 ```
 
 message:
@@ -80,16 +80,16 @@ If the user does not have a chat with the other user:
 - All the members of the chat get retrieved by joining the rooms corresponding to their userId's to the chatId rooms.
 
 ``` js
-io.in(userId).in(userId).join(chatId)
+io.in(userId).in(userId).join(chatId);
 ```
 
-- socket will emit the `chats:create`
+- The new chat will be synchronized with the online clients members using the message `chats:create`
 
 ```js
- socket.emit ('chats:create')
+ io.in(chatId).emit('chats:create', chatjson);
  ```
  
- - clients listening on message `chats:create` will sync the newly created chat, adding it to their chats.
+ - so clients listening on message `chats:create` will sync the newly created chat, adding it to their chats.
  - clients can now [send a message](#send_message)
 
 ## Future feature
