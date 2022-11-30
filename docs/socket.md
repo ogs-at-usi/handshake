@@ -10,19 +10,19 @@
 6. Socket emit('chats:read', chats) 
  	- chats is a list of chat of the user
 
-### Send message
-1. User send an http request to Post /chat/:chatID/messages
+### Send Message
+1. User send an http request  Post /chat/:chatID/messages
 			- messages is  { type, content}
-			- Store the message in the DB
 2.  socket emit to the room, io.to(chatId).emit('messages:create', 'message');
 
 
-### Create room
-1. Post /chat 
-		 - if the user does not have a chat
-2.  messages:create
+### Retrieve contact 
+1. User send an http request POST /chat:
+2. If the user does not have a chat with the other user:
+  		- The socket of the users will be added in the room socket.join(chatId)
+  		- socket.emit ('chats:create')
 	
 
 
 ### Future feature
-- messages:read
+- messages:read a flag if the message has been readed already.
