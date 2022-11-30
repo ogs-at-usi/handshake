@@ -33,9 +33,6 @@ button {
     border: 2px solid var(--color-background);
     border-radius: 100%;
     height: 5vh;
-    margin-right: 2vh;
-    margin-left: 2vh;
-
 }
 
 form {
@@ -65,7 +62,7 @@ header {
 }
 
 #menu input {
-    width: 90%;
+    width: 80%;
     height: 3vh;
 }
 
@@ -102,7 +99,6 @@ header {
 }
 
 #chat input {
-    width: 90%;
     height: 5vh;
 }
 
@@ -124,8 +120,8 @@ header {
 
 .timestamp {
     text-align: right;
-    padding-right: 1vw;
     font-family: 'Helvetica', 'Arial', sans-serif;
+    padding-right: 1vw;
 }
 
 .card-image {

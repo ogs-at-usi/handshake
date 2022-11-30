@@ -87,10 +87,18 @@
         <main class="d-flex flex-column">
 
             <!-- append messages inside here -->
+            <div class="card other">
+                <div class="card-body">
+                    <h5 class="card-title">Sender</h5>
+                    <p class="card-text">Message text</p>
+                </div>
+                <p class="timestamp text-end">Timestamp</p>
+            </div>
+            <br>
         </main>
         <footer class="d-flex row align-items-center justify-content-between">
             <form id="search-bar" action="">
-                <input type="text" name="message" placeholder="Write something..." />
+                <input type="text" name="message" placeholder="Write something..." class="col-9"/>
                 <button>💬</button>
             </form>
         </footer>
