@@ -1,5 +1,4 @@
-<%- include('contactlist')  %> 
-<% console.log(user) %>
+<%- include('contactlist', {contacts})  %>    <!-- Contacts: array; e.name; e.notification -->
 
     <section id="chat">
         <!-- contains all messages -->
@@ -12,49 +11,8 @@
         <main class="d-flex flex-column">
 
             <!-- append messages inside here -->
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">michele</h5>
-                    <p class="card-text">Guys how is your work going? Remember we have to present on Monday so do you best.</p>
-                </div>
-                <p class="timestamp">14:27</p>
-            </div>
-            <br>
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">loredana</h5>
-                    <p class="card-text">good :D</p>
-                </div>
-                <p class="timestamp">14:28</p>
-            </div>
-            <br>
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">jef</h5>
-                    <p class="card-text">im doing the database lmao</p>
-                </div>
-                <p class="timestamp">14:30</p>
-            </div>
-            <br>
+
             
-            <div class="card self">
-                <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <img class="card-image" src="icons/default_pfp.png"/>
-                    <p></p>
-                    <p class="card-text">sorry everyone i was baking a cake</p>
-                </div>
-                <p class="timestamp">15:38</p>
-            </div>
-            <br>
-            <div class="card other">
-                <div class="card-body">
-                    <h5 class="card-title">nico</h5>
-                    <p class="card-text">classic sofia</p>
-                </div>
-                <p class="timestamp">15:39</p>
-            </div>
-            <br>
         </main>
         <footer>
             <form id="search-bar" action="">
@@ -64,5 +22,4 @@
         </footer>
 
     </section><div>
-<%- include('contact'); %>
 </div>
