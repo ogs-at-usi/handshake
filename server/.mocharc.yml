@@ -1,8 +1,0 @@
-require: should
-R: spec
-ui: bdd
-trace-warnings: true
-exit: true
-timeout: 15000
-reporter: spec
-recursive: true

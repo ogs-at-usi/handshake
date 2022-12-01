@@ -1,0 +1,209 @@
+@import 'variables.css';
+
+/* global changes */
+* {
+    font-family: 'Francois One', sans-serif;
+    color: var(--color-text);
+    margin: 0;
+    /*scrollbar-color: var(--color-background) var(--color-primary) !important;*/
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-background);
+    overflow-x: hidden;
+    flex-wrap: wrap;
+    align-content: space-between;
+
+    width: 100vw;
+    max-width: 100vw;
+
+    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+}
+
+input {
+    background-color: var(--color-background);
+    border-style: none;
+    border-radius: 20px;
+    padding: 1vh;
+}
+
+button {
+    background-color: var(--color-background);
+    border-style: none;
+    border-radius: 100%;
+}
+
+.pfp {
+    border: 2px solid var(--color-background);
+    border-radius: 100%;
+    height: 5vh;
+    margin-right: 2vh;
+    margin-left: 2vh;
+
+}
+
+form {
+    width: 100%;
+
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1vh;
+    height: 8vh;
+    background-color: var(--color-secondary);
+}
+
+/* section: menu */
+
+#menu {
+    width: 20vw;
+}
+
+#menu header {
+    justify-content: space-between;
+}
+
+#menu nav {
+    background-color: var(--color-primary);
+    padding: 1vh;
+    height: 8vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#menu main {
+    background-color: var(--color-surface);
+    height: 84vh;
+    max-height: 84vh;
+    overflow: auto;
+}
+
+#menu input {
+    width: 80%;
+    height: 3vh;
+}
+
+#menu button {
+    height: 3vh;
+    width: 3vh;
+}
+
+.contact {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 7vh;
+    padding: 1vh;
+}
+
+.contact:hover {
+    background-color: var(--color-secondary);
+}
+
+/* section chat */
+#chat {
+    display: flex;
+    width: 80vw;
+
+    flex-direction: column;
+}
+
+/*#chat header {
+}*/
+
+#chat main {
+    background-color: var(--color-background);
+    height: 84vh;
+    padding: 2vh;
+    overflow-y: scroll;
+}
+
+#chat footer {
+    background-color: var(--color-secondary);
+    margin-top: auto;
+    padding: 1vh;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#chat input {
+    width: 70vw;
+    height: 5vh;
+}
+
+#chat button {
+    height: 5vh;
+    width: 5vh;
+}
+
+/* chat bubble */
+.card {
+    background-color: var(--color-primary);
+    width: fit-content;
+    max-width: 40vw;
+}
+
+.timestamp {
+    text-align: right;
+    padding-right: 1vw;
+}
+
+.card-image {
+    border-radius: 1vh;
+    max-width: 20vw;
+}
+
+.self {
+    align-self: end;
+}
+
+/* login page */
+#title {
+    height: fit-content;
+    width: 100%;
+    padding: 1vw;
+    background-color: var(--color-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#login {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100vw;
+    max-width: 100vw;
+    height: 50vh;
+    max-height: 100vh;
+}
+
+#login_form,
+#signup_form {
+    width: fit-content;
+
+}
+
+#login_form input,
+#signup_form input {
+    border: 1px solid var(--color-text);
+}
+
+#login_page_footer {
+    height: fit-content;
+    width: 100%;
+    padding: 1vw;
+    text-align: center;
+    background-color: var(--color-surface);
+}
