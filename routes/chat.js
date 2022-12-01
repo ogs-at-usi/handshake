@@ -8,30 +8,6 @@ const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 const { Message } = require('../models/message');
 
-  try {
-    const userChat = await UserChat.findOne({
-      _id: new ObjectId(req.params.chatID),
-      user: new ObjectId(req.userID),
-    })
-      .populate({
-        path: 'chat',
-        populate: {
-          path: 'messages',
-        },
-      })
-      .exec();
-
-    if (userChat?.chat?.messages) {
-      res.json(userChat.chat.messages);
-    } else {
-      res.status(422).end();
-    }
-  } catch (e) {
-    // cant find the the chat with the user
-    // error
-    res.status(422).end();
-  }
-});
 
 router.get('/users', async function (req, res) {
   const filter = req.query.filter ?? '';
