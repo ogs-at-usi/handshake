@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class Message {
     _id = null;
     sender = null;
