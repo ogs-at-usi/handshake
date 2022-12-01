@@ -8,7 +8,7 @@ const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 
 // socket.io
-const socket = require('../serverSocket').socket;
+const io = require('../serverSocket').io;
 // const soc
 
 router.get('/chats', async function (req, res) {
@@ -40,8 +40,8 @@ router.get('/messages/:chatID', async function (req, res) {
       })
       .exec();
 
-    // // SOCKET CALL TO SEND MESSAGE TO EVERY ONE IN THE ROOM WITH CHAT ID
-    // socket.emit('messages:create', userChat.chat.messages);
+    // SOCKET CALL TO SEND MESSAGE TO EVERY ONE IN THE ROOM WITH CHAT ID
+    // io.to(req.params.chatID).emit('messages:create', userChat.chat.messages);
 
 
 
@@ -130,6 +130,10 @@ router.post('/chat', async function (req, res) {
       user: otherUser._id,
       chat: chatID,
     });
+
+
+    io.to(req.userID).to(otherID).emit('chats:create', chat);
+    
 
     res.json(chat);
   } else {
