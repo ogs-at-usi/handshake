@@ -30,21 +30,11 @@ ejsc.compile('views', 'public/js', false);
 app.use('/auth', require('./routes/auth'));
 app.use('/api', require('./routes/chat'));
 
-// TODO - add routes here
-
-app.use(function (req, res, next) {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+// serve Vue app if no matching route is found
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.use(function (err, req, res, _) {
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: err,
-  });
-});
 
 // start server
 app.set('port', process.env.PORT || 8888);
