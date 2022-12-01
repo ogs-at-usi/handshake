@@ -1,4 +1,3 @@
-
 /*
 To make it JSON:
 
@@ -17,16 +16,16 @@ const u = new User(JSON.parse(myjsonresponse));
 */
 // eslint-disable-next-line no-unused-vars
 class User {
-    // password not included, never used, only to retrieve token
-    _id = null;
-    name = null;
-    email = null;
-    chats = null;
+  // password not included, never used, only to retrieve token
+  _id = null;
+  name = null;
+  email = null;
+  chats = null;
 
-    constructor({ _id = null, name = null, email = null, chats = null }) {
-        this._id = _id;
-        this.name = name;
-        this.email = email;
-        this.chats = chats;
-    };
-};
+  constructor({ _id = null, name = null, email = null, chats = null }) {
+    this._id = _id;
+    this.name = name;
+    this.email = email;
+    this.chats = chats;
+  }
+}

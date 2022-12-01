@@ -43,22 +43,16 @@ router.get('/messages/:chatID', async function (req, res) {
     // SOCKET CALL TO SEND MESSAGE TO EVERY ONE IN THE ROOM WITH CHAT ID
     // io.to(req.params.chatID).emit('messages:create', userChat.chat.messages);
 
-
-
     if (userChat?.chat?.messages) {
       res.json(userChat.chat.messages);
     } else {
       res.status(422).end();
     }
-
-
   } catch (e) {
     // cant find the the chat with the user
     // error
     res.status(422).end();
   }
-
-
 });
 
 router.get('/users', async function (req, res) {
@@ -131,9 +125,7 @@ router.post('/chat', async function (req, res) {
       chat: chatID,
     });
 
-
     io.to(req.userID).to(otherID).emit('chats:create', chat);
-    
 
     res.json(chat);
   } else {
