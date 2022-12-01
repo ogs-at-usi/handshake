@@ -35,26 +35,16 @@ function init(server) {
         console.log('✅User connected with id ' + socket.id);
         console.log('Chat list is coming...');
         // retrieve the user's chats directly from the db 
-        joinChat(socket.userID);
-        const userChat = getChat(socket.userID);
+        // joinChat(socket.userID);
+        socket.join(socket.userID);
+        const userChat = getChats(socket.userID);
+        joinChat(userChat, socket);
         // send the user's chats to the client
         socket.emit('chats:read', userChat);
 
-        
-        
-        
         socket.on('disconnect', () => {
             console.log('⛔User disconnected with id ' + socket.id);
         });
-
-        socket.on('messages:create', (message) => {
-            console.log('message: ' + message);
-            io.to(message.chatID).emit('messages:create', message);
-            
-        });
-        
-
-
     });
 
 
@@ -67,31 +57,21 @@ function init(server) {
 
 
 
-function getChat (userId) {
+async function getChats (userId) {
 
-    UserChat.find({user: userId}).populate('chat').exec(function (err, userChats) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("userChats: " + userChats);
-            return userChats;
-        }
-    });
+    const [error, userChats] = await UserChat.find({user: userId}).populate('chat').exec();
+    if (error) {
+        console.log(error);
+        return [];
+    }
+    return userChats.map(userChat => userChat.chat);
 }
 
 // join in every chat room of the user 
-function joinChat (userId) {
+function joinChat (userChats, socket) {
 
-    UserChat.find({user: userId}).populate('chat').exec(function (err, userChats) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("userChats: " + userChats);
-            userChats.forEach(userChat => {
-                console.log("userChat: " + userChat);
-                io.join(userChat.chat._id);
-            });
-        }
+    userChats.forEach(chat => {
+        socket.join(chat._id.toString());
     });
 
 }
