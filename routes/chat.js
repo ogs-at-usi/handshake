@@ -6,22 +6,7 @@ const { UserChat } = require('../models/userChat');
 const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
-
-router.get('/chats', async function (req, res) {
-  // const test = "5e63c3a5e4232e4cd0274ac2";
-  const chats = await UserChat.find({
-    user: new ObjectId(req.userID),
-  })
-    .populate('chat')
-    .exec();
-
-  res.json(chats.map((userChat) => userChat.chat));
-});
-
-router.get('/messages/:chatID', async function (req, res) {
-  if (!ObjectID.isValid(req.params.chatID)) {
-    return res.status(406).end();
-  }
+const { Message } = require('../models/message');
 
   try {
     const userChat = await UserChat.findOne({
