@@ -124,3 +124,32 @@ router.post('/chat', async function (req, res) {
     res.status(204).json(commonChats);
   }
 });
+
+router.post('/chat/:chatId/messages', async function (req, res) {
+  if (!ObjectID.isValid(req.params.chatId)) {
+    return res.status(406).end();
+  }
+
+  const message = req.body.message;
+
+  try {
+    await UserChat.findOne({
+      _id: new ObjectId(req.params.chatId),
+      user: new ObjectId(req.userID),
+    });
+
+    const newMessage = await Message.create({
+      sender: req.userID,
+      chat: req.params.chatId,
+      type: message.type,
+      content: message.content,
+      sent_at: new Date(),
+      delivered_at: new Date(),
+    });
+
+    res.json(newMessage);
+  } catch (e) {
+    // cant find the chat with the user - error
+    res.status(422).end();
+  }
+});
