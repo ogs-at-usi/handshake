@@ -61,7 +61,7 @@ The `chat` is filled thanks to the `:chatId` parameter in the route (`req.params
 
 The `sent_at` is filled in the server, with the date provided by the backend.
 
-The `delivered_at` and `read_at` are also filled server side.
+The `delivered_at` and `seen` are also filled server side.
 
 
 A new _Message_ document from the Mongoose model is created and saved to the database.
