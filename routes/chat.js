@@ -7,6 +7,10 @@ const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 
+// socket.io
+const socket = require('../serverSocket').socket;
+// const soc
+
 router.get('/chats', async function (req, res) {
   // const test = "5e63c3a5e4232e4cd0274ac2";
   const chats = await UserChat.find({
@@ -36,16 +40,25 @@ router.get('/messages/:chatID', async function (req, res) {
       })
       .exec();
 
+    // SOCKET CALL TO SEND MESSAGE TO EVERY ONE IN THE ROOM WITH CHAT ID
+    socket.emit('messages:create', userChat.chat.messages);
+
+
+
     if (userChat?.chat?.messages) {
       res.json(userChat.chat.messages);
     } else {
       res.status(422).end();
     }
+
+
   } catch (e) {
     // cant find the the chat with the user
     // error
     res.status(422).end();
   }
+
+
 });
 
 router.get('/users', async function (req, res) {

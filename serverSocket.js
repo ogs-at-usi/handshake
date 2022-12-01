@@ -46,10 +46,18 @@ function init(server) {
         socket.on('disconnect', () => {
             console.log('⛔User disconnected with id ' + socket.id);
         });
+
+        socket.on('messages:create', (message) => {
+            console.log('message: ' + message);
+            io.to(message.chatID).emit('messages:create', message);
+            
+        });
         
 
 
     });
+
+
 
 
 }
@@ -92,6 +100,6 @@ function joinChat (userId) {
 
 
 module.exports = {
-    init: init
+    init
 };
 
