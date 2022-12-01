@@ -25,9 +25,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    defaults:
-        run:
-            working-directory: ./server
+#    defaults:
+#        run:
+#            working-directory: ./
 
     strategy:
       matrix:
@@ -62,9 +62,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    defaults:
-        run:
-            working-directory: ./server
+#    defaults:
+#        run:
+#            working-directory: ./
 
     strategy:
       matrix:
