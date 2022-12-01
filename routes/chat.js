@@ -12,7 +12,9 @@ router.get('/users', async function (req, res) {
   const filter = req.query.filter ?? '';
 
   const searchedUsers = await User.find({
-    name: filter,
+    name: {
+      $regex: `^${filter}`,
+    },
   });
 
   res.json(searchedUsers);
