@@ -40,8 +40,8 @@ router.get('/messages/:chatID', async function (req, res) {
       })
       .exec();
 
-    // SOCKET CALL TO SEND MESSAGE TO EVERY ONE IN THE ROOM WITH CHAT ID
-    socket.emit('messages:create', userChat.chat.messages);
+    // // SOCKET CALL TO SEND MESSAGE TO EVERY ONE IN THE ROOM WITH CHAT ID
+    // socket.emit('messages:create', userChat.chat.messages);
 
 
 
