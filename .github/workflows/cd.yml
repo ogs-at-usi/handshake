@@ -1,0 +1,36 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-vue:
+    name: Build Vue.js app
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./client
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install packages
+        run: yarn
+      - name: Build Vue.js app
+        run: yarn run build
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: vue-build
+          path: ${GITHUB_WORKSPACE}/public
+      - name: Deploy to GitHub Pages
+        uses: actions/github-script@v5
+        with:
+          folder: ${GITHUB_WORKSPACE}/public

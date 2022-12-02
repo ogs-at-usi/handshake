@@ -26,20 +26,9 @@ app.set('view engine', 'html');
 app.use('/auth', require('./routes/auth'));
 app.use('/api', authenticate, require('./routes/chat'));
 
-// TODO - add routes here
-
-app.use(function (req, res, next) {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-app.use(function (err, req, res, _) {
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: err,
-  });
+// serve Vue app if no matching route is found
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 module.exports = app;
