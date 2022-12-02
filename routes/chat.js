@@ -80,10 +80,10 @@ router.post('/chat', async function (req, res) {
       chat: chatID,
     });
 
-    res.json(chat);
+    res.status(201).json(chat);
   } else {
     // join
-    res.status(204).json(commonChats);
+    res.status(200).json(commonChats);
   }
 });
 
@@ -109,9 +109,5 @@ router.post('/chat/:chatId/messages', async function (req, res) {
       delivered_at: new Date(),
     });
 
-    res.json(newMessage);
-  } catch (e) {
-    // cant find the chat with the user - error
-    res.status(422).end();
-  }
+  res.status(201).json(newMessage);
 });
