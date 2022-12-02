@@ -14,6 +14,9 @@ describe('HTTP Routes tests', () => {
   let user;
   // eslint-disable-next-line no-unused-vars
   let otherUser;
+  let noUser;
+  let app;
+  let createdChatId;
 
   before(async () => {
     require('dotenv').config();
