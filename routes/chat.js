@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 module.exports = router;
-const ObjectID = require('mongodb').ObjectId;
 const { UserChat } = require('../models/userChat');
 const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
@@ -21,21 +20,21 @@ router.get('/users', async function (req, res) {
 });
 
 router.post('/chat', async function (req, res) {
-  const otherID = req.body.otherID;
+  const otherId = req.body.otherId;
 
-  if (!ObjectID.isValid(otherID)) {
+  if (!ObjectId.isValid(otherId)) {
     return res.status(406).end();
   }
 
   const otherUser = await User.findOne({
-    _id: ObjectId(otherID),
+    _id: ObjectId(otherId),
   });
   if (!otherUser) {
     return res.status(406).end();
   }
 
   const user = await User.findOne({
-    _id: ObjectId(req.userID),
+    _id: ObjectId(req.userId),
   });
 
   if (!user) {
@@ -69,15 +68,15 @@ router.post('/chat', async function (req, res) {
       is_group: false,
       messages: [],
     });
-    const chatID = chat._id;
+    const chatId = chat._id;
 
     await UserChat.create({
       user: user._id,
-      chat: chatID,
+      chat: chatId,
     });
     await UserChat.create({
       user: otherUser._id,
-      chat: chatID,
+      chat: chatId,
     });
 
     res.status(201).json(chat);
@@ -88,7 +87,7 @@ router.post('/chat', async function (req, res) {
 });
 
 router.post('/chat/:chatId/messages', async function (req, res) {
-  if (!ObjectID.isValid(req.params.chatId)) {
+  if (!ObjectId.isValid(req.params.chatId)) {
     return res.status(406).end();
   }
 
@@ -104,7 +103,7 @@ router.post('/chat/:chatId/messages', async function (req, res) {
 
   const result = await UserChat.findOne({
     chat: new ObjectId(req.params.chatId),
-    user: new ObjectId(req.userID),
+    user: new ObjectId(req.userId),
   });
   console.log(result);
   if (!result) {
@@ -112,7 +111,7 @@ router.post('/chat/:chatId/messages', async function (req, res) {
   }
 
   const newMessage = await Message.create({
-    sender: ObjectId(req.userID),
+    sender: ObjectId(req.userId),
     chat: ObjectId(req.params.chatId),
     type: message.type,
     content: message.content,
