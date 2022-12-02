@@ -12,7 +12,6 @@ const { Message } = require('../models/message');
 describe('HTTP Routes tests', () => {
   const co = [];
   let user;
-  // eslint-disable-next-line no-unused-vars
   let otherUser;
   let noUser;
   let app;
