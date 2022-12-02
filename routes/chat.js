@@ -6,7 +6,7 @@ const { UserChat } = require('../models/userChat');
 const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
-const { Message } = require('../models/message');
+const { Message, MessageType } = require('../models/message');
 
 router.get('/users', async function (req, res) {
   const filter = req.query.filter ?? '';
