@@ -102,20 +102,23 @@ router.post('/chat/:chatId/messages', async function (req, res) {
     return res.status(400).end();
   }
 
-  try {
-    await UserChat.findOne({
-      _id: new ObjectId(req.params.chatId),
-      user: new ObjectId(req.userID),
-    });
+  const result = await UserChat.findOne({
+    chat: new ObjectId(req.params.chatId),
+    user: new ObjectId(req.userID),
+  });
+  console.log(result);
+  if (!result) {
+    return res.status(404).end();
+  }
 
-    const newMessage = await Message.create({
-      sender: req.userID,
-      chat: req.params.chatId,
-      type: message.type,
-      content: message.content,
-      sent_at: new Date(),
-      delivered_at: new Date(),
-    });
+  const newMessage = await Message.create({
+    sender: ObjectId(req.userID),
+    chat: ObjectId(req.params.chatId),
+    type: message.type,
+    content: message.content,
+    sent_at: new Date(),
+    delivered_at: new Date(),
+  });
 
   res.status(201).json(newMessage);
 });
