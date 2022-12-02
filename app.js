@@ -10,10 +10,9 @@ const { authenticate } = require('./middlewares/authentication.middleware');
 require('dotenv').config();
 
 const app = express();
-const initDB = require('./models');
 
 app.use(logger('dev'));
-app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false })); // parse application/x-www.js-form-urlencoded
 app.use(express.json({ limit: '4MB' })); // parse application/json
 app.use(multer().none()); // parse multipart/form-data
 app.use(cookieParser());
@@ -46,16 +45,4 @@ app.use(function (err, req, res, _) {
   });
 });
 
-// start server
-app.set('port', process.env.PORT || 8888);
-
-const server = require('http').createServer(app);
-
-server.on('listening', function () {
-  console.log('Express server listening on port ' + server.address().port);
-});
-
-// TODO websocket server
-
-initDB();
-server.listen(app.get('port'));
+module.exports = app;
