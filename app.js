@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const multer = require('multer');
-const ejsc = require('ejsc-views');
 const cookieParser = require('cookie-parser');
 const { authenticate } = require('./middlewares/authentication.middleware');
 
@@ -22,8 +21,6 @@ app.use(
 );
 
 app.set('view engine', 'html');
-
-ejsc.compile('views', 'public/js', false);
 
 // TODO - controllers
 app.use('/auth', require('./routes/auth'));
