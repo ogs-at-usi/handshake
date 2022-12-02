@@ -87,14 +87,16 @@ describe('HTTP Routes tests', () => {
 
   describe('Filtering the user name', () => {
     it('should return 200', (done) => {
-      request
+      request(app)
         .get('/api/users')
         .query({ filter: 'mochi' })
         .expect(200)
-        .end(() => done());
+        .end((err) => {
+          done(err);
+        });
     });
     it('should return the matching users', (done) => {
-      request
+      request(app)
         .get('/api/users')
         .query({ filter: 'm' })
         .expect(200)
@@ -105,7 +107,7 @@ describe('HTTP Routes tests', () => {
         });
     });
     it('should return no user', (done) => {
-      request
+      request(app)
         .get('/api/users')
         .query({ filter: 'bob' })
         .expect(200)
@@ -118,13 +120,147 @@ describe('HTTP Routes tests', () => {
   });
 
   describe('Creating a new chat', () => {
-    it('should return 406 if id is not valid', (done) => {
-      request
+    it('should return 406 if the id is not valid', (done) => {
+      request(app)
         .post('/api/chat')
         .send({ otherID: 'yothisiswrong' })
         .expect(406)
-        .end(() => {
-          done();
+        .end((err) => {
+          done(err);
+        });
+    });
+    it('should return 406 if the is no user', (done) => {
+      request(app)
+        .post('/api/chat')
+        .send({ otherID: '5e63c3a5e4232e4cd0274ae1' })
+        .expect(406)
+        .end((err) => {
+          done(err);
+        });
+    });
+    it('should return a common chat if it already exists', (done) => {
+      Chat.find({})
+        .count()
+        .exec((err, numberOfChats) => {
+          if (err) return done(err);
+          request(app)
+            .post('/api/chat')
+            .send({ otherID: otherUser._id.toString() })
+            .expect(200)
+            .end((err, res) => {
+              if (err) return done(err);
+              res.body.length.should.be.greaterThan(0);
+
+              Chat.find({})
+                .count()
+                .exec((err, newNumberOfChats) => {
+                  if (err) return done(err);
+                  numberOfChats.should.be.equal(newNumberOfChats);
+                  done();
+                });
+            });
+        });
+    });
+    it('should return a new chat if it does not exist', (done) => {
+      Chat.find({})
+        .count()
+        .exec((err, numberOfChats) => {
+          if (err) return done(err);
+          request(app)
+            .post('/api/chat')
+            .send({ otherID: noUser._id.toString() })
+            .expect(201)
+            .end((err, res) => {
+              if (err) return done(err);
+              console.log(res.body._id);
+              createdChatId = res.body._id.toString();
+              should(res.body).have.property('messages', []);
+
+              Chat.find({})
+                .count()
+                .exec((err, newNumberOfChats) => {
+                  if (err) return done(err);
+                  newNumberOfChats.should.be.equal(numberOfChats + 1);
+                  done();
+                });
+            });
+        });
+    });
+  });
+
+  describe('Create a new message', () => {
+    it('should return 406 if the ID is not valid', (done) => {
+      const chatId = 'yothisiswrong';
+      request(app)
+        .post(`/api/chat/${chatId}/messages`)
+        .send()
+        .expect(406)
+        .end((err) => {
+          done(err);
+        });
+    });
+    it('should return 404 if the chat does not exist', (done) => {
+      const chatId = '9e63c3a5e4232e4cd0274ae1';
+      request(app)
+        .post(`/api/chat/${chatId}/messages`)
+        .send({ message: { type: 'TEXT', content: 'mikiegey' } })
+        .expect(404)
+        .end((err) => {
+          done(err);
+        });
+    });
+    it('should return 400 if type invalid', (done) => {
+      const chatId = '9e63c3a5e4232e4cd0274ae1';
+      request(app)
+        .post(`/api/chat/${chatId}/messages`)
+        .send({ message: { type: 'string', content: 'mikiegey' } })
+        .expect(400)
+        .end((err) => {
+          done(err);
+        });
+    });
+    it('should return 400 if no written content', (done) => {
+      const chatId = '9e63c3a5e4232e4cd0274ae1';
+      request(app)
+        .post(`/api/chat/${chatId}/messages`)
+        .send({ message: { type: 'TEXT', content: '' } })
+        .expect(400)
+        .end((err) => {
+          done(err);
+        });
+    });
+    it('should return 400 if missing content', (done) => {
+      const chatId = '9e63c3a5e4232e4cd0274ae1';
+      request(app)
+        .post(`/api/chat/${chatId}/messages`)
+        .send({ message: { type: 'TEXT' } })
+        .expect(400)
+        .end((err) => {
+          done(err);
+        });
+    });
+    it('should create a new message in the database', (done) => {
+      Message.find({})
+        .count()
+        .exec((err, numberOfMessages) => {
+          if (err) return done(err);
+          const chatId = createdChatId;
+          request(app)
+            .post(`/api/chat/${chatId}/messages`)
+            .send({ message: { type: 'TEXT', content: 'mikiegey' } })
+            .expect(201)
+            .end((err, res) => {
+              if (err) return done(err);
+              should(res.body).have.property('chat', chatId);
+
+              Message.find({})
+                .count()
+                .exec((err, newNumberOfMessages) => {
+                  if (err) return done(err);
+                  newNumberOfMessages.should.be.equal(numberOfMessages + 1);
+                  done();
+                });
+            });
         });
     });
   });
