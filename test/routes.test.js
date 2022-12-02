@@ -1,6 +1,5 @@
 const { describe, it, before, after } = require('mocha');
 const request = require('supertest');
-// const should = require('should');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 const { UserChat } = require('../models/userChat');
@@ -119,20 +118,20 @@ describe('HTTP Routes tests', () => {
   });
 
   describe('Creating a new chat', () => {
-    it('should return 406 if the id is not valid', (done) => {
+    it('should return 400 if the id is not valid', (done) => {
       request(app)
         .post('/api/chat')
         .send({ otherId: 'yothisiswrong' })
-        .expect(406)
+        .expect(400)
         .end((err) => {
           done(err);
         });
     });
-    it('should return 406 if the is no user', (done) => {
+    it('should return 400 if the is no user', (done) => {
       request(app)
         .post('/api/chat')
         .send({ otherId: '5e63c3a5e4232e4cd0274ae1' })
-        .expect(406)
+        .expect(400)
         .end((err) => {
           done(err);
         });
@@ -145,10 +144,10 @@ describe('HTTP Routes tests', () => {
           request(app)
             .post('/api/chat')
             .send({ otherId: otherUser._id.toString() })
-            .expect(200)
+            .expect(400)
             .end((err, res) => {
               if (err) return done(err);
-              res.body.length.should.be.greaterThan(0);
+              res.body.commonChats.length.should.be.greaterThan(0);
 
               Chat.find({})
                 .count()
@@ -188,12 +187,12 @@ describe('HTTP Routes tests', () => {
   });
 
   describe('Create a new message', () => {
-    it('should return 406 if the ID is not valid', (done) => {
+    it('should return 400 if the ID is not valid', (done) => {
       const chatId = 'yothisiswrong';
       request(app)
         .post(`/api/chat/${chatId}/messages`)
         .send()
-        .expect(406)
+        .expect(400)
         .end((err) => {
           done(err);
         });
