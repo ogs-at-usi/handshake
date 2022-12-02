@@ -93,6 +93,14 @@ router.post('/chat/:chatId/messages', async function (req, res) {
   }
 
   const message = req.body.message;
+  if (
+    message?.type === undefined ||
+    message?.content === undefined ||
+    message.content.length === 0 ||
+    !Object.values(MessageType).includes(message?.type)
+  ) {
+    return res.status(400).end();
+  }
 
   try {
     await UserChat.findOne({
