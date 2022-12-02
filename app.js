@@ -5,6 +5,7 @@ const logger = require('morgan');
 const multer = require('multer');
 const ejsc = require('ejsc-views');
 const cookieParser = require('cookie-parser');
+const { authenticate } = require('./middlewares/authentication.middleware');
 
 require('dotenv').config();
 
@@ -27,7 +28,7 @@ ejsc.compile('views', 'public/js', false);
 
 // TODO - controllers
 app.use('/auth', require('./routes/auth'));
-app.use('/api', require('./routes/chat'));
+app.use('/api', authenticate, require('./routes/chat'));
 
 // TODO - add routes here
 
