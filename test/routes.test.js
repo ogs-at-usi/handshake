@@ -19,36 +19,66 @@ describe('HTTP Routes tests', () => {
   let createdChatId;
 
   before(async () => {
-    require('dotenv').config();
-    const setupDB = require('../models');
-    await setupDB();
+    try {
+      require('dotenv').config();
+      const setupDB = require('../models');
+      await setupDB();
 
-    const _user = await User.create({
-      name: 'mochi',
-      password: 'Asdf',
-      email: 'mochi@cool.com',
-    });
-    user = _user;
-    co.push(_user);
+      await User.deleteMany();
+      await Chat.deleteMany();
+      await Message.deleteMany();
+      await UserChat.deleteMany();
 
-    const _otherUser = await User.create({
-      name: 'miki',
-      password: 'forzagiuvesiumloremerda',
-      email: 'dallerivemiki@gmail.com',
-    });
-    otherUser = _otherUser;
-    co.push(_otherUser);
+      const _user = await User.create({
+        name: 'mochi',
+        password: 'Asdf',
+        email: 'mochi@cool.com',
+      });
+      user = _user;
+      co.push(_user);
 
-    const chat = await Chat.create({
-      messages: [],
-    });
-    co.push(chat);
+      const _otherUser = await User.create({
+        name: 'miki',
+        password: 'forzagiuvesiumloremerda',
+        email: 'dallerivemiki@gmail.com',
+      });
+      otherUser = _otherUser;
+      co.push(_otherUser);
 
-    const userChat = await UserChat.create({
-      user: user._id,
-      chat: chat._id,
+      noUser = await User.create({
+        name: 'gief',
+        password: 'mewhenthe',
+        email: 'fej@usi.com',
+      });
+      co.push(noUser);
+
+      const chat = await Chat.create({
+        messages: [],
+      });
+      co.push(chat);
+
+      const userChat = await UserChat.create({
+        user: user._id,
+        chat: chat._id,
+      });
+      co.push(userChat);
+
+      const userChat2 = await UserChat.create({
+        user: otherUser._id,
+        chat: chat._id,
+      });
+      co.push(userChat2);
+    } catch (e) {
+      console.log(e);
+      await Promise.all(co.map((obj) => obj.remove()));
+    }
+
+    sinon.stub(authMiddleware, 'authenticate').callsFake((req, res, next) => {
+      req.userID = user._id.toString();
+      next();
     });
-    co.push(userChat);
+
+    app = require('../app');
   });
 
   after(async () => {
