@@ -73,7 +73,7 @@ describe('HTTP Routes tests', () => {
     }
 
     sinon.stub(authMiddleware, 'authenticate').callsFake((req, res, next) => {
-      req.userID = user._id.toString();
+      req.userId = user._id.toString();
       next();
     });
 
@@ -122,7 +122,7 @@ describe('HTTP Routes tests', () => {
     it('should return 406 if the id is not valid', (done) => {
       request(app)
         .post('/api/chat')
-        .send({ otherID: 'yothisiswrong' })
+        .send({ otherId: 'yothisiswrong' })
         .expect(406)
         .end((err) => {
           done(err);
@@ -131,7 +131,7 @@ describe('HTTP Routes tests', () => {
     it('should return 406 if the is no user', (done) => {
       request(app)
         .post('/api/chat')
-        .send({ otherID: '5e63c3a5e4232e4cd0274ae1' })
+        .send({ otherId: '5e63c3a5e4232e4cd0274ae1' })
         .expect(406)
         .end((err) => {
           done(err);
@@ -144,7 +144,7 @@ describe('HTTP Routes tests', () => {
           if (err) return done(err);
           request(app)
             .post('/api/chat')
-            .send({ otherID: otherUser._id.toString() })
+            .send({ otherId: otherUser._id.toString() })
             .expect(200)
             .end((err, res) => {
               if (err) return done(err);
@@ -167,7 +167,7 @@ describe('HTTP Routes tests', () => {
           if (err) return done(err);
           request(app)
             .post('/api/chat')
-            .send({ otherID: noUser._id.toString() })
+            .send({ otherId: noUser._id.toString() })
             .expect(201)
             .end((err, res) => {
               if (err) return done(err);
