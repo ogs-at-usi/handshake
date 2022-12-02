@@ -1,9 +1,13 @@
 const { describe, it, before, after } = require('mocha');
-const request = require('supertest')('http://localhost:8888');
+const request = require('supertest');
 // const should = require('should');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 const { UserChat } = require('../models/userChat');
+const sinon = require('sinon');
+const authMiddleware = require('../middlewares/authentication.middleware');
+const should = require('should');
+const { Message } = require('../models/message');
 
 describe('HTTP Routes tests', () => {
   const co = [];
