@@ -115,7 +115,8 @@ header {
     margin-bottom: 5px;
 }
 
-.card-text, .notification {
+.card-text,
+.notification {
     font-family: 'Helvetica', 'Arial', sans-serif;
 }
 

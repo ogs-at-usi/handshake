@@ -1,5 +1,7 @@
 <template>
-  <span>Vue works! :D</span>
+  <div id='app'>
+    <router-view />
+  </div>
 </template>
 
 <style></style>
