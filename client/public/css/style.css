@@ -2,160 +2,160 @@
 
 /* global changes */
 * {
-    font-family: 'Francois One', sans-serif;
-    color: var(--color-text);
-    margin: 0;
+  font-family: 'Francois One', sans-serif;
+  color: var(--color-text);
+  margin: 0;
 }
 
 body {
-    background-color: var(--color-background);
-    overflow-x: hidden;
-    flex-wrap: wrap;
-    width: 100vw;
-    max-width: 100vw;
+  background-color: var(--color-background);
+  overflow-x: hidden;
+  flex-wrap: wrap;
+  width: 100vw;
+  max-width: 100vw;
 }
 
 input {
-    background-color: var(--color-background);
-    font-family: 'Helvetica', 'Arial', sans-serif;
-    border-style: none;
-    border-radius: 20px;
-    padding: 1vh;
+  background-color: var(--color-background);
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  border-style: none;
+  border-radius: 20px;
+  padding: 1vh;
 }
 
 button {
-    background-color: var(--color-background);
-    border-style: none;
-    border-radius: 100%;
+  background-color: var(--color-background);
+  border-style: none;
+  border-radius: 100%;
 }
 
 .pfp {
-    border: 2px solid var(--color-background);
-    border-radius: 100%;
-    height: 5vh;
+  border: 2px solid var(--color-background);
+  border-radius: 100%;
+  height: 5vh;
 }
 
 form {
-    width: 100%;
+  width: 100%;
 }
 
 header {
-    background-color: var(--color-secondary);
-    padding: 1vh;
-    height: 8vh;
+  background-color: var(--color-secondary);
+  padding: 1vh;
+  height: 8vh;
 }
 
 /* section: menu */
 
 #menu nav {
-    background-color: var(--color-primary);
-    padding: 1vh;
-    height: 8vh;
-    overflow: auto;
+  background-color: var(--color-primary);
+  padding: 1vh;
+  height: 8vh;
+  overflow: auto;
 }
 
 #menu main {
-    background-color: var(--color-surface);
-    height: 84vh;
-    max-height: 84vh;
-    overflow: auto;
+  background-color: var(--color-surface);
+  height: 84vh;
+  max-height: 84vh;
+  overflow: auto;
 }
 
 #menu input {
-    width: 80%;
-    height: 3vh;
+  width: 80%;
+  height: 3vh;
 }
 
 #menu button {
-    height: 3vh;
-    width: 3vh;
+  height: 3vh;
+  width: 3vh;
 }
 
 .contact {
-    height: 7vh;
-    padding: 1vh;
+  height: 7vh;
+  padding: 1vh;
 }
 
 .contact:hover {
-    background-color: var(--color-secondary);
+  background-color: var(--color-secondary);
 }
 
 /* section chat */
 
 #chat main {
-    background-color: var(--color-background);
-    height: 84vh;
-    padding: 2vh;
-    overflow-y: scroll;
+  background-color: var(--color-background);
+  height: 84vh;
+  padding: 2vh;
+  overflow-y: scroll;
 }
 
 #chat footer {
-    background-color: var(--color-secondary);
-    margin-top: auto;
-    margin-left: 0;
-    padding: 1vh;
-    height: 8vh;
-    width: 100%;
+  background-color: var(--color-secondary);
+  margin-top: auto;
+  margin-left: 0;
+  padding: 1vh;
+  height: 8vh;
+  width: 100%;
 }
 
 #chat input {
-    height: 5vh;
+  height: 5vh;
 }
 
 #chat button {
-    height: 5vh;
-    width: 5vh;
+  height: 5vh;
+  width: 5vh;
 }
 
 /* chat bubble */
 .card {
-    background-color: var(--color-primary);
-    width: fit-content;
-    max-width: 40vw;
-    margin-bottom: 5px;
+  background-color: var(--color-primary);
+  width: fit-content;
+  max-width: 40vw;
+  margin-bottom: 5px;
 }
 
 .card-text,
 .notification {
-    font-family: 'Helvetica', 'Arial', sans-serif;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .timestamp {
-    font-family: 'Helvetica', 'Arial', sans-serif;
-    padding-right: 1vw;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  padding-right: 1vw;
 }
 
 .card-image {
-    border-radius: 1vh;
-    max-width: 20vw;
+  border-radius: 1vh;
+  max-width: 20vw;
 }
 
 .self {
-    align-self: end;
+  align-self: end;
 }
 
 /* login page */
 #title {
-    background-color: var(--color-secondary);
-    display: flex;
-    height: fit-content;
-    width: 100%;
-    padding: 1vw;
+  background-color: var(--color-secondary);
+  display: flex;
+  height: fit-content;
+  width: 100%;
+  padding: 1vw;
 }
 
 #login {
-    width: 100vw;
-    height: 80vh;
-    max-height: 100vh;
+  width: 100vw;
+  height: 80vh;
+  max-height: 100vh;
 }
 
 #login_form input,
 #signup_form input {
-    border: 1px solid var(--color-text);
-    margin-bottom: 20px;
+  border: 1px solid var(--color-text);
+  margin-bottom: 20px;
 }
 
 #login_page_footer {
-    background-color: var(--color-surface);
-    padding: 1vh;
+  background-color: var(--color-surface);
+  padding: 1vh;
 }

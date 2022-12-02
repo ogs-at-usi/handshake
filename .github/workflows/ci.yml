@@ -21,7 +21,7 @@ on:
 
 jobs:
   code-style:
-    name: Run style checks
+    name: Run style checks for Express server
 
     runs-on: ${{ matrix.os }}
 
