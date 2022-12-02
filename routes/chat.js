@@ -125,6 +125,9 @@ router.post('/chat', async function (req, res) {
       chat: chatID,
     });
 
+    // let join the user and other user in chat id room 
+    io.in(req.userID).in(otherID).join(chatID);
+ 
     io.to(req.userID).to(otherID).emit('chats:create', chat);
 
     res.json(chat);
