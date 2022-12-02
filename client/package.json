@@ -5,7 +5,10 @@
   "scripts": {
     "serve": "rm -f ../public/*.hot-update.* && vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "style:lint": "vue-cli-service lint",
+    "style:lint:fix": "vue-cli-service lint --fix",
+    "style:prettier": "prettier .",
+    "style:prettier:fix": "prettier --write ."
   },
   "dependencies": {
     "core-js": "^3.8.3",
