@@ -51,11 +51,21 @@ jobs:
       - name: Install packages
         run: yarn
 
-      - name: Run ESLint
+      - name: Run ESLint for Express
         run: yarn run style:lint
 
-      - name: Run Prettier
+      - name: Run Prettier for Express
         run: yarn run style:prettier
+
+      - name: Run ESLint for Vue.js
+        run: yarn run style:lint
+        with:
+          working-directory: ./client
+
+      - name: Run Prettier for Vue.js
+        run: yarn run style:prettier
+        with:
+          working-directory: ./client
 
   testing:
     name: Run tests
