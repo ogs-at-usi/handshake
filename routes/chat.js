@@ -1,38 +1,41 @@
 const express = require('express');
 const router = express.Router();
 module.exports = router;
-const { ObjectId } = require('mongodb');
+const ObjectID = require('mongodb').ObjectId;
 const { UserChat } = require('../models/userChat');
+const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
-const { Message } = require('../models/message');
+const { Message, MessageType } = require('../models/message');
 
 router.get('/users', async function (req, res) {
   const filter = req.query.filter ?? '';
 
   const searchedUsers = await User.find({
-    name: filter,
+    name: {
+      $regex: `^${filter}`,
+    },
   });
 
   res.json(searchedUsers);
 });
 
 router.post('/chat', async function (req, res) {
-  const otherId = req.body.otherId;
+  const otherID = req.body.otherID;
 
-  if (!ObjectId.isValid(otherId)) {
+  if (!ObjectID.isValid(otherID)) {
     return res.status(406).end();
   }
 
   const otherUser = await User.findOne({
-    _id: ObjectId(otherId),
+    _id: ObjectId(otherID),
   });
   if (!otherUser) {
     return res.status(406).end();
   }
 
   const user = await User.findOne({
-    _id: ObjectId(req.userId),
+    _id: ObjectId(req.userID),
   });
 
   if (!user) {
@@ -66,49 +69,56 @@ router.post('/chat', async function (req, res) {
       is_group: false,
       messages: [],
     });
-    const chatId = chat._id;
+    const chatID = chat._id;
 
     await UserChat.create({
       user: user._id,
-      chat: chatId,
+      chat: chatID,
     });
     await UserChat.create({
       user: otherUser._id,
-      chat: chatId,
+      chat: chatID,
     });
 
-    res.json(chat);
+    res.status(201).json(chat);
   } else {
     // join
-    res.status(204).json(commonChats);
+    res.status(200).json(commonChats);
   }
 });
 
 router.post('/chat/:chatId/messages', async function (req, res) {
-  if (!ObjectId.isValid(req.params.chatId)) {
+  if (!ObjectID.isValid(req.params.chatId)) {
     return res.status(406).end();
   }
 
   const message = req.body.message;
-
-  try {
-    await UserChat.findOne({
-      _id: new ObjectId(req.params.chatId),
-      user: new ObjectId(req.userId),
-    });
-
-    const newMessage = await Message.create({
-      sender: req.userId,
-      chat: req.params.chatId,
-      type: message.type,
-      content: message.content,
-      sent_at: new Date(),
-      delivered_at: new Date(),
-    });
-
-    res.json(newMessage);
-  } catch (e) {
-    // cant find the chat with the user - error
-    res.status(422).end();
+  if (
+    message?.type === undefined ||
+    message?.content === undefined ||
+    message.content.length === 0 ||
+    !Object.values(MessageType).includes(message?.type)
+  ) {
+    return res.status(400).end();
   }
+
+  const result = await UserChat.findOne({
+    chat: new ObjectId(req.params.chatId),
+    user: new ObjectId(req.userID),
+  });
+  console.log(result);
+  if (!result) {
+    return res.status(404).end();
+  }
+
+  const newMessage = await Message.create({
+    sender: ObjectId(req.userID),
+    chat: ObjectId(req.params.chatId),
+    type: message.type,
+    content: message.content,
+    sent_at: new Date(),
+    delivered_at: new Date(),
+  });
+
+  res.status(201).json(newMessage);
 });
