@@ -4,7 +4,7 @@ class ApiClient {
   }
 
   /**
-   * Retrieve the list of users that match the filter
+   * Retrieve the list of users that match the filter.
    * @param filter {string} The filter to apply
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
@@ -13,7 +13,7 @@ class ApiClient {
   }
 
   /**
-   * Create a chat with the logged user and the user with the given ID
+   * Create a chat with the logged user and the user with the given ID.
    * @param otherUserID {string} The ID of the other user
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
@@ -22,7 +22,7 @@ class ApiClient {
   }
 
   /**
-   * Create a message in a chat
+   * Create a message in a chat.
    * @param chatID {string} The ID of the chat
    * @param message {Message} The message to create
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
@@ -37,7 +37,7 @@ class ApiClient {
 
 export default {
   /**
-   * Install the plugin
+   * Install the plugin.
    * @param Vue {Vue} The Vue instance
    * @param axiosInstance {AxiosInstance} The axios instance
    */
