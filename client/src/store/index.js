@@ -20,10 +20,16 @@ export default new Vuex.Store({
   },
   actions: {
     login({ commit }, { username, password }) {
-      return this._vm.$api.login(username, password).then((response) => {
-        if (response.status === 200) {
-          commit('login');
-        }
+      return new Promise((resolve, reject) => {
+        this._vm.$api
+          .login(username, password)
+          .then((response) => {
+            commit('login');
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+          });
       });
     },
     signup({ commit }, { username, email, password }) {

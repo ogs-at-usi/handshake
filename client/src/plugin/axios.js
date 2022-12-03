@@ -26,6 +26,7 @@ instance.interceptors.response.use(
         .catch(() => {
           // how to access Vuex
           store.commit('logout');
+          return Promise.reject(error);
         });
     }
     return Promise.reject(error);
