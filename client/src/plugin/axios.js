@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../store';
 
 const instance = axios.create({
   baseURL: 'http://localhost:8888',
@@ -24,7 +25,7 @@ instance.interceptors.response.use(
         })
         .catch(() => {
           // how to access Vuex
-          this.$store.commit('logout');
+          store.commit('logout');
         });
     }
     return Promise.reject(error);
