@@ -1,7 +1,6 @@
 const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
-const { authConstants } = require('./constants/auth.constants');
-const { verifyJWT } = require('./utils/jwt.utils');
+const {authMiddleware} = require('./middlewares/socket.middleware');
 
 function init(server) {
   io.attach(server);
@@ -17,26 +16,15 @@ function init(server) {
     return userChats.map((userChat) => userChat.chat);
   }
 
-  io.use((socket, next) => {
-    const jwtToken = socket.request.cookies[authConstants.JWT_COOKIE_NAME];
-
-    try {
-      const userID = verifyJWT(jwtToken);
-      socket.userID = userID;
-      next();
-    } catch (e) {
-      console.log(e);
-      next(new Error('Authentication error'));
-    }
-  });
+  io.use(authMiddleware);
 
   io.on('connection', (socket) => {
     console.log('✅User connected with id ' + socket.id);
     console.log('Chat list is coming...');
     socket.join(socket.userID);
-    const userChat = getChats(socket.userID);
-    joinChat(userChat, socket);
-    socket.emit('chats:read', userChat);
+    const userChats = getChats(socket.userID);
+    joinRooms(userChats, socket);
+    socket.emit('chats:read', userChats);
 
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
@@ -44,7 +32,7 @@ function init(server) {
   });
 }
 
-function joinChat(userChats, socket) {
+function joinRooms(userChats, socket) {
   if (!Array.isArray(userChats)) {
     socket.join(userChats);
   } else {
@@ -56,6 +44,6 @@ function joinChat(userChats, socket) {
 
 module.exports = {
   init,
-  joinChat,
+  joinRooms,
   io,
 };

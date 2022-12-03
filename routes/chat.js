@@ -88,8 +88,8 @@ router.post('/chat', async function (req, res) {
 
     const userSocket = [io.sockets.adapter.rooms.get(req.userId)];
     const otherSocket = [io.sockets.adapter.rooms.get(otherId)];
-    serverSocket.joinChat(chatId.toString(), otherSocket);
-    serverSocket.joinChat(chatId.toString(), userSocket);
+    serverSocket.joinRooms(chatId.toString(), otherSocket);
+    serverSocket.joinRooms(chatId.toString(), userSocket);
 
     io.to(req.userId).to(otherId).emit('chats:created', chat);
 
