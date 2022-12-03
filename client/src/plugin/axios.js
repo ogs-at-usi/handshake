@@ -14,11 +14,18 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      return instance.post('/auth/refresh').then((res) => {
-        if (res.status === 200) {
-          return instance(originalRequest);
-        }
-      });
+      // if the refresh function fails then we need to logout (Vuex)
+      return instance
+        .post('/auth/refresh')
+        .then((res) => {
+          if (res.status === 200) {
+            return instance(originalRequest);
+          }
+        })
+        .catch(() => {
+          // how to access Vuex
+          this.$store.commit('logout');
+        });
     }
     return Promise.reject(error);
   }
