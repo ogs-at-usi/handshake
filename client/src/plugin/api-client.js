@@ -4,13 +4,28 @@ class ApiClient {
   }
 
   /**
-   *
+   * Retrieve the list of chats that match the filter.
    * @param username
    * @param password
    * @returns {*}
    */
   login(username, password) {
     return this.axiosInstance.post('/auth/login', { username, password });
+  }
+
+  /**
+   * Retrieve the list of chats that match the filter.
+   * @param email
+   * @param username
+   * @param password
+   * @returns {*}
+   */
+  signup(email, username, password) {
+    return this.axiosInstance.post('/auth/register', {
+      email,
+      username,
+      password,
+    });
   }
 
   /**
