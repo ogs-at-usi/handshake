@@ -84,8 +84,14 @@ router.post('/chat', async function (req, res) {
       chat: chatId,
     });
 
-    io.in(req.UserID).in(otherId).join(chatId.toString());
-    io.to(req.UserID).to(otherId).emit('chats:created', chat);
+    // io.in(req.userId).join(chatId.toString());
+    // io.in(otherId).join(chatId.toString());
+    const userSocket = [io.sockets.adapter.rooms.get(req.userId)];
+    const otherSocket = [io.sockets.adapter.rooms.get(otherId)];
+    userSocket.join(chatId.toString());
+    otherSocket.join(chatId.toString());
+
+    io.to(req.userId).to(otherId).emit('chats:created', chat);
 
     res.status(201).json(chat);
   } else {

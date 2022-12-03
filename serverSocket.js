@@ -61,4 +61,5 @@ function joinChat(userChats, socket) {
 
 module.exports = {
   init,
+  io
 };
