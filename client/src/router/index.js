@@ -16,6 +16,11 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "signup" */ '../views/Signup.vue'),
   },
+  {
+    path: '/',
+    name: 'app',
+    component: () => import(/* webpackChunkName: "home" */ '../views/AppContainer.vue'),
+  },
 ];
 
 const router = new VueRouter({
