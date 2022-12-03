@@ -84,8 +84,6 @@ router.post('/chat', async function (req, res) {
       chat: chatId,
     });
 
-    // io.in(req.userId).join(chatId.toString());
-    // io.in(otherId).join(chatId.toString());
     const userSocket = [io.sockets.adapter.rooms.get(req.userId)];
     const otherSocket = [io.sockets.adapter.rooms.get(otherId)];
     userSocket.join(chatId.toString());
