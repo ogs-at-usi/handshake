@@ -1,6 +1,6 @@
 const initDB = require('../models');
 const app = require('../app');
-const serverSocket = require('./serverSocket');
+const serverSocket = require('../serverSocket');
 
 app.set('port', process.env.PORT || 8888);
 
