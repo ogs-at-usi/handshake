@@ -6,16 +6,20 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLoggedIn: false,
+    user: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
+    user: (state) => state.user,
   },
   mutations: {
-    login(state) {
+    login(state, { user }) {
       state.isLoggedIn = true;
+      state.user = user;
     },
     logout(state) {
       state.isLoggedIn = false;
+      state.user = null;
     },
   },
   actions: {
@@ -24,7 +28,7 @@ export default new Vuex.Store({
         this._vm.$api
           .login(username, password)
           .then((response) => {
-            commit('login');
+            commit('login', response.data.user);
             resolve(response);
           })
           .catch((error) => {
