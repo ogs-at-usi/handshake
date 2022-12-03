@@ -1,79 +1,45 @@
 const express = require('express');
 const router = express.Router();
-module.exports = router;
-const ObjectID = require('mongodb').ObjectId;
 const { UserChat } = require('../models/userChat');
 const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
+const { Message, MessageType } = require('../models/message'); // MessageType is used for verification
 
-router.get('/chats', async function (req, res) {
-  // const test = "5e63c3a5e4232e4cd0274ac2";
-  const chats = await UserChat.find({
-    user: new ObjectId(req.userID),
-  })
-    .populate('chat')
-    .exec();
-
-  res.json(chats.map((userChat) => userChat.chat));
-});
-
-router.get('/messages/:chatID', async function (req, res) {
-  if (!ObjectID.isValid(req.params.chatID)) {
-    return res.status(406).end();
-  }
-
-  try {
-    const userChat = await UserChat.findOne({
-      _id: new ObjectId(req.params.chatID),
-      user: new ObjectId(req.userID),
-    })
-      .populate({
-        path: 'chat',
-        populate: {
-          path: 'messages',
-        },
-      })
-      .exec();
-
-    if (userChat?.chat?.messages) {
-      res.json(userChat.chat.messages);
-    } else {
-      res.status(422).end();
-    }
-  } catch (e) {
-    // cant find the the chat with the user
-    // error
-    res.status(422).end();
-  }
-});
-
+/**
+ * Responds an array of users that match what the client typed
+ */
 router.get('/users', async function (req, res) {
   const filter = req.query.filter ?? '';
 
   const searchedUsers = await User.find({
-    name: filter,
+    name: {
+      $regex: `^${filter}`,
+    },
   });
 
   res.json(searchedUsers);
 });
 
+/*
+ * Responds a created chat between users and returns the new chat
+ */
 router.post('/chat', async function (req, res) {
-  const otherID = req.body.otherID;
+  const otherId = req.body.otherId;
 
-  if (!ObjectID.isValid(otherID)) {
-    return res.status(406).end();
+  if (!ObjectId.isValid(otherId)) {
+    return res.status(400).end();
   }
 
   const otherUser = await User.findOne({
-    _id: ObjectId(otherID),
+    _id: ObjectId(otherId),
   });
   if (!otherUser) {
-    return res.status(406).end();
+    return res.status(400).end();
   }
 
   const user = await User.findOne({
-    _id: ObjectId(req.userID),
+    _id: ObjectId(req.userId),
   });
 
   if (!user) {
@@ -107,20 +73,67 @@ router.post('/chat', async function (req, res) {
       is_group: false,
       messages: [],
     });
-    const chatID = chat._id;
+    const chatId = chat._id;
 
     await UserChat.create({
       user: user._id,
-      chat: chatID,
+      chat: chatId,
     });
     await UserChat.create({
       user: otherUser._id,
-      chat: chatID,
+      chat: chatId,
     });
 
-    res.json(chat);
+    res.status(201).json(chat);
   } else {
-    // join
-    res.status(204).json(commonChats);
+    // Not meant to happen that a chat already exists between the users
+    res.status(400).json({
+      message: 'Error, a chat already exists',
+      commonChats,
+    });
   }
 });
+
+/*
+ * Responds a created a new message and returns the new message
+ */
+router.post('/chat/:chatId/messages', async function (req, res) {
+  const chatId = req.params.chatId;
+  if (!ObjectId.isValid(chatId)) {
+    return res.status(400).end();
+  }
+
+  const message = req.body.message;
+  if (
+    message?.type === undefined ||
+    message?.content === undefined ||
+    message.content.length === 0 ||
+    !Object.values(MessageType).includes(message?.type)
+  ) {
+    return res.status(400).end();
+  }
+
+  const result = await UserChat.findOne({
+    chat: new ObjectId(chatId),
+    user: new ObjectId(req.userId),
+  });
+  console.log(
+    `Route: /chat/:chatId/messages, params: ${req.params}, body: ${req.body} - Chat of the new message: ${chatId}`
+  );
+  if (!result) {
+    return res.status(404).end();
+  }
+
+  const newMessage = await Message.create({
+    sender: ObjectId(req.userId),
+    chat: ObjectId(chatId),
+    type: message.type,
+    content: message.content,
+    sent_at: new Date(),
+    delivered_at: new Date(),
+  });
+
+  res.status(201).json(newMessage);
+});
+
+module.exports = router;
