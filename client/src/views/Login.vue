@@ -59,10 +59,13 @@ export default {
   },
   methods: {
     login() {
-      this.$api
-        .login(this.username, this.password)
+      this.$store
+        .dispatch('login', {
+          username: this.username,
+          password: this.password,
+        })
         .then(() => {
-          this.$router.push('/');
+          this.$router.push({ name: 'Home' });
         })
         .catch((err) => {
           console.log(err);
