@@ -1,6 +1,6 @@
 const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
-const {authMiddleware} = require('./middlewares/socket.middleware');
+const { authMiddleware } = require('./middlewares/socket.middleware');
 
 function init(server) {
   io.attach(server);
