@@ -4,6 +4,16 @@ class ApiClient {
   }
 
   /**
+   *
+   * @param username
+   * @param password
+   * @returns {*}
+   */
+  login(username, password) {
+    return this.axiosInstance.post('/auth/login', { username, password });
+  }
+
+  /**
    * Retrieve the list of users that match the filter.
    * @param filter {string} The filter to apply
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
