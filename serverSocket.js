@@ -1,12 +1,7 @@
 const io = require('socket.io')();
-// import modules to retreiwe data from db
-// const { UserChat } = require('../models/userChat');
-// const { ObjectId } = require('mongodb');
 const { UserChat } = require('./models/userChat');
-// const { User } = require('./models/user');
 const { authConstants } = require('./constants/auth.constants');
 const { verifyJWT } = require('./utils/jwt.utils');
-// const { Chat } = require('./models/chat');
 
 function init(server) {
   io.attach(server);
@@ -27,12 +22,9 @@ function init(server) {
   io.on('connection', (socket) => {
     console.log('✅User connected with id ' + socket.id);
     console.log('Chat list is coming...');
-    // retrieve the user's chats directly from the db
-    // joinChat(socket.userID);
     socket.join(socket.userID);
     const userChat = getChats(socket.userID);
     joinChat(userChat, socket);
-    // send the user's chats to the client
     socket.emit('chats:read', userChat);
 
     socket.on('disconnect', () => {
@@ -52,7 +44,6 @@ async function getChats(userId) {
   return userChats.map((userChat) => userChat.chat);
 }
 
-// join in every chat room of the user
 function joinChat(userChats, socket) {
   userChats.forEach((chat) => {
     socket.join(chat._id.toString());
@@ -61,5 +52,5 @@ function joinChat(userChats, socket) {
 
 module.exports = {
   init,
-  io
+  io,
 };
