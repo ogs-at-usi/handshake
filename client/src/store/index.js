@@ -4,9 +4,31 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
+  state: {
+    isLoggedIn: false,
+  },
+  getters: {
+    isLoggedIn: (state) => state.isLoggedIn,
+  },
+  mutations: {
+    login(state) {
+      state.isLoggedIn = true;
+    },
+    logout(state) {
+      state.isLoggedIn = false;
+    },
+  },
+  actions: {
+    login({ commit }, { username, password }) {
+      return this._vm.$api.login(username, password).then((response) => {
+        if (response.status === 200) {
+          commit('login');
+        }
+      });
+    },
+    signup({ commit }, { username, email, password }) {
+      return this._vm.$api.signup(email, username, password);
+    },
+  },
   modules: {},
 });
