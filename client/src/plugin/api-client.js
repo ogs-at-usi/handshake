@@ -20,8 +20,8 @@ class ApiClient {
    * @param password {string} The password of the user
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
-  register(email, username, password) {
-    return this.axiosInstance.post('/auth/register', {
+  signup(email, username, password) {
+    return this.axiosInstance.post('/auth/signup', {
       email,
       username,
       password,
