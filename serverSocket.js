@@ -4,6 +4,8 @@ const { authConstants } = require('./constants/auth.constants');
 const { verifyJWT } = require('./utils/jwt.utils');
 
 function init(server) {
+  io.attach(server);
+
   async function getChats(userId) {
     const [error, userChats] = await UserChat.find({ user: userId })
       .populate('chat')
@@ -14,14 +16,6 @@ function init(server) {
     }
     return userChats.map((userChat) => userChat.chat);
   }
-
-  function joinChat(userChats, socket) {
-    userChats.forEach((chat) => {
-      socket.join(chat._id.toString());
-    });
-  }
-
-  io.attach(server);
 
   io.use((socket, next) => {
     const jwtToken = socket.request.cookies[authConstants.JWT_COOKIE_NAME];
@@ -50,7 +44,18 @@ function init(server) {
   });
 }
 
+function joinChat(userChats, socket) {
+  if (!Array.isArray(userChats)) {
+    socket.join(userChats);
+  } else {
+    userChats.forEach((chat) => {
+      socket.join(chat._id.toString());
+    });
+  }
+}
+
 module.exports = {
   init,
+  joinChat,
   io,
 };

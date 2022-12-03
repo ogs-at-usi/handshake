@@ -6,6 +6,8 @@ const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 const { Message, MessageType } = require('../models/message'); // MessageType is used for verification
 const io = require('../serverSocket').io;
+const serverSocket = require('../serverSocket');
+
 /**
  * Responds an array of users that match what the client typed
  */
@@ -86,8 +88,8 @@ router.post('/chat', async function (req, res) {
 
     const userSocket = [io.sockets.adapter.rooms.get(req.userId)];
     const otherSocket = [io.sockets.adapter.rooms.get(otherId)];
-    userSocket.join(chatId.toString());
-    otherSocket.join(chatId.toString());
+    serverSocket.joinChat(chatId.toString(), otherSocket);
+    serverSocket.joinChat(chatId.toString(), userSocket);
 
     io.to(req.userId).to(otherId).emit('chats:created', chat);
 
