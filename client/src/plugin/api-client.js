@@ -15,12 +15,12 @@ class ApiClient {
 
   /**
    * Retrieve the list of chats that match the filter.
-   * @param email
-   * @param username
-   * @param password
-   * @returns {*}
+   * @param email {string} The email of the user
+   * @param username {string} The username of the user
+   * @param password {string} The password of the user
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
-  signup(email, username, password) {
+  register(email, username, password) {
     return this.axiosInstance.post('/auth/register', {
       email,
       username,

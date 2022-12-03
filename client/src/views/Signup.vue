@@ -81,7 +81,7 @@ export default {
         return;
       }
       this.$api
-        .signup(this.email, this.username, this.password)
+        .register(this.email, this.username, this.password)
         .then(() => {
           this.$router.push('/login');
         })
