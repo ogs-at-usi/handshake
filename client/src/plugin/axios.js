@@ -11,13 +11,13 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // if the error is 401, try to refresh the token and resubmit the request
-    if (error.response.status === 401) {
-      if (error.config.url === '/auth/refresh') {
-        return Promise.reject(error);
-      }
-      return instance.post('/auth/refresh').then((_) => {
-        return instance(error.config);
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      return instance.post('/auth/refresh').then((res) => {
+        if (res.status === 200) {
+          return instance(originalRequest);
+        }
       });
     }
     return Promise.reject(error);
