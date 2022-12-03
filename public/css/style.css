@@ -158,3 +158,13 @@ header {
     background-color: var(--color-surface);
     padding: 1vh;
 }
+
+/* about us */
+.display-1 {
+    font-weight: 900;
+    font-size: 6rem;
+}
+
+#aboutus {
+    overflow-y: auto;
+}
