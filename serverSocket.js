@@ -26,9 +26,18 @@ function init(server) {
       const members = await UserChat.find({ chat: chat._id })
         .populate('user')
         .exec();
-      chat.members = members.map((member) => member.user);
+      console.log(chat.members);
+      Object.defineProperty(chat, 'members', {
+        value: members.map((member) => member.user),
+      });
+      console.log(chat);
     }
-    return chats;
+    return await Promise.all(chats.map(async (chat) => {
+      const members = await UserChat.find({ chat: chat._id })
+        .populate('user')
+        .exec();
+      return {...chat._doc, members};
+    }));
   }
 
   io.use(authMiddleware);
@@ -38,6 +47,7 @@ function init(server) {
     console.log('Chat list is coming...');
     socket.join(socket.userId);
     const userChats = await getChats(socket.userId);
+    console.log(userChats);
     joinRooms(
       userChats.map((chat) => chat._id.toString()),
       socket
