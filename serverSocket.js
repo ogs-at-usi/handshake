@@ -18,7 +18,16 @@ function init(server) {
     if (!userChats) {
       return [];
     }
-    return userChats.map((userChat) => userChat.chat);
+
+    const chats = userChats.map((userChat) => userChat.chat);
+    // find all the users in each chat ad add it as a property 'members'
+    for (const chat of chats) {
+      const members = await UserChat.find({ chat: chat._id })
+        .populate('user')
+        .exec();
+      chat.members = members.map((member) => member.user);
+    }
+    return chats;
   }
 
   io.use(authMiddleware);
