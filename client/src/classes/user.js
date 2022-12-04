@@ -28,3 +28,5 @@ class User {
     this.chats = chats;
   }
 }
+
+export default User;
