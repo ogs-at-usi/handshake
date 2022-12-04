@@ -138,8 +138,8 @@ router.post('/chats/:chatId/messages', async function (req, res) {
     chat: ObjectId(chatId),
     type: message.type,
     content: message.content,
-    sent_at: new Date(),
-    delivered_at: new Date(),
+    sentAt: new Date(),
+    deliveredAt: new Date(),
   });
 
   const chat = await Chat.findOne({

@@ -23,8 +23,8 @@ class Message {
     this.chat = chat;
     this.type = type;
     this.content = content;
-    this.sent_at = sentAt;
-    this.delivered_at = deliveredAt;
+    this.sentAt = sentAt;
+    this.deliveredAt = deliveredAt;
     this.seen = seen;
   }
 }

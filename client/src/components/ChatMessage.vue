@@ -37,7 +37,11 @@ export default {
       return this.isSelf ? 'self' : '';
     },
     timestamp() {
-      return this.isSelf ? this.$props.message.sentAt : this.$props.message.deliveredAt;
+      const time = this.isSelf
+        ? this.$props.message.sentAt
+        : this.$props.message.deliveredAt;
+      const datetime = new Date(time);
+      return `${datetime.getHours()}:${datetime.getMinutes()}:${datetime.getSeconds()}`;
     },
     content() {
       const retrieveContent = {};
@@ -47,11 +51,18 @@ export default {
     },
     senderName() {
       if (this.isGroup) return null; // this.$props.chat.title;
-      console.error('this function should never be reached', this.$props.message);
+      console.error(
+        'this function should never be reached',
+        this.$props.message
+      );
       return '';
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.timestamp {
+  margin: 8px;
+}
+</style>
