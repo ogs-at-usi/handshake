@@ -1,5 +1,5 @@
 <template>
-  <div id="chat" class="col-12 col-md-8 col-lg-9">
+  <div id="chat" class="col-12 col-md-8 col-lg-9" v-if="chat !== null">
     <header>
       <!-- image & name of the chat: other user image or group image -->
       <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
