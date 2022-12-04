@@ -1,7 +1,8 @@
 <template>
   <!-- UI: CONTACT -->
-  <div class="contact justify-content-between d-flex flex-row align-items-center gap-4">
-
+  <div
+    class="contact justify-content-between d-flex flex-row align-items-center gap-4"
+  >
     <!-- image of the other user or group chat -->
     <div>
       <img :src="imageId" class="pfp" alt="pfp" />
@@ -9,8 +10,8 @@
 
     <!-- name of the other user or group chat -->
     <div class="flex-grow-1 overflow-hidden pa-3">
-      <h3 class='m-0'>{{ name }}</h3>
-      <span class='mb-0 text-secondary text-truncate'>
+      <h3 class="m-0">{{ name }}</h3>
+      <span class="mb-0 text-secondary text-truncate">
         {{ lastMessage }}
       </span>
     </div>
@@ -19,13 +20,12 @@
     <div class="d-none">
       <p class="notification badge rounded-pill text-bg-light"></p>
     </div>
-
   </div>
 </template>
 
 <script>
-import Chat from '@/classes/chat'
-import Group from '@/classes/group'
+import Chat from '@/classes/chat';
+import Group from '@/classes/group';
 
 export default {
   name: 'ChatContact',
@@ -53,12 +53,12 @@ export default {
       else return this.otherPrivateUser.name;
     },
     lastMessage() {
-       return this.chat.messages[this.chat.messages.length - 1].content;
-    }
+      return this.chat.messages && this.chat.messages.length > 0
+        ? this.chat.messages[this.chat.messages.length - 1].content
+        : '';
+    },
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
