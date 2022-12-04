@@ -1,3 +1,6 @@
+import User from '@/classes/user';
+import Message from '@/classes/message';
+
 class Chat {
   _id = null;
   members = null;
@@ -11,8 +14,12 @@ class Chat {
     isGroup = false,
   }) {
     this._id = _id;
-    this.members = members;
-    this.messages = messages;
+    this.members = members.map((member) =>
+      member instanceof User ? member : new User(member)
+    );
+    this.messages = messages.map((message) =>
+      message instanceof Message ? message : new Message(message)
+    );
     this.isGroup = isGroup;
   }
 }
