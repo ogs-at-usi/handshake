@@ -54,8 +54,7 @@ class ApiClient {
    */
   sendMessage(chatID, message) {
     return this.axiosInstance.post(`/api/chats/${chatID}/messages`, {
-      type: message.type,
-      content: message.content,
+      message,
     });
   }
 }
