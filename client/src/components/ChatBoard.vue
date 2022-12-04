@@ -31,8 +31,8 @@
 </template>
 
 <script>
-// import Chat from '@/classes/chat';
 import ChatMessage from '@/components/ChatMessage';
+import Chat from '@/classes/chat';
 
 export default {
   name: 'ChatBoard',
@@ -44,14 +44,20 @@ export default {
   },
   props: {
     chat: {
-      type: Object,
-      required: true,
+      type: Chat,
+      default: null,
     },
   },
   methods: {
-    sendMessage() {
+    async sendMessage() {
+      let chatId = this.$props.chat._id;
+
+      if (chatId === null) {
+        const { data } = await this.$api.createChat(this.chat.members[0]._id);
+        chatId = data; // way to unpack data apparently
+      }
       this.$api
-        .sendMessage(this.$props.chat._id, {
+        .sendMessage(chatId, {
           content: this.message,
           timestamp: new Date(),
         })
