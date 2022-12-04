@@ -2,14 +2,14 @@
   <!-- UI: MESSAGE -->
   <div :id="message._id" :class="`card ${selfClass}`">
     <!-- message with header of name of sender (none if ours) and message text -->
-    <div class="card-body">
+    <div class="card-body pb-0">
       <!-- TODO: change v-if to display only if it is a group, add chat in props -->
       <h5 v-if="false" class="card-title">{{ senderName }}</h5>
       <p class="card-text">{{ content }}</p>
     </div>
 
     <!-- timestamp of the message: sent_at for our message, delivered_at for others -->
-    <p class="timestamp text-end">{{ timestamp }}</p>
+    <p class="timestamp text-end pe-2">{{ timestamp }}</p>
   </div>
 </template>
 
