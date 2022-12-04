@@ -72,7 +72,9 @@ export default {
             sentAt: new Date(), // TODO: add sentAt implementation server side, field actually ignored
           })
         )
-        .then(() => {})
+        .then(() => {
+          this.messageString = '';
+        })
         .catch((err) => {
           alert('Could not send the message. Check your internet connection');
           console.error(err);
