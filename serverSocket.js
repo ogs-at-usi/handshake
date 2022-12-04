@@ -2,6 +2,7 @@ const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 
+// Initialize the socket.io server
 function init(server) {
   io.attach(server);
 
@@ -23,7 +24,10 @@ function init(server) {
     console.log('Chat list is coming...');
     socket.join(socket.userID);
     const userChats = getChats(socket.userID);
-    joinRooms(userChats, socket);
+    joinRooms(
+      userChats.map((chat) => chat._id.toString()),
+      socket
+    );
     socket.emit('chats:read', userChats);
 
     socket.on('disconnect', () => {
@@ -32,14 +36,13 @@ function init(server) {
   });
 }
 
-function joinRooms(userChats, socket) {
-  if (!Array.isArray(userChats)) {
-    socket.join(userChats);
-  } else {
-    userChats.forEach((chat) => {
-      socket.join(chat._id.toString());
-    });
+function joinRooms(rooms, socket) {
+  if (!Array.isArray(rooms)) {
+    rooms = [rooms];
   }
+  rooms.forEach((room) => {
+    socket.join(room);
+  });
 }
 
 module.exports = {
