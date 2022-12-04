@@ -28,3 +28,5 @@ class Message {
     this.seen = seen;
   }
 }
+
+export default Message;
