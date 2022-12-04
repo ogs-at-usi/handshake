@@ -97,7 +97,7 @@ router.post('/chats', async function (req, res) {
 /*
  * Responds a created a new message and returns the new message
  */
-router.post('/chat/:chatId/messages', async function (req, res) {
+router.post('/chats/:chatId/messages', async function (req, res) {
   const chatId = req.params.chatId;
   if (!ObjectId.isValid(chatId)) {
     return res.status(400).end();
