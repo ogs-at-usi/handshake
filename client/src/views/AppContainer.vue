@@ -13,6 +13,7 @@
 import AppMenu from '@/components/AppMenu.vue';
 import ChatBoard from '@/components/ChatBoard.vue';
 import Chat from '@/classes/chat';
+import io from 'socket.io-client';
 
 export default {
   name: 'AppContainer',
@@ -20,6 +21,13 @@ export default {
     return {
       activeChat: null,
     };
+  },
+  mounted() {
+    const socket = io(":8888");
+    this.$store.commit("setSocket", socket);
+    socket.on("connect", () => {
+      console.log("connected");
+    });
   },
   methods: {
     userSelected(otherUser) {
