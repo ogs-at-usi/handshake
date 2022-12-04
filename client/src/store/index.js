@@ -7,10 +7,12 @@ export default new Vuex.Store({
   state: {
     isLoggedIn: false,
     user: null,
+    socket: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
     user: (state) => state.user,
+    socket: (state) => state.socket,
   },
   mutations: {
     login(state, { user }) {
@@ -20,6 +22,9 @@ export default new Vuex.Store({
     logout(state) {
       state.isLoggedIn = false;
       state.user = null;
+    },
+    setSocket(state, { socket }) {
+      state.socket = socket;
     },
   },
   actions: {
