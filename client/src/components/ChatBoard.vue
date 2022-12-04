@@ -23,6 +23,7 @@
         @submit.prevent="sendMessage()"
       >
         <input
+          ref="messageInput"
           type="text"
           name="message"
           placeholder="Type something..."
@@ -93,6 +94,9 @@ export default {
         return this.otherPrivateUser.name;
       }
     },
+  },
+  updated() {
+    this.$refs.messageInput.focus();
   },
 };
 </script>
