@@ -8,8 +8,8 @@
     >
       <h1>HandShake</h1>
       <!-- user profile image href insertion -->
-      <!-- TODO: recognize whether the user as an image or not -->
-      <img class="pfp" :src="'icons/default_pfp.png'" alt="pfp" />
+      <!-- TODO: recognize whether the user as an image or not (POST request) -->
+      <img :src="'icons/default_pfp.png'" class="pfp" alt="pfp" />
     </header>
 
     <!-- UI: SEARCH BAR TEXT & BUTTON -->
@@ -21,36 +21,31 @@
     </nav>
 
     <!-- UI: CONTACTS -->
-    <main id="contacts">
-      <ChatContact v-for="(chat, index) in chats"
-                   :key="index"
-                   :id="`chat${index}`"
-                   :chat="chat" >
-      </ChatContact>
-    </main>
-
+    <ChatList v-if="searchedUser === ''" chats='chats'></ChatList>
+    <!-- TODO: add v-else -->
   </section>
 </template>
 
 <script>
-import ChatContact from '@/components/ChatContact.vue';
+import ChatList from '@/components/ChatList.vue'
 
 export default {
-  name: 'ContactList',
-  components: { ChatContact },
+  name: 'AppMenu',
+  components: { ChatList },
   data: function () {
     return {
-      contacts: [],
+      chats: [],
       searchedUser: '',
     };
   },
   methods: {
     async search() {
       console.log(`Searching matching users: ${this.searchedUser}`);
-      // eslint-disable-next-line no-unused-vars
-      const matchingUsers = await this.$api.getUsers(this.searchedUser);
+      // const matchingUsers = await this.$api.getUsers(this.searchedUser);
       // do stuff with the result creating a new component popup to show matches
     },
+  },
+  computed: {
   },
 };
 </script>
