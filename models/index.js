@@ -10,17 +10,15 @@ const client = new MongoClient(mongodb_uri, {
 });
 */
 
-const connectionParams = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
 async function setupDB() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, connectionParams);
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log('✅Connected to database');
   } catch (err) {
-    console.error(`Error connecting to the database. \n${err}`);
+    console.error(`Error connecting to the database: ${err}`);
   }
 }
-// process.env.MONGODB_URI
 module.exports = setupDB;
