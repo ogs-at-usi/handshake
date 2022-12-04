@@ -11,16 +11,16 @@ const client = new MongoClient(mongodb_uri, {
 */
 
 const connectionParams = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 async function setupDB() {
   try {
-      await mongoose.connect(process.env.MONGODB_URI, connectionParams);
-        console.log('✅Connected to database');
-    } catch (err) {
-        console.error(`Error connecting to the database. \n${err}`);
-    }
+    await mongoose.connect(process.env.MONGODB_URI, connectionParams);
+    console.log('✅Connected to database');
+  } catch (err) {
+    console.error(`Error connecting to the database. \n${err}`);
+  }
 }
 // process.env.MONGODB_URI
 module.exports = setupDB;
