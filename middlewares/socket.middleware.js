@@ -1,4 +1,4 @@
-const { verifyJWT } = require('../utils/auth.utils');
+const { verifyJWT } = require('../utils/jwt.utils');
 const cookie = require('cookie');
 const authConstants = require('../constants/auth.constants');
 
