@@ -17,12 +17,16 @@
 
     <!-- lower input bar for new message sending -->
     <footer class="d-flex row align-items-center justify-content-between">
-      <form id="search-bar" @submit.prevent="sendMessage()">
+      <form
+        id="search-bar"
+        class="d-flex flex-row align-items-center justify-space-between gap-3"
+        @submit.prevent="sendMessage()"
+      >
         <input
           type="text"
           name="message"
           placeholder="Type something..."
-          class="col-9"
+          class="flex-grow-1"
           v-model="messageString"
         />
         <button type="submit">💬</button>
@@ -68,11 +72,10 @@ export default {
             sentAt: new Date(), // TODO: add sentAt implementation server side, field actually ignored
           })
         )
-        .then(() => {
-          this.$router.push('/');
-        })
+        .then(() => {})
         .catch((err) => {
-          console.log(err);
+          alert('Could not send the message. Check your internet connection');
+          console.error(err);
         });
     },
   },
