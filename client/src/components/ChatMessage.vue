@@ -3,7 +3,8 @@
   <div :id="message._id" :class="`card ${selfClass}`">
     <!-- message with header of name of sender (none if ours) and message text -->
     <div class="card-body">
-      <h5 class="card-title">{{ senderName }}</h5>
+      <!-- TODO: change v-if to display only if it is a group, add chat in props -->
+      <h5 v-if="false" class="card-title">{{ senderName }}</h5>
       <p class="card-text">{{ content }}</p>
     </div>
 
