@@ -3,7 +3,12 @@
     <span class='visually-hidden'>Loading...</span>
   </div>
   <main v-else-if='users.length > 0' class='menu_list'>
-    <UserItem v-for='(user, index) in users' :key='index' :user='user' />
+    <UserItem
+      v-for='(user, index) in users'
+      :key='index'
+      :user='user'
+      @click.native="$emit('selectUser', user)"
+    />
   </main>
   <main v-else class='menu_list'>
     <h3>No users found</h3>
@@ -34,7 +39,9 @@ export default {
       this.loading = true;
       const { data } = await this.$api.getUsers(this.filter);
       this.users = data.map((user) => new User(user));
-      this.users = this.users.filter((user) => user._id !== this.$store.getters.user._id);
+      this.users = this.users.filter(
+        (user) => user._id !== this.$store.getters.user._id,
+      );
       this.loading = false;
     },
   },
