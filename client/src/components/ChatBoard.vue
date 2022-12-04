@@ -7,7 +7,7 @@
     </header>
 
     <!-- message container -->
-    <main class="d-flex flex-column">
+    <main class="d-flex flex-column" ref="scroll">
       <ChatMessage
         v-for="(msg, index) in chat.messages"
         :key="index"
@@ -75,6 +75,8 @@ export default {
         )
         .then(() => {
           this.messageString = '';
+          const e = this.$refs.scroll;
+          e.scrollTop = e.scrollHeight;
         })
         .catch((err) => {
           alert('Could not send the message. Check your internet connection');
