@@ -5,6 +5,8 @@ const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
 const { Message, MessageType } = require('../models/message'); // MessageType is used for verification
+const io = require('../serverSocket').io;
+const serverSocket = require('../serverSocket');
 
 /**
  * Responds an array of users that match what the client typed
@@ -84,6 +86,12 @@ router.post('/chat', async function (req, res) {
       chat: chatId,
     });
 
+    const userSocket = [io.sockets.adapter.rooms.get(req.userId)];
+    const otherSocket = [io.sockets.adapter.rooms.get(otherId)];
+    serverSocket.joinRooms(chatId.toString(), [userSocket, otherSocket]);
+
+    io.to(req.userId).to(otherId).emit('chats:created', chat);
+
     res.status(201).json(chat);
   } else {
     // Not meant to happen that a chat already exists between the users
@@ -132,6 +140,9 @@ router.post('/chat/:chatId/messages', async function (req, res) {
     sent_at: new Date(),
     delivered_at: new Date(),
   });
+
+  // socket io emit to all users in the chat room that a new message has been created and send the new message
+  io.to(req.params.chatId).emit('messages:create', newMessage);
 
   res.status(201).json(newMessage);
 });
