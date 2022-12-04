@@ -8,8 +8,11 @@
     </div>
 
     <!-- name of the other user or group chat -->
-    <div class="flex-grow-1">
+    <div class="flex-grow-1 overflow-hidden pa-3">
       <h3 class='m-0'>{{ name }}</h3>
+      <span class='mb-0 text-secondary text-truncate'>
+        {{ lastMessage }}
+      </span>
     </div>
 
     <!-- notification badge -->
@@ -49,6 +52,9 @@ export default {
       if (this.chat.isGroup) return this.chat.title;
       else return this.otherPrivateUser.name;
     },
+    lastMessage() {
+       return this.chat.messages[this.chat.messages.length - 1].content;
+    }
   },
 };
 </script>
