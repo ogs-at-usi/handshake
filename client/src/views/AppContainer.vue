@@ -32,16 +32,33 @@ export default {
     const socket = io(':8888');
     console.log('Trying to connect');
     this.$store.commit('setSocket', socket);
+
     socket.on('chats:read', (chats) => {
-      console.log('Chats received', chats);
+      console.log('EVENT chats:read -', chats);
       this.chats = chats.map((chat) => new Chat(chat));
       // this.setActiveChat(this.chats[0]._id);
     });
+
     socket.on('messages:create', (message) => {
-      console.log('Message received', message);
+      console.log('EVENT messages:create -', message);
       const chatId = message.chat;
       const chat = this.chats.find((chat) => chat._id === chatId);
       chat.messages.push(new Message(message));
+    });
+
+    /**
+     * Get newly created chat.
+     */
+    socket.on('chats:create', chatJson => {
+      console.log('EVENT chats:create -', chatJson);
+      const chat = new Chat(chatJson);
+      this.chats.unshift(chat);
+
+      console.log(chat._id, this.activeChat._id);
+      if (chat.members[0]._id === this.$store.getters.user._id) {
+        console.log(chat);
+        this.activeChat = chat;
+      }
     });
   },
   methods: {
@@ -50,11 +67,27 @@ export default {
       this.activeChat = chat;
     },
     userSelected(otherUser) {
-      this.activeChat = new Chat({
-        members: [otherUser],
-        messages: [],
+      console.log('EVENT User selected - ', otherUser);
+      const chat = this.chats.find((chat) => {
+        if (chat.members.length === 2) {
+          const otherChatUser = chat.members.find((member) => member._id !== this.$store.getters.user._id);
+          return otherChatUser._id === otherUser._id;
+        }
+        return false;
       });
+      if (chat) {
+        this.activeChat = chat;
+      } else {
+        this.activeChat = new Chat({
+          members: [otherUser, this.$store.getters.user],
+          messages: [],
+        });
+      }
     },
+    overrideChat(id) {
+      console.log(id);
+      this.activeChat._id = id;
+    }
   },
   components: { AppMenu, ChatBoard },
 };

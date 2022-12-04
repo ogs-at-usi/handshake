@@ -7,6 +7,7 @@
       v-for='(user, index) in users'
       :key='index'
       :user='user'
+      class="ps-4 py-3"
       @click.native="$emit('userSelected', user)"
     />
   </main>
