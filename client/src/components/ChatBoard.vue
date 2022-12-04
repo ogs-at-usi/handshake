@@ -3,15 +3,14 @@
     <header>
       <!-- image & name of the chat: other user image or group image -->
       <img alt='pfp' class='pfp' src='/icons/default_pfp.png' />
-      <!--      <h2>{{ // chat instanceof Group ? chat.title : otheruser.name }}</h2>-->
+      <!-- <h2>{{ // chat instanceof Group ? chat.title : otheruser.name }}</h2>-->
     </header>
 
     <main class="d-flex flex-column">
-      <!--       append messages inside here-->
       <ChatMessage
-        v-for="(message, index) in chat.messages"
+        v-for="(msg, index) in chat.messages"
         :key="index"
-        :message="message"
+        :message="msg"
       ></ChatMessage>
     </main>
 
@@ -22,7 +21,7 @@
           name="message"
           placeholder="Type something..."
           class="col-9"
-          v-model="message"
+          v-model="message_string"
         />
         <button type="submit">💬</button>
       </form>
