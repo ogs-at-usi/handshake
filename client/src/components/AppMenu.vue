@@ -21,7 +21,7 @@
     </nav>
 
     <!-- UI: CONTACTS -->
-    <ChatList v-if="searchedUser === ''" chats='chats'></ChatList>
+    <ChatList v-if="searchedUser === ''" :chats='chats'></ChatList>
     <!-- TODO: add v-else -->
   </section>
 </template>
