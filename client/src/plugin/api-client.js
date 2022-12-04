@@ -34,7 +34,7 @@ class ApiClient {
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
   getUsers(filter) {
-    return this.axiosInstance.get(`/users?filter=${filter}`);
+    return this.axiosInstance.get(`/api/users?filter=${filter}`);
   }
 
   /**
@@ -43,7 +43,7 @@ class ApiClient {
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
   createChat(otherUserID) {
-    return this.axiosInstance.post('/chats', { otherUserID });
+    return this.axiosInstance.post('/api/chats', { otherUserID });
   }
 
   /**
@@ -53,7 +53,7 @@ class ApiClient {
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
   sendMessage(chatID, message) {
-    return this.axiosInstance.post(`/chats/${chatID}/messages`, {
+    return this.axiosInstance.post(`/api/chats/${chatID}/messages`, {
       type: message.type,
       content: message.content,
     });
