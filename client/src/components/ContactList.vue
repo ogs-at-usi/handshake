@@ -19,9 +19,11 @@
 
     <!-- UI: CONTACTS -->
     <main id="contacts">
-      <ChatContact v-for="(chat, index) in chats" :key="index"
+      <ChatContact v-for="(chat, index) in chats"
+                   :key="index"
                    :id="`chat${index}`"
-                   :chat="chat" ></ChatContact>
+                   :chat="chat" >
+      </ChatContact>
     </main>
 
   </section>

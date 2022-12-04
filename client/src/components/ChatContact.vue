@@ -4,12 +4,12 @@
 
     <!-- image of the other user or group chat -->
     <div class="col-3">
-      <img :src="`/media/${ other._id }.png`" class="pfp" alt="pfp" />
+      <img :src="`/media/${ id }.png`" class="pfp" alt="pfp" />
     </div>
 
     <!-- name of the other user or group chat -->
     <div class="col-8">
-      <h3>{{ other.name }}</h3>
+      <h3>{{ title }}</h3>
     </div>
 
     <!-- notification badge -->
@@ -21,7 +21,8 @@
 </template>
 
 <script>
-import Chat from '../../public/js/classes/chat.js';
+// eslint-disable-next-line no-unused-vars
+import Chat from '@/classes/chat.js';
 
 export default {
   name: 'ChatContact',
@@ -33,6 +34,11 @@ export default {
     title: {
       type: String,
       required: true,
+    },
+  },
+  methods: {
+    openChat() {
+
     },
   },
 };
