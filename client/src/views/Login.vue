@@ -32,6 +32,10 @@
             Log in
           </button>
         </form>
+        <p>
+          Don't have an account?
+          <a class="btn .mx-auto" href="/signup"> Sign up </a>
+        </p>
       </section>
     </section>
     <footer id="login_page_footer" class="text-center">
@@ -75,4 +79,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+a {
+  color: #fffa;
+}
+</style>

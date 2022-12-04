@@ -47,6 +47,7 @@
             Sign up
           </button>
         </form>
+        <p>Already a user? <a class="btn .mx-auto" href="/login">Login</a></p>
       </section>
     </section>
     <footer id="login_page_footer" class="text-center">
@@ -93,4 +94,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+a {
+  color: #fffa;
+}
+input {
+  padding: 12px 20px;
+  margin: 8px;
+  display: inline-block;
+}
+</style>
