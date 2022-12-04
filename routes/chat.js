@@ -24,7 +24,7 @@ router.get('/users', async function (req, res) {
 /*
  * Responds a created chat between users and returns the new chat
  */
-router.post('/chat', async function (req, res) {
+router.post('/chats', async function (req, res) {
   const otherId = req.body.otherId;
 
   if (!ObjectId.isValid(otherId)) {
@@ -97,7 +97,7 @@ router.post('/chat', async function (req, res) {
 /*
  * Responds a created a new message and returns the new message
  */
-router.post('/chat/:chatId/messages', async function (req, res) {
+router.post('/chats/:chatId/messages', async function (req, res) {
   const chatId = req.params.chatId;
   if (!ObjectId.isValid(chatId)) {
     return res.status(400).end();
