@@ -40,8 +40,13 @@ function joinRooms(rooms, socket) {
   if (!Array.isArray(rooms)) {
     rooms = [rooms];
   }
+  if (!Array.isArray(socket)) {
+    socket = [socket];
+  }
   rooms.forEach((room) => {
-    socket.join(room);
+    socket.forEach((socket) => {
+      socket.join(room);
+    });
   });
 }
 
