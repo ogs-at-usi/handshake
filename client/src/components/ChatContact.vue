@@ -1,6 +1,6 @@
 <template>
   <!-- UI: CONTACT -->
-  <div @click.native="$emit('selectChat', chat._id)" class="contact justify-content-between d-flex flex-row align-items-center">
+  <div class="contact justify-content-between d-flex flex-row align-items-center">
 
     <!-- image of the other user or group chat -->
     <div class="col-3">

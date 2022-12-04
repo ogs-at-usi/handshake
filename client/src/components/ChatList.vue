@@ -3,8 +3,8 @@
     <ChatContact v-for="(chat, index) in chats"
                  :key="index"
                  :chat="chat"
-                 v-on="$listeners">   // propagate events: selectChat
-    </ChatContact>
+                 v-on="$listeners"
+                 @click.native="$emit('selectChat', chat._id)" />   // propagate events: selectChat
   </main>
 </template>
 
