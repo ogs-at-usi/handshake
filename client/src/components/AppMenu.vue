@@ -21,7 +21,7 @@
     </nav>
 
     <!-- UI: CONTACTS -->
-    <ChatList v-if="searchedUser === ''" :chats='chats'></ChatList>
+    <ChatList v-if="searchedUser === ''" :chats='chats' v-on="$listeners"></ChatList>
     <UsersList v-else :filter='searchedUser' @userSelected="searchedUser = ''" v-on='$listeners'></UsersList>
   </section>
 </template>
@@ -35,10 +35,14 @@ export default {
   components: { UsersList, ChatList },
   data: function() {
     return {
-      chats: this.$store.getters.user.chats,
       searchedUser: '',
     };
   },
+  props: {
+    chats: {
+      type: Array,
+    }
+  }
 };
 </script>
 

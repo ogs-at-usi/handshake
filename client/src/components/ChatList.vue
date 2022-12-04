@@ -1,10 +1,10 @@
 <template>
-  <main id="menu_list">
+  <main v-if="chats !== null" id="menu_list">
     <ChatContact v-for="(chat, index) in chats"
                  :key="index"
                  :chat="chat"
                  v-on="$listeners"
-                 @click.native="$emit('selectChat', chat._id)" />   // propagate events: selectChat
+                 @click.native="$emit('selectChat', chat._id)" />
   </main>
 </template>
 
@@ -16,7 +16,6 @@ export default {
   props: {
     chats: {
       type: Array, // of Chats
-      required: true,
     },
   },
   components: { ChatContact },
