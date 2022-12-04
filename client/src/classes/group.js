@@ -1,3 +1,5 @@
+import Chat from '@/classes/chat';
+
 class Group extends Chat {
   _id = null;
   title = null;
