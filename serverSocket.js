@@ -24,11 +24,11 @@ function init(server) {
 
   io.use(authMiddleware);
 
-  io.on('connection', (socket) => {
+  io.on('connection', async (socket) => {
     console.log('✅User connected with id ' + socket.id);
     console.log('Chat list is coming...');
     socket.join(socket.userId);
-    const userChats = getChats(socket.userId);
+    const userChats = await getChats(socket.userId);
     joinRooms(
       userChats.map((chat) => chat._id.toString()),
       socket
