@@ -18,7 +18,7 @@ export default {
       required: true,
     },
   },
-  components: { ChatContact }
+  components: { ChatContact },
 };
 </script>
 
