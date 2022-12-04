@@ -22,8 +22,7 @@
 
     <!-- UI: CONTACTS -->
     <ChatList v-if="searchedUser === ''" :chats='chats'></ChatList>
-    <UsersList v-else :filter='searchedUser'></UsersList>
-    <!-- TODO: add v-else -->
+    <UsersList v-else :filter='searchedUser' v-on='$listeners'></UsersList>
   </section>
 </template>
 

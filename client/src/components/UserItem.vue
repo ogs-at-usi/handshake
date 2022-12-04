@@ -1,6 +1,7 @@
 <template>
-  <div class='contact justify-content-between d-flex flex-row align-items-center'>
-
+  <div
+    class='contact justify-content-between d-flex flex-row align-items-center'
+  >
     <!-- image of the other user or group chat -->
     <div class='col-3'>
       <img alt='pfp' class='pfp' src='/icons/default_pfp.png' />
@@ -15,7 +16,6 @@
     <div class='col-1'>
       <p class='notification badge rounded-pill text-bg-light'></p>
     </div>
-
   </div>
 </template>
 
@@ -33,6 +33,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
