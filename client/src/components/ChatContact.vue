@@ -1,19 +1,19 @@
 <template>
   <!-- UI: CONTACT -->
-  <div class="contact justify-content-between d-flex flex-row align-items-center">
+  <div class="contact justify-content-between d-flex flex-row align-items-center gap-4">
 
     <!-- image of the other user or group chat -->
-    <div class="col-3">
+    <div>
       <img :src="imageId" class="pfp" alt="pfp" />
     </div>
 
     <!-- name of the other user or group chat -->
-    <div class="col-8">
-      <h3>{{ name }}</h3>
+    <div class="flex-grow-1">
+      <h3 class='m-0'>{{ name }}</h3>
     </div>
 
     <!-- notification badge -->
-    <div class="col-1">
+    <div class="d-none">
       <p class="notification badge rounded-pill text-bg-light"></p>
     </div>
 
