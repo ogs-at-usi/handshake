@@ -67,10 +67,22 @@ export default {
       this.activeChat = chat;
     },
     userSelected(otherUser) {
-      this.activeChat = new Chat({
-        members: [otherUser, this.$store.getters.user],
-        messages: [],
+      console.log('EVENT User selected - ', otherUser);
+      const chat = this.chats.find((chat) => {
+        if (chat.members.length === 2) {
+          const otherChatUser = chat.members.find((member) => member._id !== this.$store.getters.user._id);
+          return otherChatUser._id === otherUser._id;
+        }
+        return false;
       });
+      if (chat) {
+        this.activeChat = chat;
+      } else {
+        this.activeChat = new Chat({
+          members: [otherUser, this.$store.getters.user],
+          messages: [],
+        });
+      }
     },
     overrideChat(id) {
       console.log(id);

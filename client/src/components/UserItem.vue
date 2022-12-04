@@ -1,20 +1,20 @@
 <template>
   <div
-    class='contact justify-content-between d-flex flex-row align-items-center'
+    class="contact justify-content-between d-flex flex-row align-items-center gap-4"
   >
     <!-- image of the other user or group chat -->
-    <div class='col-3'>
-      <img alt='pfp' class='pfp' src='/icons/default_pfp.png' />
+    <div>
+      <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
     </div>
 
     <!-- name of the other user or group chat -->
-    <div class='col-8'>
+    <div class="flex-grow-1">
       <h3>{{ user.name }}</h3>
     </div>
 
     <!-- notification badge -->
-    <div class='col-1'>
-      <p class='notification badge rounded-pill text-bg-light'></p>
+    <div>
+      <p class="notification badge rounded-pill text-bg-light"></p>
     </div>
   </div>
 </template>

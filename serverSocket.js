@@ -8,30 +8,25 @@ function init(server) {
   io.attach(server);
 
   async function getChats(userId) {
-    const userChats = await UserChat.find({ user: ObjectId(userId) })
+    let userChats = await UserChat.find({ user: ObjectId(userId) })
       .populate({
         path: 'chat',
         populate: {
           path: 'messages',
         },
-      })
-      .exec();
+      }).exec();
     if (!userChats) {
       return [];
     }
+    userChats = userChats.map((userChat) => userChat.chat);
+    userChats = userChats.sort((a, b) => {
+      const lastMessageA = a.messages[a.messages.length - 1];
+      const lastMessageB = b.messages[b.messages.length - 1];
+      return lastMessageB.sentAt - lastMessageA.sentAt;
+    });
 
-    const chats = userChats.map((userChat) => userChat.chat);
+    const chats = userChats;
     // find all the users in each chat ad add it as a property 'members'
-    for (const chat of chats) {
-      const members = await UserChat.find({ chat: chat._id })
-        .populate('user')
-        .exec();
-      console.log(chat.members);
-      Object.defineProperty(chat, 'members', {
-        value: members.map((member) => member.user),
-      });
-      console.log(chat);
-    }
     return await Promise.all(chats.map(async (chat) => {
       const members = await UserChat.find({ chat: chat._id })
         .populate('user')
