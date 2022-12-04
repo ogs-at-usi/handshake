@@ -7,8 +7,8 @@ const authMiddleware = (socket, next) => {
   const jwtToken = socket.request.cookies[authConstants.JWT_COOKIE_NAME];
 
   try {
-    const userID = verifyJWT(jwtToken);
-    socket.userID = userID;
+    const {userId}= verifyJWT(jwtToken);
+    socket.userId = userId;
     next();
   } catch (e) {
     console.log(e);
