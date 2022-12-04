@@ -12,7 +12,12 @@ instance.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 401 &&
+      !originalRequest._retry &&
+      store.getters.isLoggedIn &&
+      originalRequest.url !== '/auth/refresh'
+    ) {
       originalRequest._retry = true;
       // if the refresh function fails then we need to logout (Vuex)
       return instance
