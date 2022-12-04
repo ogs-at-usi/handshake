@@ -8,7 +8,7 @@
     >
       <h1>HandShake</h1>
       <!-- user profile image href insertion -->
-      <!-- TODO: recognize whether the user as an image or not (POST request) -->
+      <!-- TODO: recognize whether the user has an image or not (POST request) -->
       <img :src="'icons/default_pfp.png'" class='pfp' alt='pfp' />
     </header>
 
@@ -22,12 +22,7 @@
 
     <!-- UI: CONTACTS -->
     <ChatList v-if="searchedUser === ''" :chats='chats'></ChatList>
-    <UsersList
-      v-else
-      :filter='searchedUser'
-      @userSelected="searchedUser = ''"
-      v-on='$listeners'
-    ></UsersList>
+    <UsersList v-else :filter='searchedUser' @userSelected="searchedUser = ''" v-on='$listeners'></UsersList>
   </section>
 </template>
 
@@ -40,12 +35,10 @@ export default {
   components: { UsersList, ChatList },
   data: function() {
     return {
-      chats: [],
+      chats: this.$store.getters.user.chats,
       searchedUser: '',
     };
   },
-  methods: {},
-  computed: {},
 };
 </script>
 
