@@ -44,6 +44,9 @@ export default {
       const chatId = message.chat;
       const chat = this.chats.find((chat) => chat._id === chatId);
       chat.messages.push(new Message(message));
+      // move the chat to the top of the list
+      this.chats = this.chats.filter((chat) => chat._id !== chatId);
+      this.chats.unshift(chat);
     });
 
     /**
