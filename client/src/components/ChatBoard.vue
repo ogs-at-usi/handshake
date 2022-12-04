@@ -51,7 +51,10 @@ export default {
   methods: {
     sendMessage() {
       this.$api
-        .sendMessage(this.$props.chat._id, this.$props.chat.messages)
+        .sendMessage(this.$props.chat._id, {
+          content: this.message,
+          timestamp: new Date(),
+        })
         .then(() => {
           this.$router.push('/');
         })
