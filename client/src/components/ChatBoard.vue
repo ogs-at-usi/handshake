@@ -45,7 +45,7 @@ export default {
   props: {
     chat: {
       type: Chat,
-      required: true,
+      default: null,
     },
   },
   methods: {
