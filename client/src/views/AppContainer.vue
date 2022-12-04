@@ -29,7 +29,7 @@ export default {
     };
   },
   mounted() {
-    const socket = io('localhost:8888');
+    const socket = io(':8888');
     console.log('Trying to connect');
     this.$store.commit('setSocket', socket);
     socket.on('chats:read', (chats) => {
