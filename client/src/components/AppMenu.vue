@@ -13,40 +13,35 @@
     </header>
 
     <!-- UI: SEARCH BAR TEXT & BUTTON -->
-    <nav id="searchbar" class="align-items-center d-flex flex-row">
-      <form id="search-bar">
-        <input v-model="searchedUser" type="text" placeholder="Search..." />
-        <button @click="search()">🔎</button>
+    <nav id='searchbar' class='align-items-center d-flex flex-row'>
+      <form id='search-bar'>
+        <input v-model='searchedUser' type='text' placeholder='Search...' />
+        <button>🔎</button>
       </form>
     </nav>
 
     <!-- UI: CONTACTS -->
     <ChatList v-if="searchedUser === ''" :chats='chats'></ChatList>
+    <UsersList v-else :filter='searchedUser'></UsersList>
     <!-- TODO: add v-else -->
   </section>
 </template>
 
 <script>
-import ChatList from '@/components/ChatList.vue'
+import ChatList from '@/components/ChatList.vue';
+import UsersList from '@/components/UsersList';
 
 export default {
   name: 'AppMenu',
-  components: { ChatList },
-  data: function () {
+  components: { UsersList, ChatList },
+  data: function() {
     return {
       chats: [],
       searchedUser: '',
     };
   },
-  methods: {
-    async search() {
-      console.log(`Searching matching users: ${this.searchedUser}`);
-      // const matchingUsers = await this.$api.getUsers(this.searchedUser);
-      // do stuff with the result creating a new component popup to show matches
-    },
-  },
-  computed: {
-  },
+  methods: {},
+  computed: {},
 };
 </script>
 
