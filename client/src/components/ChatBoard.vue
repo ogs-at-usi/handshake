@@ -13,24 +13,18 @@
         :key="index"
         :message="message"
       ></ChatMessage>
-      <!--      <ChatMessage-->
-      <!--        :message="{-->
-      <!--          _id: '1',-->
-      <!--          content: 'Hello',-->
-      <!--          deliveredAt: '2021-05-01T00:00:00.000Z',-->
-      <!--        }"-->
-      <!--      />-->
     </main>
 
     <footer class="d-flex row align-items-center justify-content-between">
-      <form id="search-bar" action="">
+      <form id="search-bar" @submit.prevent="sendMessage()">
         <input
           type="text"
           name="message"
           placeholder="Type something..."
           class="col-9"
+          v-model="message"
         />
-        <button>💬</button>
+        <button type="submit">💬</button>
       </form>
     </footer>
   </div>
@@ -43,10 +37,27 @@ import ChatMessage from '@/components/ChatMessage';
 export default {
   name: 'ChatBoard',
   components: { ChatMessage },
+  data() {
+    return {
+      message: '',
+    };
+  },
   props: {
     chat: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    sendMessage() {
+      this.$api
+        .sendMessage(this.$props.chat._id, this.$props.chat.messages)
+        .then(() => {
+          this.$router.push('/');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
