@@ -4,7 +4,7 @@
 
     <!-- image of the other user or group chat -->
     <div class="col-3">
-      <img :src="`/media/${imageId}.png`" class="pfp" alt="pfp" />
+      <img :src="imageId" class="pfp" alt="pfp" />
     </div>
 
     <!-- name of the other user or group chat -->
@@ -39,7 +39,11 @@ export default {
     },
     imageId() {
       if (this.chat instanceof Group) return this.chat._id;
-      else return this.otherPrivateUser._id;
+      else {
+        // TODO: check if the user has an image with a axios HTTP request
+        // then if exist, return this.otherPrivateUser._id;
+        return 'icons/default_pfp.png';
+      }
     },
     name() {
       if (this.chat instanceof Group) return this.chat.title;
