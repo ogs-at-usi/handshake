@@ -5,13 +5,14 @@
     <AppMenu @userSelected='userSelected($event)'></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard :chat="{}"></ChatBoard>
+    <ChatBoard :chat='activeChat'></ChatBoard>
   </div>
 </template>
 
 <script>
 import AppMenu from '@/components/AppMenu.vue';
 import ChatBoard from '@/components/ChatBoard.vue';
+import Chat from '@/classes/chat';
 
 export default {
   name: 'AppContainer',
@@ -21,8 +22,11 @@ export default {
     };
   },
   methods: {
-    userSelected(user) {
-      console.log(user.name);
+    userSelected(otherUser) {
+      this.activeChat = new Chat({
+        members: [otherUser],
+        messages: [],
+      });
     },
   },
   components: { AppMenu, ChatBoard },

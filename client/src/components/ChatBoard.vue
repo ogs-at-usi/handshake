@@ -2,7 +2,7 @@
   <div id="chat" class="col-12 col-md-8 col-lg-9" v-if="chat !== null">
     <header>
       <!-- image & name of the chat: other user image or group image -->
-      <img class="pfp" src="icons/default_pfp.png" alt="pfp" />
+      <img alt='pfp' class='pfp' src='/icons/default_pfp.png' />
       <!--      <h2>{{ // chat instanceof Group ? chat.title : otheruser.name }}</h2>-->
     </header>
 
@@ -54,7 +54,7 @@ export default {
 
       if (chatId === null) {
         const { data } = await this.$api.createChat(this.chat.members[0]._id);
-        chatId = data; // way to unpack data apparently
+        chatId = data._id; // way to unpack data apparently
       }
       this.$api
         .sendMessage(chatId, {
