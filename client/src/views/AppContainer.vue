@@ -13,7 +13,7 @@
 import AppMenu from '@/components/AppMenu.vue';
 import ChatBoard from '@/components/ChatBoard.vue';
 import Chat from '@/classes/chat';
-import {io} from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 export default {
   name: 'AppContainer',
@@ -27,8 +27,10 @@ export default {
     const socket = io("localhost:8888");
     console.log("Trying to connect");
     this.$store.commit("setSocket", socket);
-    socket.on("connect", () => {
-      console.log("connected");
+    socket.on("chats:read", (chats) => {
+      console.log("Chats received", chats);
+      this.chats = chats.map((chat) => new Chat(chat));
+      // this.setActiveChat(this.chats[0]._id);
     });
   },
   methods: {
