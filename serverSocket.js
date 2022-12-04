@@ -26,11 +26,9 @@ function init(server) {
       const members = await UserChat.find({ chat: chat._id })
         .populate('user')
         .exec();
-      console.log(chat.members);
       Object.defineProperty(chat, 'members', {
         value: members.map((member) => member.user),
       });
-      console.log(chat);
     }
     return await Promise.all(chats.map(async (chat) => {
       const members = await UserChat.find({ chat: chat._id })
