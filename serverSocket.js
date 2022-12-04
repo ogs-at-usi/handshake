@@ -7,7 +7,7 @@ function init(server) {
   io.attach(server);
 
   async function getChats(userId) {
-    const [error, userChats] = await UserChat.find({ user: userId })
+    const userChats = await UserChat.find({ user: userId })
       .populate({
         path: 'chat',
         populate: {
@@ -15,8 +15,7 @@ function init(server) {
         },
       })
       .exec();
-    if (error) {
-      console.log(error);
+    if (!userChats) {
       return [];
     }
     return userChats.map((userChat) => userChat.chat);
