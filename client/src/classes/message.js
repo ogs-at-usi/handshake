@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 class Message {
   _id = null;
   sender = null;

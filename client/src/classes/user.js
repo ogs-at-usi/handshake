@@ -14,7 +14,6 @@ const u = new User(JSON.parse(myjsonresponse));
 > u;
 < User { _id: null, name: 'John', email: null, chats: null }
 */
-// eslint-disable-next-line no-unused-vars
 class User {
   // password not included, never used, only to retrieve token
   _id = null;

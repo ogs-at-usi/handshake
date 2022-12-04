@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 class Group extends Chat {
   _id = null;
   title = null;

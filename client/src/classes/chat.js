@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 class Chat {
   _id = null;
   members = null;
