@@ -1,12 +1,15 @@
 <template>
-  <div :id="" class="card">
+  <!-- UI: MESSAGE -->
+  <div :id="message._id" class="card">
 
+    <!-- message with header of name of sender (none if ours) and message text -->
     <div class="card-body">
-      <h5 class="card-title">{{ }}</h5>
-      <p class="card-text">Message text</p>
+      <h5 class="card-title">{{ otheruser.name }}</h5>
+      <p class="card-text">{{ message.content }}</p>
     </div>
 
-    <p class="timestamp text-end">Timestamp</p>
+    <!-- timestamp of the message: sent_at for our message, delivered_at for others -->
+    <p class="timestamp text-end">{{ message.delivered_at }}</p>
 
   </div>
 </template>
