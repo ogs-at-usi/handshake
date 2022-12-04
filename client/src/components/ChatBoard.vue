@@ -49,9 +49,15 @@ export default {
     },
   },
   methods: {
-    sendMessage() {
+    async sendMessage() {
+      let chatId = this.$props.chat._id;
+
+      if (chatId === null) {
+        const { data } = await this.$api.createChat(this.chat.members[0]._id);
+        chatId = data; // way to unpack data apparently
+      }
       this.$api
-        .sendMessage(this.$props.chat._id, {
+        .sendMessage(chatId, {
           content: this.message,
           timestamp: new Date(),
         })
