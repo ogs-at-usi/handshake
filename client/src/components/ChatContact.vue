@@ -1,10 +1,10 @@
 <template>
   <!-- UI: CONTACT -->
-  <div class="contact justify-content-between d-flex flex-row align-items-center">
+  <div @click.native="$emit('selectChat', chat._id)" class="contact justify-content-between d-flex flex-row align-items-center">
 
     <!-- image of the other user or group chat -->
     <div class="col-3">
-      <img :src="`/media/${ imageId }.png`" class="pfp" alt="pfp" />
+      <img :src="`/media/${imageId}.png`" class="pfp" alt="pfp" />
     </div>
 
     <!-- name of the other user or group chat -->
@@ -30,11 +30,6 @@ export default {
     chat: {
       type: Chat,
       required: true,
-    },
-  },
-  methods: {
-    openChat() {
-      // TODO: populate when chats get rendered
     },
   },
   computed: {
