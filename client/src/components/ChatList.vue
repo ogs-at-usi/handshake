@@ -2,7 +2,8 @@
   <main id="menu_list">
     <ChatContact v-for="(chat, index) in chats"
                  :key="index"
-                 :chat="chat">
+                 :chat="chat"
+                 v-on="$listeners">   // propagate events: selectChat
     </ChatContact>
   </main>
 </template>
