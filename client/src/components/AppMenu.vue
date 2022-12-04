@@ -3,26 +3,40 @@
   <section id="menu" class="col-12 col-md-4 col-lg-3">
     <!-- UI: HANDSHAKE TITLE & USER IMAGE -->
     <header
-      id='title_user_image'
-      class='justify-content-between align-items-center d-flex flex-row'
+      id="title_user_image"
+      class="justify-content-between align-items-center d-flex flex-row"
     >
       <h1>HandShake</h1>
       <!-- user profile image href insertion -->
       <!-- TODO: recognize whether the user has an image or not (POST request) -->
-      <img :src="'icons/default_pfp.png'" class='pfp' alt='pfp' />
+      <img :src="'icons/default_pfp.png'" alt="pfp" class="pfp" />
     </header>
 
     <!-- UI: SEARCH BAR TEXT & BUTTON -->
-    <nav id='searchbar' class='align-items-center d-flex flex-row'>
-      <form id='search-bar'>
-        <input v-model='searchedUser' placeholder='Search...' type='text' />
+    <nav id="searchbar" class="align-items-center d-flex flex-row">
+      <form id="search-bar" class="d-flex flex-row gap-3">
+        <input
+          v-model="searchedUser"
+          class="flex-grow-1"
+          placeholder="Search..."
+          type="text"
+        />
         <button>🔎</button>
       </form>
     </nav>
 
     <!-- UI: CONTACTS -->
-    <ChatList v-if="searchedUser === ''" :chats='chats' v-on="$listeners"></ChatList>
-    <UsersList v-else :filter='searchedUser' @userSelected="searchedUser = ''" v-on='$listeners'></UsersList>
+    <ChatList
+      v-if="searchedUser === ''"
+      :chats="chats"
+      v-on="$listeners"
+    ></ChatList>
+    <UsersList
+      v-else
+      :filter="searchedUser"
+      @userSelected="searchedUser = ''"
+      v-on="$listeners"
+    ></UsersList>
   </section>
 </template>
 
@@ -33,7 +47,7 @@ import UsersList from '@/components/UsersList';
 export default {
   name: 'AppMenu',
   components: { UsersList, ChatList },
-  data: function() {
+  data: function () {
     return {
       searchedUser: '',
     };
@@ -41,8 +55,8 @@ export default {
   props: {
     chats: {
       type: Array,
-    }
-  }
+    },
+  },
 };
 </script>
 
