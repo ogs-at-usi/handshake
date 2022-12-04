@@ -36,7 +36,7 @@ function init(server) {
       const members = await UserChat.find({ chat: chat._id })
         .populate('user')
         .exec();
-      return {...chat._doc, members};
+      return {...chat._doc, members: members.map((member) => member.user)};
     }));
   }
 
