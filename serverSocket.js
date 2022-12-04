@@ -8,7 +8,12 @@ function init(server) {
 
   async function getChats(userId) {
     const [error, userChats] = await UserChat.find({ user: userId })
-      .populate('chat')
+      .populate({
+        path: 'chat',
+        populate: {
+          path: 'messages',
+        },
+      })
       .exec();
     if (error) {
       console.log(error);
