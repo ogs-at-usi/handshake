@@ -141,6 +141,13 @@ router.post('/chats/:chatId/messages', async function (req, res) {
     delivered_at: new Date(),
   });
 
+  const chat = await Chat.findOne({
+    _id: ObjectId(chatId),
+  }).exec();
+
+  chat.messages.push(newMessage._id);
+  await chat.save();
+
   // socket io emit to all users in the chat room that a new message has been created and send the new message
   io.to(req.params.chatId).emit('messages:create', newMessage);
 
