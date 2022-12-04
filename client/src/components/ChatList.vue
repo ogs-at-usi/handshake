@@ -5,7 +5,7 @@
                    :key="index"
                    :chat="chat"
                    v-on="$listeners"
-                   @click.native="$emit('selectChat', chat._id)" />
+                   @click.native="$emit('selectChat', chat)" />
     </ul>
   </main>
 </template>

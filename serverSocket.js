@@ -1,13 +1,14 @@
 const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
+const { ObjectId } = require('mongodb');
 
 // Initialize the socket.io server
 function init(server) {
   io.attach(server);
 
   async function getChats(userId) {
-    const userChats = await UserChat.find({ user: userId })
+    const userChats = await UserChat.find({ user: ObjectId(userId) })
       .populate({
         path: 'chat',
         populate: {
@@ -18,16 +19,35 @@ function init(server) {
     if (!userChats) {
       return [];
     }
-    return userChats.map((userChat) => userChat.chat);
+
+    const chats = userChats.map((userChat) => userChat.chat);
+    // find all the users in each chat ad add it as a property 'members'
+    for (const chat of chats) {
+      const members = await UserChat.find({ chat: chat._id })
+        .populate('user')
+        .exec();
+      console.log(chat.members);
+      Object.defineProperty(chat, 'members', {
+        value: members.map((member) => member.user),
+      });
+      console.log(chat);
+    }
+    return await Promise.all(chats.map(async (chat) => {
+      const members = await UserChat.find({ chat: chat._id })
+        .populate('user')
+        .exec();
+      return {...chat._doc, members};
+    }));
   }
 
   io.use(authMiddleware);
 
   io.on('connection', async (socket) => {
-    console.log('✅User connected with id ' + socket.id);
+    console.log('✅User connected with id ' + socket.id, socket.userId);
     console.log('Chat list is coming...');
     socket.join(socket.userId);
     const userChats = await getChats(socket.userId);
+    console.log(userChats);
     joinRooms(
       userChats.map((chat) => chat._id.toString()),
       socket
