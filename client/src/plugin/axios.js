@@ -1,7 +1,8 @@
 import axios from 'axios';
+import store from '../store';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'http://localhost:8888',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -11,14 +12,22 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // if the error is 401, try to refresh the token and resubmit the request
-    if (error.response.status === 401) {
-      if (error.config.url === '/auth/refresh') {
-        return Promise.reject(error);
-      }
-      return instance.post('/auth/refresh').then((_) => {
-        return instance(error.config);
-      });
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      // if the refresh function fails then we need to logout (Vuex)
+      return instance
+        .post('/auth/refresh')
+        .then((res) => {
+          if (res.status === 200) {
+            return instance(originalRequest);
+          }
+        })
+        .catch(() => {
+          // how to access Vuex
+          store.commit('logout');
+          return Promise.reject(error);
+        });
     }
     return Promise.reject(error);
   }

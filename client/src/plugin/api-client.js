@@ -4,6 +4,31 @@ class ApiClient {
   }
 
   /**
+   * Retrieve the list of chats that match the filter.
+   * @param username
+   * @param password
+   * @returns {*}
+   */
+  login(username, password) {
+    return this.axiosInstance.post('/auth/login', { username, password });
+  }
+
+  /**
+   * Retrieve the list of chats that match the filter.
+   * @param email {string} The email of the user
+   * @param username {string} The username of the user
+   * @param password {string} The password of the user
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  signup(email, username, password) {
+    return this.axiosInstance.post('/auth/signup', {
+      email,
+      username,
+      password,
+    });
+  }
+
+  /**
    * Retrieve the list of users that match the filter.
    * @param filter {string} The filter to apply
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
