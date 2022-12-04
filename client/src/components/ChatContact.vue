@@ -46,7 +46,7 @@ export default {
       }
     },
     name() {
-      if (this.chat instanceof Group) return this.chat.title;
+      if (this.chat.isGroup) return this.chat.title;
       else return this.otherPrivateUser.name;
     },
   },

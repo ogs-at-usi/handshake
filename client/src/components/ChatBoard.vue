@@ -1,9 +1,9 @@
 <template>
   <div id="chat" class="col-12 col-md-8 col-lg-9" v-if="chat !== null">
     <!-- image & name of the chat: other user image or group image -->
-    <header>
+    <header class="d-flex flex-row gap-5 align-items-center">
       <img alt='pfp' class='pfp' src='/icons/default_pfp.png' />
-      <!-- <h2>{{ // chat instanceof Group ? chat.title : otheruser.name }}</h2>-->
+      <h2>{{ chatName }}</h2>
     </header>
 
     <!-- message container -->
@@ -72,6 +72,19 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+  },
+  computed: {
+    otherPrivateUser() {
+      const [us1, us2] = this.chat.members;
+      return us1._id !== this.$store.getters.user._id ? us1 : us2;
+    },
+    chatName() {
+      if (this.$props.chat.isGroup) {
+        return this.$props.chat.title;
+      } else {
+        return this.otherPrivateUser.name;
+      };
     },
   },
 };
