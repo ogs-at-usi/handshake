@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       activeChat: null,
-      chats: this.$store.getters.user.chats,
+      chats: null,
     };
   },
   mounted() {
