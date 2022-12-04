@@ -2,8 +2,11 @@
   <div v-if='loading' class='spinner-border' role='status'>
     <span class='visually-hidden'>Loading...</span>
   </div>
-  <main v-else class='menu_list'>
+  <main v-else-if='users.length > 0' class='menu_list'>
     <UserItem v-for='(user, index) in users' :key='index' :user='user' />
+  </main>
+  <main v-else class='menu_list'>
+    <h3>No users found</h3>
   </main>
 </template>
 
