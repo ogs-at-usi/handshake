@@ -74,6 +74,7 @@ header {
 .contact {
   height: 7vh;
   padding: 1vh;
+  cursor: pointer;
 }
 
 .contact:hover {
