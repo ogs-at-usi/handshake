@@ -1,13 +1,14 @@
 const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
+const { ObjectId } = require('mongodb');
 
 // Initialize the socket.io server
 function init(server) {
   io.attach(server);
 
   async function getChats(userId) {
-    const userChats = await UserChat.find({ user: userId })
+    const userChats = await UserChat.find({ user: ObjectId(userId) })
       .populate({
         path: 'chat',
         populate: {
@@ -24,7 +25,7 @@ function init(server) {
   io.use(authMiddleware);
 
   io.on('connection', async (socket) => {
-    console.log('✅User connected with id ' + socket.id);
+    console.log('✅User connected with id ' + socket.id, socket.userId);
     console.log('Chat list is coming...');
     socket.join(socket.userId);
     const userChats = await getChats(socket.userId);
