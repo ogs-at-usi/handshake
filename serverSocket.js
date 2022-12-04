@@ -27,8 +27,8 @@ function init(server) {
   io.on('connection', (socket) => {
     console.log('✅User connected with id ' + socket.id);
     console.log('Chat list is coming...');
-    socket.join(socket.userID);
-    const userChats = getChats(socket.userID);
+    socket.join(socket.userId);
+    const userChats = getChats(socket.userId);
     joinRooms(
       userChats.map((chat) => chat._id.toString()),
       socket
