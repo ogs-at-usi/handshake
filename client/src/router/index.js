@@ -19,13 +19,13 @@ const routes = [
   },
   {
     path: '/',
-    name: 'app',
+    name: 'AppContainer',
     meta: {
       // variable that indicates that this route requires authentication
       requiresAuth: true,
     },
     component: () =>
-      import(/* webpackChunkName: "home" */ '../views/AppContainer.vue'),
+      import(/* webpackChunkName: "container" */ '../views/AppContainer.vue'),
   },
 ];
 
