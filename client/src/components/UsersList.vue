@@ -7,7 +7,7 @@
       v-for='(user, index) in users'
       :key='index'
       :user='user'
-      @click.native="$emit('selectUser', user)"
+      @click.native="$emit('userSelected', user)"
     />
   </main>
   <main v-else class='menu_list'>
