@@ -31,8 +31,8 @@
 </template>
 
 <script>
-// import Chat from '@/classes/chat';
 import ChatMessage from '@/components/ChatMessage';
+import Chat from '@/classes/chat';
 
 export default {
   name: 'ChatBoard',
@@ -44,7 +44,7 @@ export default {
   },
   props: {
     chat: {
-      type: Object,
+      type: Chat,
       required: true,
     },
   },
