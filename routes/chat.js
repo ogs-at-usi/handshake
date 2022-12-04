@@ -24,7 +24,7 @@ router.get('/users', async function (req, res) {
 /*
  * Responds a created chat between users and returns the new chat
  */
-router.post('/chat', async function (req, res) {
+router.post('/chats', async function (req, res) {
   const otherId = req.body.otherId;
 
   if (!ObjectId.isValid(otherId)) {

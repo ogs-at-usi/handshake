@@ -39,11 +39,11 @@ class ApiClient {
 
   /**
    * Create a chat with the logged user and the user with the given ID.
-   * @param otherUserID {string} The ID of the other user
+   * @param otherId {string} The ID of the other user
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
-  createChat(otherUserID) {
-    return this.axiosInstance.post('/api/chats', { otherUserID });
+  createChat(otherId) {
+    return this.axiosInstance.post('/api/chats', { otherId });
   }
 
   /**
