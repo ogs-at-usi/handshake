@@ -1,11 +1,13 @@
-const { authConstants } = require('../constants/auth.constants');
 const { verifyJWT } = require('../utils/auth.utils');
+const cookie = require('cookie');
+const authConstants = require('../constants/auth.constants');
 
 // This middleware is used to check if the user is authenticated
 // and if it is, it adds the user id to the socket object
 const authMiddleware = (socket, next) => {
-  const jwtToken = socket.request.cookies[authConstants.JWT_COOKIE_NAME];
-
+  const jwtCookieName = authConstants.JWT_COOKIE_NAME;
+  const cookies = cookie.parse(socket.request.headers.cookie);
+  const jwtToken = cookies[jwtCookieName];
   try {
     const {userId}= verifyJWT(jwtToken);
     socket.userId = userId;
