@@ -34,6 +34,7 @@ export default {
       this.loading = true;
       const { data } = await this.$api.getUsers(this.filter);
       this.users = data.map((user) => new User(user));
+      this.users = this.users.filter((user) => user._id !== this.$store.getters.user._id);
       this.loading = false;
     },
   },

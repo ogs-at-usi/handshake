@@ -28,7 +28,7 @@ export default new Vuex.Store({
         this._vm.$api
           .login(username, password)
           .then((response) => {
-            commit('login', response.data.user);
+            commit('login', { user: response.data.user });
             resolve(response);
           })
           .catch((error) => {
