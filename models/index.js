@@ -16,9 +16,9 @@ async function setupDB() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+    console.log('✅Connected to database');
   } catch (err) {
-    console.error(err);
+    console.error(`Error connecting to the database: ${err}`);
   }
 }
-
 module.exports = setupDB;
