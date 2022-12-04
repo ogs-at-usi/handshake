@@ -1,10 +1,12 @@
 <template>
-  <main v-if="chats !== null" id="menu_list">
-    <ChatContact v-for="(chat, index) in chats"
-                 :key="index"
-                 :chat="chat"
-                 v-on="$listeners"
-                 @click.native="$emit('selectChat', chat._id)" />
+  <main id="menu_list">
+    <ul>
+      <ChatContact v-for="(chat, index) in chats"
+                   :key="index"
+                   :chat="chat"
+                   v-on="$listeners"
+                   @click.native="$emit('selectChat', chat._id)" />
+    </ul>
   </main>
 </template>
 
