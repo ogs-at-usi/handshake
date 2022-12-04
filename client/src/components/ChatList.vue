@@ -1,11 +1,14 @@
 <template>
   <main id="menu_list">
-    <ul>
-      <ChatContact v-for="(chat, index) in chats"
-                   :key="index"
-                   :chat="chat"
-                   v-on="$listeners"
-                   @click.native="$emit('selectChat', chat)" />
+    <ul class="ps-0">
+      <ChatContact
+        v-for="(chat, index) in chats"
+        :key="index"
+        :chat="chat"
+        class="ps-4 py-3"
+        v-on="$listeners"
+        @click.native="$emit('selectChat', chat)"
+      />
     </ul>
   </main>
 </template>
@@ -24,6 +27,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

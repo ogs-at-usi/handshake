@@ -1,8 +1,8 @@
 <template>
   <div id="chat" class="col-12 col-md-8 col-lg-9" v-if="chat !== null">
     <!-- image & name of the chat: other user image or group image -->
-    <header class="d-flex flex-row gap-5 align-items-center">
-      <img alt='pfp' class='pfp' src='/icons/default_pfp.png' />
+    <header class="d-flex flex-row gap-4 align-items-center">
+      <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
       <h2>{{ chatName }}</h2>
     </header>
 
@@ -28,7 +28,6 @@
         <button type="submit">💬</button>
       </form>
     </footer>
-
   </div>
 </template>
 
@@ -61,11 +60,14 @@ export default {
       }
 
       this.$api
-        .sendMessage(chatId, new Message({
-          type: "TEXT",
-          content: this.messageString,
-          sentAt: new Date(), // TODO: add sentAt implementation server side, field actually ignored
-        }))
+        .sendMessage(
+          chatId,
+          new Message({
+            type: 'TEXT',
+            content: this.messageString,
+            sentAt: new Date(), // TODO: add sentAt implementation server side, field actually ignored
+          })
+        )
         .then(() => {
           this.$router.push('/');
         })
@@ -84,7 +86,7 @@ export default {
         return this.$props.chat.title;
       } else {
         return this.otherPrivateUser.name;
-      };
+      }
     },
   },
 };
