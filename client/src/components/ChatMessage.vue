@@ -1,7 +1,9 @@
 <template>
   <!-- UI: MESSAGE -->
-  <div :id="message._id" class="card">
-
+  <div
+    :id="message._id"
+    :class="`card ${message.sender === $store.getters.user._id ? 'self' : ''}`"
+  >
     <!-- message with header of name of sender (none if ours) and message text -->
     <div class="card-body">
       <h5 class="card-title">{{ otheruser.name }}</h5>
