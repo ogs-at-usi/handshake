@@ -16,3 +16,5 @@ class Chat {
     this.isGroup = isGroup;
   }
 }
+
+export default Chat;
