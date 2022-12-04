@@ -15,3 +15,5 @@ class Group extends Chat {
     this.description = description;
   }
 }
+
+export default Group;
