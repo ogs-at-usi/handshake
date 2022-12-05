@@ -18,8 +18,8 @@ const REFRESH_TOKEN_COOKIE = {
   maxAge: constants.REFRESH_MAX_AGE,
 };
 
-function generateJWT(userID) {
-  return jwt.sign({ userID }, process.env.JWT_SECRET, {
+function generateJWT(userId) {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: constants.JWT_MAX_AGE / 1000,
   });
 }
@@ -28,14 +28,14 @@ async function verifyJWT(token) {
   return jwt.verify(token, process.env.JWT_SECRET);
 }
 
-async function generateRefreshJWT(userID) {
-  const refreshToken = jwt.sign({ userID }, process.env.REFRESH_SECRET, {
+async function generateRefreshJWT(userId) {
+  const refreshToken = jwt.sign({ userId }, process.env.REFRESH_SECRET, {
     expiresIn: constants.REFRESH_MAX_AGE / 1000,
   });
 
   await RefreshToken.findOneAndUpdate(
-    { user: ObjectId(userID) },
-    { user: ObjectId(userID), token: refreshToken },
+    { user: ObjectId(userId) },
+    { user: ObjectId(userId), token: refreshToken },
     { upsert: true, new: true }
   ).exec();
 
@@ -47,10 +47,10 @@ function verifyRefreshJWT(refreshToken) {
 }
 
 async function refreshJWT(refreshToken) {
-  const { userID } = verifyRefreshJWT(refreshToken);
+  const { userId } = verifyRefreshJWT(refreshToken);
 
   const dbRefreshToken = await RefreshToken.findOne({
-    user: new ObjectId(userID),
+    user: new ObjectId(userId),
   }).exec();
   if (
     !dbRefreshToken ||
@@ -60,8 +60,8 @@ async function refreshJWT(refreshToken) {
     throw new Error('Invalid refresh token');
   }
 
-  const token = generateJWT(userID);
-  const refresh = await generateRefreshJWT(userID);
+  const token = generateJWT(userId);
+  const refresh = await generateRefreshJWT(userId);
   return { token, refresh };
 }
 

@@ -167,7 +167,7 @@ describe('Authentication/Authorization tests', () => {
     describe('Register', () => {
       it('should return 400 if username is missing', (done) => {
         request
-          .post('/auth/register')
+          .post('/auth/signup')
           .send({ password: 'password' })
           .expect(400)
           .end((err, res) => {
@@ -181,7 +181,7 @@ describe('Authentication/Authorization tests', () => {
       });
       it('should return 400 if password is missing', (done) => {
         request
-          .post('/auth/register')
+          .post('/auth/signup')
           .send({ username: 'test' })
           .expect(400)
           .end((err, res) => {
@@ -195,7 +195,7 @@ describe('Authentication/Authorization tests', () => {
       });
       it('should return 400 if email is missing', (done) => {
         request
-          .post('/auth/register')
+          .post('/auth/signup')
           .send({ username: 'test', password: 'password' })
           .expect(400)
           .end((err, res) => {
@@ -209,7 +209,7 @@ describe('Authentication/Authorization tests', () => {
       });
       it('should return 400 if username is already taken', (done) => {
         request
-          .post('/auth/register')
+          .post('/auth/signup')
           .send({
             username: 'test',
             password: 'password',
@@ -227,7 +227,7 @@ describe('Authentication/Authorization tests', () => {
       });
       it('should return 201 if the user is created', (done) => {
         request
-          .post('/auth/register')
+          .post('/auth/signup')
           .send({
             username: 'test2',
             password: 'password',

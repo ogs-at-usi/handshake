@@ -52,6 +52,7 @@ router.post('/login', async (req, res) => {
     .status(200)
     .json({
       message: 'Login successful',
+      user,
     });
 });
 
@@ -96,7 +97,7 @@ router.post('/logout', async (req, res) => {
     });
 });
 
-router.post('/register', async (req, res) => {
+router.post('/signup', async (req, res) => {
   const { email, username, password } = req.body;
   if (!email || !username || !password) {
     return res.status(400).json({
