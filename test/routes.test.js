@@ -120,7 +120,7 @@ describe('HTTP Routes tests', () => {
   describe('Creating a new chat', () => {
     it('should return 400 if the id is not valid', (done) => {
       request(app)
-        .post('/api/chat')
+        .post('/api/chats')
         .send({ otherId: 'yothisiswrong' })
         .expect(400)
         .end((err) => {
@@ -129,7 +129,7 @@ describe('HTTP Routes tests', () => {
     });
     it('should return 400 if the is no user', (done) => {
       request(app)
-        .post('/api/chat')
+        .post('/api/chats')
         .send({ otherId: '5e63c3a5e4232e4cd0274ae1' })
         .expect(400)
         .end((err) => {
@@ -142,7 +142,7 @@ describe('HTTP Routes tests', () => {
         .exec((err, numberOfChats) => {
           if (err) return done(err);
           request(app)
-            .post('/api/chat')
+            .post('/api/chats')
             .send({ otherId: otherUser._id.toString() })
             .expect(400)
             .end((err, res) => {
@@ -165,7 +165,7 @@ describe('HTTP Routes tests', () => {
         .exec((err, numberOfChats) => {
           if (err) return done(err);
           request(app)
-            .post('/api/chat')
+            .post('/api/chats')
             .send({ otherId: noUser._id.toString() })
             .expect(201)
             .end((err, res) => {
@@ -190,7 +190,7 @@ describe('HTTP Routes tests', () => {
     it('should return 400 if the ID is not valid', (done) => {
       const chatId = 'yothisiswrong';
       request(app)
-        .post(`/api/chat/${chatId}/messages`)
+        .post(`/api/chats/${chatId}/messages`)
         .send()
         .expect(400)
         .end((err) => {
@@ -200,7 +200,7 @@ describe('HTTP Routes tests', () => {
     it('should return 404 if the chat does not exist', (done) => {
       const chatId = '9e63c3a5e4232e4cd0274ae1';
       request(app)
-        .post(`/api/chat/${chatId}/messages`)
+        .post(`/api/chats/${chatId}/messages`)
         .send({ message: { type: 'TEXT', content: 'mikiegey' } })
         .expect(404)
         .end((err) => {
@@ -210,7 +210,7 @@ describe('HTTP Routes tests', () => {
     it('should return 400 if type invalid', (done) => {
       const chatId = '9e63c3a5e4232e4cd0274ae1';
       request(app)
-        .post(`/api/chat/${chatId}/messages`)
+        .post(`/api/chats/${chatId}/messages`)
         .send({ message: { type: 'string', content: 'mikiegey' } })
         .expect(400)
         .end((err) => {
@@ -220,7 +220,7 @@ describe('HTTP Routes tests', () => {
     it('should return 400 if no written content', (done) => {
       const chatId = '9e63c3a5e4232e4cd0274ae1';
       request(app)
-        .post(`/api/chat/${chatId}/messages`)
+        .post(`/api/chats/${chatId}/messages`)
         .send({ message: { type: 'TEXT', content: '' } })
         .expect(400)
         .end((err) => {
@@ -230,7 +230,7 @@ describe('HTTP Routes tests', () => {
     it('should return 400 if missing content', (done) => {
       const chatId = '9e63c3a5e4232e4cd0274ae1';
       request(app)
-        .post(`/api/chat/${chatId}/messages`)
+        .post(`/api/chats/${chatId}/messages`)
         .send({ message: { type: 'TEXT' } })
         .expect(400)
         .end((err) => {
@@ -244,7 +244,7 @@ describe('HTTP Routes tests', () => {
           if (err) return done(err);
           const chatId = createdChatId;
           request(app)
-            .post(`/api/chat/${chatId}/messages`)
+            .post(`/api/chats/${chatId}/messages`)
             .send({ message: { type: 'TEXT', content: 'mikiegey' } })
             .expect(201)
             .end((err, res) => {
