@@ -4,9 +4,9 @@
     <!-- UI: HANDSHAKE TITLE & USER IMAGE -->
     <header
       id="title_user_image"
-      class="justify-content-between align-items-center d-flex flex-row"
+      class="justify-content-end align-items-center d-flex flex-row-reverse gap-3"
     >
-      <h1>HandShake</h1>
+      <h1 class='m-0 p-0'>HandShake</h1>
       <!-- user profile image href insertion -->
       <!-- TODO: recognize whether the user has an image or not (POST request) -->
       <img :src="'icons/default_pfp.png'" alt="pfp" class="pfp" />
