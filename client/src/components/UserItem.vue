@@ -9,7 +9,7 @@
 
     <!-- name of the other user or group chat -->
     <div class="flex-grow-1">
-      <h3>{{ user.name }}</h3>
+      <h3 class='m-0 text-truncate'>{{ user.name }}</h3>
     </div>
 
     <!-- notification badge -->
