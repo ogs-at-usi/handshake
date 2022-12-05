@@ -168,3 +168,11 @@ header {
 #aboutus {
     overflow-y: auto;
 }
+
+.display-7 {
+    font-size: 2rem;
+}
+
+.display-8 {
+    font-size: 1.5rem;
+}
