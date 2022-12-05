@@ -3,7 +3,7 @@
     <!-- image & name of the chat: other user image or group image -->
     <header class="d-flex flex-row gap-4 align-items-center">
       <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
-      <h2>{{ chatName }}</h2>
+      <h2 class='m-0 text-truncate'>{{ chatName }}</h2>
     </header>
 
     <!-- message container -->
@@ -60,7 +60,14 @@ export default {
       const e = this.$refs.scroll;
       e.scrollTop = e.scrollHeight;
     },
+    onlySpaces(str) {
+      return /^\s*$/.test(str);
+    },
     async sendMessage() {
+      if (this.onlySpaces(this.messageString)) {
+        return;
+      }
+
       let chatId = this.$props.chat._id;
       // if the chat does not exist we create a new one and get the save the id
       if (chatId === null) {
@@ -79,7 +86,6 @@ export default {
         await this.$api.sendMessage(chatId, msg);
         // after sending it we reset the message box and scroll down
         this.messageString = '';
-        this.scrollDown();
       } catch (err) {
         alert('Could not send the message. Check your internet connection');
         console.error(err);
