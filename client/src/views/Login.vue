@@ -62,18 +62,17 @@ export default {
     };
   },
   methods: {
-    login() {
-      this.$store
-        .dispatch('login', {
+    async login() {
+      // write an array with 3 numbers
+      try {
+        await this.$store.dispatch('login', {
           username: this.username,
           password: this.password,
-        })
-        .then(() => {
-          this.$router.push('/');
-        })
-        .catch((err) => {
-          console.log(err);
         });
+        await this.$router.push('/');
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
