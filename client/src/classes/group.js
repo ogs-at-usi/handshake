@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
+import Chat from '@/classes/chat';
+
 class Group extends Chat {
   _id = null;
   title = null;
@@ -17,3 +17,5 @@ class Group extends Chat {
     this.description = description;
   }
 }
+
+export default Group;

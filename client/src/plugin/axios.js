@@ -2,7 +2,6 @@ import axios from 'axios';
 import store from '../store';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8888',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -13,7 +12,12 @@ instance.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 401 &&
+      !originalRequest._retry &&
+      store.getters.isLoggedIn &&
+      originalRequest.url !== '/auth/refresh'
+    ) {
       originalRequest._retry = true;
       // if the refresh function fails then we need to logout (Vuex)
       return instance
