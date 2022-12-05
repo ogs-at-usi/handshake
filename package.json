@@ -16,6 +16,7 @@
     "ejsc": "node ejs-compile.js"
   },
   "dependencies": {
+    "@lottiefiles/lottie-interactivity": "^1.6.1",
     "bcrypt": "^5.1.0",
     "cookie": "^0.5.0",
     "cookie-parser": "^1.4.6",
