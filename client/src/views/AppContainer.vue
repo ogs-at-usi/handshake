@@ -57,9 +57,7 @@ export default {
       const chat = new Chat(chatJson);
       this.chats.unshift(chat);
 
-      console.log(chat._id, this.activeChat._id);
       if (chat.members[0]._id === this.$store.getters.user._id) {
-        console.log(chat);
         this.activeChat = chat;
       }
     });
