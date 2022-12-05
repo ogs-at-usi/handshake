@@ -5,7 +5,9 @@
     <div class="card-body pb-0">
       <!-- TODO: change v-if to display only if it is a group, add chat in props -->
       <h5 v-if="false" class="card-title">{{ senderName }}</h5>
-      <p class="card-text">{{ content }}</p>
+      <p class="card-text">{{ content }}
+        <a v-if='content.length < message.content.length' style='cursor:pointer' @click.prevent='page++'>Show more</a>
+      </p>
     </div>
 
     <!-- timestamp of the message: sent_at for our message, delivered_at for others -->
@@ -18,6 +20,11 @@ import Message from '@/classes/message';
 
 export default {
   name: 'ChatMessage',
+  data() {
+    return {
+      page: 1
+    }
+  },
   props: {
     message: {
       type: Message,
@@ -25,6 +32,9 @@ export default {
     },
   },
   computed: {
+    maxChars() {
+      return 500;
+    },
     isSelf() {
       return this.$props.message.sender === this.$store.getters.user._id;
     },
@@ -49,7 +59,11 @@ export default {
     content() {
       const retrieveContent = {};
       // TODO: substitute with enum field
-      retrieveContent.TEXT = this.$props.message.content;
+      let message = this.$props.message.content.substring(0, this.page*this.maxChars);
+      if (message.length !== this.message.content.length) {
+        message += "...";
+      }
+      retrieveContent.TEXT = message;
       return retrieveContent[this.$props.message.type];
     },
     senderName() {
