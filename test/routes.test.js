@@ -22,10 +22,10 @@ describe('HTTP Routes tests', () => {
       const setupDB = require('../models');
       await setupDB();
 
-      await User.deleteMany();
-      await Chat.deleteMany();
-      await Message.deleteMany();
-      await UserChat.deleteMany();
+      // await User.deleteMany();
+      // await Chat.deleteMany();
+      // await Message.deleteMany();
+      // await UserChat.deleteMany();
 
       const _user = await User.create({
         name: 'mochi',
