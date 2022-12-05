@@ -60,7 +60,14 @@ export default {
       const e = this.$refs.scroll;
       e.scrollTop = e.scrollHeight;
     },
+    onlySpaces(str) {
+      return /^\s*$/.test(str);
+    },
     async sendMessage() {
+      if (this.onlySpaces(this.messageString)) {
+        return;
+      }
+
       let chatId = this.$props.chat._id;
       // if the chat does not exist we create a new one and get the save the id
       if (chatId === null) {
