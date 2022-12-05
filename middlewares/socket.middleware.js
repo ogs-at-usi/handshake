@@ -9,7 +9,7 @@ const authMiddleware = async (socket, next) => {
   const cookies = cookie.parse(socket.request.headers.cookie);
   const jwtToken = cookies[jwtCookieName];
   try {
-    const {userId} = await verifyJWT(jwtToken);
+    const { userId } = await verifyJWT(jwtToken);
     socket.userId = userId;
     next();
   } catch (e) {

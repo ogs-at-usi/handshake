@@ -53,7 +53,6 @@ export default {
       else return this.otherPrivateUser.name;
     },
     lastMessage() {
-
       return this.chat.messages && this.chat.messages.length > 0
         ? this.chat.messages[this.chat.messages.length - 1].content
         : '';

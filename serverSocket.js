@@ -14,7 +14,8 @@ function init(server) {
         populate: {
           path: 'messages',
         },
-      }).exec();
+      })
+      .exec();
     if (!userChats) {
       return [];
     }
@@ -27,12 +28,14 @@ function init(server) {
 
     const chats = userChats;
     // find all the users in each chat ad add it as a property 'members'
-    return await Promise.all(chats.map(async (chat) => {
-      const members = await UserChat.find({ chat: chat._id })
-        .populate('user')
-        .exec();
-      return {...chat._doc, members: members.map((member) => member.user)};
-    }));
+    return await Promise.all(
+      chats.map(async (chat) => {
+        const members = await UserChat.find({ chat: chat._id })
+          .populate('user')
+          .exec();
+        return { ...chat._doc, members: members.map((member) => member.user) };
+      })
+    );
   }
 
   io.use(authMiddleware);

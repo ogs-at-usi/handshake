@@ -1,17 +1,17 @@
 <template>
-  <div v-if='loading' class='spinner-border' role='status'>
-    <span class='visually-hidden'>Loading...</span>
+  <div v-if="loading" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
   </div>
-  <main v-else-if='users.length > 0' class='menu_list'>
+  <main v-else-if="users.length > 0" class="menu_list">
     <UserItem
-      v-for='(user, index) in users'
-      :key='index'
-      :user='user'
+      v-for="(user, index) in users"
+      :key="index"
+      :user="user"
       class="ps-4 py-3"
       @click.native="$emit('userSelected', user)"
     />
   </main>
-  <main v-else class='menu_list'>
+  <main v-else class="menu_list">
     <h3>No users found</h3>
   </main>
 </template>
@@ -29,7 +29,7 @@ export default {
       default: '',
     },
   },
-  data: function() {
+  data: function () {
     return {
       users: [],
       loading: true,
@@ -41,7 +41,7 @@ export default {
       const { data } = await this.$api.getUsers(this.filter);
       this.users = data.map((user) => new User(user));
       this.users = this.users.filter(
-        (user) => user._id !== this.$store.getters.user._id,
+        (user) => user._id !== this.$store.getters.user._id
       );
       this.loading = false;
     },
