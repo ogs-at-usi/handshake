@@ -3,7 +3,7 @@
     <!-- image & name of the chat: other user image or group image -->
     <header class="d-flex flex-row gap-4 align-items-center">
       <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
-      <h2 class='m-0'>{{ chatName }}</h2>
+      <h2 class='m-0 text-truncate'>{{ chatName }}</h2>
     </header>
 
     <!-- message container -->
