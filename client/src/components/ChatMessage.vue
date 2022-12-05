@@ -5,8 +5,14 @@
     <div class="card-body pb-0">
       <!-- TODO: change v-if to display only if it is a group, add chat in props -->
       <h5 v-if="false" class="card-title">{{ senderName }}</h5>
-      <p class="card-text">{{ content }}
-        <a v-if='content.length < message.content.length' style='cursor:pointer' @click.prevent='page++'>Show more</a>
+      <p class="card-text">
+        {{ content }}
+        <a
+          v-if="content.length < message.content.length"
+          style="cursor: pointer"
+          @click.prevent="page++"
+          >Show more</a
+        >
       </p>
     </div>
 
@@ -22,8 +28,8 @@ export default {
   name: 'ChatMessage',
   data() {
     return {
-      page: 1
-    }
+      page: 1,
+    };
   },
   props: {
     message: {
@@ -59,9 +65,12 @@ export default {
     content() {
       const retrieveContent = {};
       // TODO: substitute with enum field
-      let message = this.$props.message.content.substring(0, this.page*this.maxChars);
+      let message = this.$props.message.content.substring(
+        0,
+        this.page * this.maxChars
+      );
       if (message.length !== this.message.content.length) {
-        message += "...";
+        message += '...';
       }
       retrieveContent.TEXT = message;
       return retrieveContent[this.$props.message.type];
