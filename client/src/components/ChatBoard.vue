@@ -56,14 +56,18 @@ export default {
     },
   },
   methods: {
+    scrollDown() {
+      const e = this.$refs.scroll;
+      e.scrollTop = e.scrollHeight;
+    },
     async sendMessage() {
       let chatId = this.$props.chat._id;
-
+      // if the chat does not exist we create a new one and get the save the id
       if (chatId === null) {
         const { data } = await this.$api.createChat(this.chat.members[0]._id);
         chatId = data._id; // way to unpack data apparently
       }
-
+      // send the message using the chat id
       this.$api
         .sendMessage(
           chatId,
@@ -74,9 +78,9 @@ export default {
           })
         )
         .then(() => {
+          // after sending it we reset the message box and scroll down
           this.messageString = '';
-          const e = this.$refs.scroll;
-          e.scrollTop = e.scrollHeight;
+          this.scrollDown();
         })
         .catch((err) => {
           alert('Could not send the message. Check your internet connection');
@@ -97,8 +101,14 @@ export default {
       }
     },
   },
-  updated() {
-    this.$refs.messageInput.focus();
+  watch: {
+    chat() {
+      // updates when you click on a new chat
+      this.$nextTick(() => {
+        this.scrollDown();
+        this.$refs.messageInput.focus();
+      });
+    },
   },
 };
 </script>
