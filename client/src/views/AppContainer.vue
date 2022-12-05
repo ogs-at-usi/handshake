@@ -9,7 +9,7 @@
     ></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard :chat="activeChat"></ChatBoard>
+    <ChatBoard ref="chatBoard" :chat="activeChat"></ChatBoard>
   </div>
 </template>
 
@@ -47,12 +47,17 @@ export default {
       // move the chat to the top of the list
       this.chats = this.chats.filter((chat) => chat._id !== chatId);
       this.chats.unshift(chat);
+      if (this.activeChat && this.activeChat._id === chatId) {
+        this.$nextTick(() => {
+          this.$refs.chatBoard.scrollDown();
+        });
+      }
     });
 
     /**
      * Get newly created chat.
      */
-    socket.on('chats:create', chatJson => {
+    socket.on('chats:create', (chatJson) => {
       console.log('EVENT chats:create -', chatJson);
       const chat = new Chat(chatJson);
       this.chats.unshift(chat);
@@ -71,7 +76,9 @@ export default {
       console.log('EVENT User selected - ', otherUser);
       const chat = this.chats.find((chat) => {
         if (chat.members.length === 2) {
-          const otherChatUser = chat.members.find((member) => member._id !== this.$store.getters.user._id);
+          const otherChatUser = chat.members.find(
+            (member) => member._id !== this.$store.getters.user._id
+          );
           return otherChatUser._id === otherUser._id;
         }
         return false;
@@ -88,7 +95,7 @@ export default {
     overrideChat(id) {
       console.log(id);
       this.activeChat._id = id;
-    }
+    },
   },
   components: { AppMenu, ChatBoard },
 };

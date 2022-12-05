@@ -79,7 +79,6 @@ export default {
         await this.$api.sendMessage(chatId, msg);
         // after sending it we reset the message box and scroll down
         this.messageString = '';
-        this.scrollDown();
       } catch (err) {
         alert('Could not send the message. Check your internet connection');
         console.error(err);
