@@ -14,14 +14,14 @@
 
     <!-- UI: SEARCH BAR TEXT & BUTTON -->
     <nav id="searchbar" class="align-items-center d-flex flex-row">
-      <form id="search-bar" class="d-flex flex-row gap-3">
+      <form id="search-bar" class="d-flex flex-row-reverse gap-2 alig-items-center" @click.prevent=''>
         <input
           v-model="searchedUser"
           class="flex-grow-1"
           placeholder="Search..."
           type="text"
         />
-        <button>🔎</button>
+        <span class='d-flex align-items-center justify-content-center'>🔎</span>
       </form>
     </nav>
 
