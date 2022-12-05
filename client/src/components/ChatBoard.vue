@@ -3,7 +3,7 @@
     <!-- image & name of the chat: other user image or group image -->
     <header class="d-flex flex-row gap-4 align-items-center">
       <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
-      <h2>{{ chatName }}</h2>
+      <h2 class='m-0'>{{ chatName }}</h2>
     </header>
 
     <!-- message container -->
@@ -74,25 +74,22 @@ export default {
         const { data } = await this.$api.createChat(this.chat.members[0]._id);
         chatId = data._id; // way to unpack data apparently
       }
+
       // send the message using the chat id
-      this.$api
-        .sendMessage(
-          chatId,
-          new Message({
-            type: 'TEXT',
-            content: this.messageString,
-            sentAt: new Date(), // TODO: add sentAt implementation server side, field actually ignored
-          })
-        )
-        .then(() => {
-          // after sending it we reset the message box and scroll down
-          this.messageString = '';
-          this.scrollDown();
-        })
-        .catch((err) => {
-          alert('Could not send the message. Check your internet connection');
-          console.error(err);
+      try {
+        const msg = new Message({
+          type: 'TEXT',
+          content: this.messageString,
+          sentAt: new Date(), // TODO: add sentAt implementation server side, field actually ignored
         });
+
+        await this.$api.sendMessage(chatId, msg);
+        // after sending it we reset the message box and scroll down
+        this.messageString = '';
+      } catch (err) {
+        alert('Could not send the message. Check your internet connection');
+        console.error(err);
+      }
     },
   },
   computed: {

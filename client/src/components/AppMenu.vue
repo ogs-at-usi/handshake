@@ -4,9 +4,9 @@
     <!-- UI: HANDSHAKE TITLE & USER IMAGE -->
     <header
       id="title_user_image"
-      class="justify-content-between align-items-center d-flex flex-row"
+      class="justify-content-end align-items-center d-flex flex-row-reverse gap-3"
     >
-      <h1>HandShake</h1>
+      <h1 class='m-0 p-0'>HandShake</h1>
       <!-- user profile image href insertion -->
       <!-- TODO: recognize whether the user has an image or not (POST request) -->
       <img :src="'icons/default_pfp.png'" alt="pfp" class="pfp" />
@@ -14,14 +14,14 @@
 
     <!-- UI: SEARCH BAR TEXT & BUTTON -->
     <nav id="searchbar" class="align-items-center d-flex flex-row">
-      <form id="search-bar" class="d-flex flex-row gap-3">
+      <form id="search-bar" class="d-flex flex-row-reverse gap-2 alig-items-center" @click.prevent=''>
         <input
           v-model="searchedUser"
           class="flex-grow-1"
           placeholder="Search..."
           type="text"
         />
-        <button>🔎</button>
+        <span class='d-flex align-items-center justify-content-center'>🔎</span>
       </form>
     </nav>
 
