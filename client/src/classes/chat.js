@@ -14,12 +14,16 @@ class Chat {
     isGroup = false,
   }) {
     this._id = _id;
-    this.members = members && members.map((member) =>
-      member instanceof User ? member : new User(member)
-    );
-    this.messages = messages && messages.map((message) =>
-      message instanceof Message ? message : new Message(message)
-    );
+    this.members =
+      members &&
+      members.map((member) =>
+        member instanceof User ? member : new User(member)
+      );
+    this.messages =
+      messages &&
+      messages.map((message) =>
+        message instanceof Message ? message : new Message(message)
+      );
     this.isGroup = isGroup;
   }
 }

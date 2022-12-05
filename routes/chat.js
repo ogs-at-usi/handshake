@@ -86,12 +86,17 @@ router.post('/chats', async function (req, res) {
       chat: chatId,
     });
 
-    serverSocket.joinRooms(chatId.toString(), await io.to(req.userId).to(otherId).fetchSockets());
+    serverSocket.joinRooms(
+      chatId.toString(),
+      await io.to(req.userId).to(otherId).fetchSockets()
+    );
 
-    let members = await UserChat.find({chat: chatId}).populate('user').exec();
+    let members = await UserChat.find({ chat: chatId }).populate('user').exec();
     members = members.map((member) => member.user);
 
-    io.to(req.userId).to(otherId).emit('chats:create', {...chat._doc, members});
+    io.to(req.userId)
+      .to(otherId)
+      .emit('chats:create', { ...chat._doc, members });
 
     res.status(201).json(chat);
   } else {
