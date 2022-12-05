@@ -56,6 +56,10 @@ export default {
     },
   },
   methods: {
+    scrollDown() {
+      const e = this.$refs.scroll;
+      e.scrollTop = e.scrollHeight;
+    },
     async sendMessage() {
       let chatId = this.$props.chat._id;
 
@@ -75,8 +79,7 @@ export default {
         )
         .then(() => {
           this.messageString = '';
-          const e = this.$refs.scroll;
-          e.scrollTop = e.scrollHeight;
+          this.scrollDown();
         })
         .catch((err) => {
           alert('Could not send the message. Check your internet connection');
@@ -97,8 +100,13 @@ export default {
       }
     },
   },
-  updated() {
-    this.$refs.messageInput.focus();
+  watch: {
+    chat() {
+      this.$nextTick(() => {
+        this.scrollDown();
+        this.$refs.messageInput.focus();
+      });
+    },
   },
 };
 </script>
