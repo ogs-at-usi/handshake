@@ -5,12 +5,12 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "start": "node app.js",
-    "dev": "DEBUG=router:* nodemon --delay 1 --ignore public/ app.js",
+    "start": "node ./bin/www.js",
+    "dev": "DEBUG=router:* nodemon --delay 1 --ignore public/ ./bin/www.js",
     "test": "MONGODB_URI=mongodb://localhost:27017/handshake mocha",
-    "start:test": "(node app.js &) && MONGODB_URI=mongodb://localhost:27017/handshake mocha",
-    "style:lint": "eslint '**/*.js'",
-    "style:lint:fix": "eslint --fix '**/*.js'",
+    "start:test": "(node ./bin/www.js &) && MONGODB_URI=mongodb://localhost:27017/handshake mocha",
+    "style:lint": "eslint -c ./.eslintrc.yml --ext .js .",
+    "style:lint:fix": "eslint --fix -c ./.eslintrc.yml --ext .js .",
     "style:prettier": "prettier --check '**/*.js'",
     "style:prettier:fix": "prettier --write '**/*.js'",
     "ejsc": "node ejs-compile.js"
@@ -28,7 +28,8 @@
     "mongodb": "^4.12.1",
     "mongoose": "^6.7.3",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.5.4"
   },
   "devDependencies": {
     "eslint": "^8.0.1",
@@ -40,6 +41,7 @@
     "mocha": "^10.1.0",
     "prettier": "^2.8.0",
     "should": "^13.2.3",
+    "sinon": "^15.0.0",
     "supertest": "^6.3.1"
   }
 }
