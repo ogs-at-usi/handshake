@@ -1,5 +1,5 @@
 <template>
-  <v-row class="flex-column h-100 ma-0 surface--darken2">
+  <v-container class="flex-column h-100 d-flex flex-column pa-0 ma-0 surface--darken2" fluid>
     <div
       class="primary d-flex flex-row justify-space-between align-center pa-3"
     >
@@ -49,7 +49,7 @@
         >
       </p>
     </footer>
-  </v-row>
+  </v-container>
 </template>
 
 <script>

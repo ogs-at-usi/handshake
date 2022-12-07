@@ -1,5 +1,5 @@
 <template>
-  <v-row class='d-flex flex-row'>
+  <v-container class='pa-0 d-flex flex-row' fluid>
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
@@ -11,7 +11,7 @@
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
     <ChatBoard ref="chatBoard" :chat="activeChat" class='col-8'></ChatBoard>
-  </v-row>
+  </v-container>
 </template>
 
 <script>
