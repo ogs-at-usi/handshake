@@ -1,11 +1,21 @@
 <template>
-  <v-container v-if="chat !== null" class="w-100 grey lighten-4 pa-0" fluid>
+  <v-container
+    v-if="chat !== null"
+    class="w-100 grey lighten-4 pa-0 d-flex flex-column gap-5"
+    fluid
+    style='height: 100vh; overflow:hidden'
+  >
     <!-- image & name of the chat: other user image or group image -->
-    <v-toolbar elevation='0' height='70px' >
+    <v-toolbar class='flex-shrink-1' elevation="0" height="70px" max-height="70px">
       <v-avatar>
-        <img alt="icon of person you're chatting with" src="/icons/default_pfp.png" />
+        <img
+          alt="icon of person you're chatting with"
+          src="/icons/default_pfp.png"
+        />
       </v-avatar>
-      <v-toolbar-title class='ml-5'>Name of person you're chatting with</v-toolbar-title>
+      <v-toolbar-title class="ml-5">{{
+        otherPrivateUser.name
+      }}</v-toolbar-title>
       <v-spacer />
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
@@ -13,7 +23,7 @@
     </v-toolbar>
 
     <!-- message container -->
-    <main class="d-flex flex-column" ref="scroll">
+    <main ref="scroll" class="overflow-y-auto h-100">
       <ChatMessage
         v-for="(msg, index) in chat.messages"
         :key="index"
@@ -22,23 +32,18 @@
     </main>
 
     <!-- lower input bar for new message sending -->
-    <footer class="d-flex row align-items-center justify-content-between">
-      <form
-        id="search-bar"
-        class="d-flex flex-row align-items-center justify-space-between gap-3"
-        @submit.prevent="sendMessage()"
-      >
-        <input
-          ref="messageInput"
-          type="text"
-          name="message"
-          placeholder="Type something..."
-          class="flex-grow-1"
-          v-model="messageString"
-        />
-        <button type="submit">💬</button>
-      </form>
-    </footer>
+    <v-row class="ma-0 flex-shrink-0">
+      <v-text-field
+        v-model="messageString"
+        append-outer-icon="mdi-send"
+        class="gap-5 px-5 py-5"
+        hide-details
+        label="Message"
+        outlined
+        @click="sendMessage"
+        @click:append-outer="sendMessage"
+      />
+    </v-row>
   </v-container>
 </template>
 
