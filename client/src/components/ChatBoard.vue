@@ -1,10 +1,16 @@
 <template>
-  <div id="chat" class="col-12 col-md-8 col-lg-9" v-if="chat !== null">
+  <v-container v-if="chat !== null" class="w-100 grey lighten-4 pa-0" fluid>
     <!-- image & name of the chat: other user image or group image -->
-    <header class="d-flex flex-row gap-4 align-items-center">
-      <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
-      <h2 class="m-0 text-truncate">{{ chatName }}</h2>
-    </header>
+    <v-toolbar elevation='0' height='70px' >
+      <v-avatar>
+        <img alt="icon of person you're chatting with" src="/icons/default_pfp.png" />
+      </v-avatar>
+      <v-toolbar-title class='ml-5'>Name of person you're chatting with</v-toolbar-title>
+      <v-spacer />
+      <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn>
+    </v-toolbar>
 
     <!-- message container -->
     <main class="d-flex flex-column" ref="scroll">
@@ -33,7 +39,7 @@
         <button type="submit">💬</button>
       </form>
     </footer>
-  </div>
+  </v-container>
 </template>
 
 <script>
