@@ -38,26 +38,28 @@
 
     <!-- lower input bar for new message sending -->
     <v-row class="ma-0 flex-shrink-0 white">
-      <v-text-field
-        v-model="messageString"
-        append-outer-icon="mdi-send"
-        class="gap-4 px-5 py-5"
-        hide-details
-        label="Message"
-        outlined
-        @click="sendMessage"
-        @click:append-outer="sendMessage"
-      />
+      <v-form class="w-100" @submit.prevent="sendMessage">
+        <v-text-field
+          v-model="messageString"
+          append-outer-icon="mdi-send"
+          class="gap-4 px-5 py-5"
+          hide-details
+          label="Message"
+          outlined
+          @submit="sendMessage"
+          @click:append-outer="sendMessage"
+        />
+      </v-form>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import vueCustomScrollbar from 'vue-custom-scrollbar'
+import vueCustomScrollbar from 'vue-custom-scrollbar';
 import ChatMessage from '@/components/ChatMessage';
 import Chat from '@/classes/chat';
 import Message from '@/classes/message';
-import "vue-custom-scrollbar/dist/vueScrollbar.css"
+import 'vue-custom-scrollbar/dist/vueScrollbar.css';
 
 export default {
   name: 'ChatBoard',
