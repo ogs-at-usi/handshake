@@ -1,16 +1,17 @@
 <template>
-  <div id="app_container" class="justify-content-between d-flex flex-row h-100">
+  <v-row class='d-flex flex-row'>
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
+      class='col-4'
       :chats="chats"
       @selectChat="setActiveChat($event)"
       @userSelected="userSelected($event)"
     ></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard ref="chatBoard" :chat="activeChat"></ChatBoard>
-  </div>
+    <ChatBoard ref="chatBoard" :chat="activeChat" class='col-8'></ChatBoard>
+  </v-row>
 </template>
 
 <script>
