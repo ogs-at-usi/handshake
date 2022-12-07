@@ -14,6 +14,6 @@ p {
   margin: 0!important;
 }
 html {
-  overflow: auto;
+  overflow-y: auto!important;
 }
 </style>
