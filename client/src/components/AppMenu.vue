@@ -1,47 +1,44 @@
 <template>
   <!-- MENU WITH OWN IMAGE, SEARCH BAR AND CONTACTS LIST -->
-  <section id="menu" class="col-12 col-md-4 col-lg-3">
-    <!-- UI: HANDSHAKE TITLE & USER IMAGE -->
-    <header
-      id="title_user_image"
-      class="justify-content-end align-items-center d-flex flex-row-reverse gap-3"
-    >
-      <h1 class="m-0 p-0">HandShake</h1>
-      <!-- user profile image href insertion -->
-      <!-- TODO: recognize whether the user has an image or not (POST request) -->
-      <img :src="'icons/default_pfp.png'" alt="pfp" class="pfp" />
-    </header>
-
-    <!-- UI: SEARCH BAR TEXT & BUTTON -->
-    <nav id="searchbar" class="align-items-center d-flex flex-row">
-      <form
-        id="search-bar"
-        class="d-flex flex-row-reverse gap-2 alig-items-center"
-        @click.prevent=""
-      >
-        <input
-          v-model="searchedUser"
-          class="flex-grow-1"
-          placeholder="Search..."
-          type="text"
-        />
-        <span class="d-flex align-items-center justify-content-center">🔎</span>
-      </form>
-    </nav>
-
-    <!-- UI: CONTACTS -->
-    <ChatList
-      v-if="searchedUser === ''"
-      :chats="chats"
-      v-on="$listeners"
-    ></ChatList>
-    <UsersList
-      v-else
-      :filter="searchedUser"
-      @userSelected="searchedUser = ''"
-      v-on="$listeners"
-    ></UsersList>
-  </section>
+  <v-container class="pa-0 w-100 ma-0 h-100" fluid>
+    <v-navigation-drawer clipped permanent width="100%">
+      <v-list>
+        <v-list-item>
+          <v-list-item-avatar>
+            <img alt="pfp" src='/icons/default_pfp.png' />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{$store.getters.user.name}}</v-list-item-title>
+            <v-list-item-subtitle>{{$store.getters.user.email}}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider></v-divider>
+        <v-list-item class="pa-3">
+          <v-text-field
+            v-model="searchedUser"
+            dense
+            hide-details
+            label="Search"
+            outlined
+            prepend-inner-icon="mdi-magnify"
+            single-line
+          ></v-text-field>
+        </v-list-item>
+        <v-divider></v-divider>
+        <ChatList
+          v-if="searchedUser === ''"
+          :chats="chats"
+          v-on="$listeners"
+        ></ChatList>
+        <UsersList
+          v-else
+          :filter="searchedUser"
+          @userSelected="searchedUser = ''"
+          v-on="$listeners"
+        ></UsersList>
+      </v-list>
+    </v-navigation-drawer>
+  </v-container>
 </template>
 
 <script>
