@@ -1,5 +1,5 @@
 <template>
-  <v-container class='pa-0 d-flex flex-row' fluid>
+  <v-container class='pa-0 d-flex flex-row justify-start h-100 w-100' fluid>
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
