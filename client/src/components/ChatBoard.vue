@@ -1,12 +1,17 @@
 <template>
   <v-container
     v-if="chat !== null"
-    class="w-100 grey lighten-4 pa-0 d-flex flex-column gap-5"
+    class="w-100 grey lighten-4 pa-0 d-flex flex-column"
     fluid
-    style='height: 100vh; overflow:hidden'
+    style="height: 100vh; overflow: hidden"
   >
     <!-- image & name of the chat: other user image or group image -->
-    <v-toolbar class='flex-shrink-1' elevation="0" height="70px" max-height="70px">
+    <v-toolbar
+      class="flex-shrink-1"
+      elevation="0"
+      height="70px"
+      max-height="70px"
+    >
       <v-avatar>
         <img
           alt="icon of person you're chatting with"
@@ -23,20 +28,20 @@
     </v-toolbar>
 
     <!-- message container -->
-    <main ref="scroll" class="overflow-y-auto h-100">
+    <vue-custom-scrollbar ref="scroll" class="overflow-y-none h-100 py-5 px-4">
       <ChatMessage
         v-for="(msg, index) in chat.messages"
         :key="index"
         :message="msg"
       ></ChatMessage>
-    </main>
+    </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
-    <v-row class="ma-0 flex-shrink-0">
+    <v-row class="ma-0 flex-shrink-0 white">
       <v-text-field
         v-model="messageString"
         append-outer-icon="mdi-send"
-        class="gap-5 px-5 py-5"
+        class="gap-4 px-5 py-5"
         hide-details
         label="Message"
         outlined
@@ -48,13 +53,15 @@
 </template>
 
 <script>
+import vueCustomScrollbar from 'vue-custom-scrollbar'
 import ChatMessage from '@/components/ChatMessage';
 import Chat from '@/classes/chat';
 import Message from '@/classes/message';
+import "vue-custom-scrollbar/dist/vueScrollbar.css"
 
 export default {
   name: 'ChatBoard',
-  components: { ChatMessage },
+  components: { ChatMessage, vueCustomScrollbar },
   data() {
     return {
       messageString: '',
