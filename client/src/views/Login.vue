@@ -32,6 +32,10 @@
             Log in
           </button>
         </form>
+        <p>
+          Don't have an account?
+          <a class="btn .mx-auto" href="/signup"> Sign up </a>
+        </p>
       </section>
     </section>
     <footer id="login_page_footer" class="text-center">
@@ -58,21 +62,24 @@ export default {
     };
   },
   methods: {
-    login() {
-      this.$store
-        .dispatch('login', {
+    async login() {
+      // write an array with 3 numbers
+      try {
+        await this.$store.dispatch('login', {
           username: this.username,
           password: this.password,
-        })
-        .then(() => {
-          this.$router.push({ name: 'Home' });
-        })
-        .catch((err) => {
-          console.log(err);
         });
+        await this.$router.push('/');
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+a {
+  color: #fffa;
+}
+</style>

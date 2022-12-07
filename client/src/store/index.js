@@ -7,10 +7,12 @@ export default new Vuex.Store({
   state: {
     isLoggedIn: false,
     user: null,
+    socket: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
     user: (state) => state.user,
+    socket: (state) => state.socket,
   },
   mutations: {
     login(state, { user }) {
@@ -21,6 +23,9 @@ export default new Vuex.Store({
       state.isLoggedIn = false;
       state.user = null;
     },
+    setSocket(state, { socket }) {
+      state.socket = socket;
+    },
   },
   actions: {
     login({ commit }, { username, password }) {
@@ -28,7 +33,7 @@ export default new Vuex.Store({
         this._vm.$api
           .login(username, password)
           .then((response) => {
-            commit('login', response.data.user);
+            commit('login', { user: response.data.user });
             resolve(response);
           })
           .catch((error) => {

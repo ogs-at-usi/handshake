@@ -26,7 +26,7 @@ router.get('/users', async function (req, res) {
 /*
  * Responds a created chat between users and returns the new chat
  */
-router.post('/chat', async function (req, res) {
+router.post('/chats', async function (req, res) {
   const otherId = req.body.otherId;
 
   if (!ObjectId.isValid(otherId)) {
@@ -86,11 +86,17 @@ router.post('/chat', async function (req, res) {
       chat: chatId,
     });
 
-    const userSocket = [io.sockets.adapter.rooms.get(req.userId)];
-    const otherSocket = [io.sockets.adapter.rooms.get(otherId)];
-    serverSocket.joinRooms(chatId.toString(), [userSocket, otherSocket]);
+    serverSocket.joinRooms(
+      chatId.toString(),
+      await io.to(req.userId).to(otherId).fetchSockets()
+    );
 
-    io.to(req.userId).to(otherId).emit('chats:created', chat);
+    let members = await UserChat.find({ chat: chatId }).populate('user').exec();
+    members = members.map((member) => member.user);
+
+    io.to(req.userId)
+      .to(otherId)
+      .emit('chats:create', { ...chat._doc, members });
 
     res.status(201).json(chat);
   } else {
@@ -105,7 +111,7 @@ router.post('/chat', async function (req, res) {
 /*
  * Responds a created a new message and returns the new message
  */
-router.post('/chat/:chatId/messages', async function (req, res) {
+router.post('/chats/:chatId/messages', async function (req, res) {
   const chatId = req.params.chatId;
   if (!ObjectId.isValid(chatId)) {
     return res.status(400).end();
@@ -137,9 +143,16 @@ router.post('/chat/:chatId/messages', async function (req, res) {
     chat: ObjectId(chatId),
     type: message.type,
     content: message.content,
-    sent_at: new Date(),
-    delivered_at: new Date(),
+    sentAt: new Date(),
+    deliveredAt: new Date(),
   });
+
+  const chat = await Chat.findOne({
+    _id: ObjectId(chatId),
+  }).exec();
+
+  chat.messages.push(newMessage._id);
+  await chat.save();
 
   // socket io emit to all users in the chat room that a new message has been created and send the new message
   io.to(req.params.chatId).emit('messages:create', newMessage);
