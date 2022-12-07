@@ -6,4 +6,9 @@
   </v-app>
 </template>
 
-<style></style>
+<style>
+* {
+  box-sizing: border-box;
+  color: var(--v-text-base);
+}
+</style>
