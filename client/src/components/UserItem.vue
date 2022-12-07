@@ -1,22 +1,21 @@
 <template>
-  <div
-    class="contact justify-content-between d-flex flex-row align-items-center gap-4"
-  >
+  <v-list-item class="py-2 gap-3">
     <!-- image of the other user or group chat -->
-    <div>
+    <v-list-item-avatar class="mr-0">
       <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
-    </div>
+    </v-list-item-avatar>
 
     <!-- name of the other user or group chat -->
-    <div class="flex-grow-1">
-      <h3 class="m-0 text-truncate">{{ user.name }}</h3>
-    </div>
+    <v-list-item-content>
+      <v-list-item-title class="text--primary font-weight-bold">
+        {{ user.name }}
+      </v-list-item-title>
+      <v-list-item-subtitle class="text--secondary">
+        {{ user.email }}
+      </v-list-item-subtitle>
+    </v-list-item-content>
 
-    <!-- notification badge -->
-    <div>
-      <p class="notification badge rounded-pill text-bg-light"></p>
-    </div>
-  </div>
+  </v-list-item>
 </template>
 
 <script>
