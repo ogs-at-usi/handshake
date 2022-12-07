@@ -28,7 +28,10 @@
     </v-toolbar>
 
     <!-- message container -->
-    <vue-custom-scrollbar ref="scroll" class="overflow-y-none h-100 py-5 px-4">
+    <vue-custom-scrollbar
+      ref="scroll"
+      class="overflow-y-none h-100 py-5 px-4 gap-3 d-flex flex-column"
+    >
       <ChatMessage
         v-for="(msg, index) in chat.messages"
         :key="index"
@@ -46,6 +49,7 @@
           hide-details
           label="Message"
           outlined
+          ref="messagesInput"
           @submit="sendMessage"
           @click:append-outer="sendMessage"
         />
@@ -130,7 +134,7 @@ export default {
       // updates when you click on a new chat
       this.$nextTick(() => {
         this.scrollDown();
-        this.$refs.messageInput.focus();
+        this.$refs.messagesInput.focus();
       });
     },
   },
