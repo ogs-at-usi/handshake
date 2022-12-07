@@ -1,26 +1,26 @@
 <template>
   <!-- UI: CONTACT -->
-  <div
-    class="contact justify-content-between d-flex flex-row align-items-center gap-4"
-  >
+  <v-list-item class='py-2 gap-3'>
     <!-- image of the other user or group chat -->
-    <div>
+    <v-list-item-avatar class='mr-0'>
       <img :src="imageId" class="pfp" alt="pfp" />
-    </div>
+    </v-list-item-avatar>
 
     <!-- name of the other user or group chat -->
-    <div class="flex-grow-1 overflow-hidden pa-3">
-      <h3 class="m-0 text-truncate">{{ name }}</h3>
-      <span class="mb-0 text-secondary text-truncate">
+    <v-list-item-content>
+      <v-list-item-title class='text--primary font-weight-bold'>
+        {{ name }}
+      </v-list-item-title>
+      <v-list-item-subtitle class='text--secondary'>
         {{ lastMessage }}
-      </span>
-    </div>
+      </v-list-item-subtitle>
+    </v-list-item-content>
 
     <!-- notification badge -->
-    <div class="d-none">
-      <p class="notification badge rounded-pill text-bg-light"></p>
-    </div>
-  </div>
+    <v-list-item-action-text>
+      <p class="notification badge rounded-pill text-bg-light">test</p>
+    </v-list-item-action-text>
+  </v-list-item>
 </template>
 
 <script>
