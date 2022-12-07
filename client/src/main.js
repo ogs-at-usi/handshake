@@ -3,8 +3,9 @@ import VueAxios from 'vue-axios';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import axios from './plugin/axios';
-import apiClient from './plugin/api-client';
+import axios from './plugins/axios';
+import apiClient from './plugins/api-client';
+import vuetify from './plugins/vuetify';
 
 Vue.use(apiClient, axios);
 Vue.use(VueAxios, axios);
@@ -14,5 +15,6 @@ new Vue({
   router,
   store,
   axios,
+  vuetify,
   render: (h) => h(App),
 }).$mount('#app');
