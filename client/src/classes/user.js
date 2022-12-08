@@ -20,12 +20,20 @@ class User {
   name = null;
   email = null;
   chats = null;
+  online = false;
 
-  constructor({ _id = null, name = null, email = null, chats = null }) {
+  constructor({
+    _id = null,
+    name = null,
+    email = null,
+    chats = null,
+    online = false,
+  }) {
     this._id = _id;
     this.name = name;
     this.email = email;
     this.chats = chats;
+    this.online = online;
   }
 }
 
