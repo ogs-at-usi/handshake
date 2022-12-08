@@ -39,6 +39,17 @@ export default {
       // this.setActiveChat(this.chats[0]._id);
     });
 
+    socket.on('users:online', (userId) => {
+      console.log('EVENT users:online -', userId);
+      this.chats.forEach((chat) => {
+        chat.members.forEach((member) => {
+          if (member._id === userId) {
+            member.online = true;
+          }
+        });
+      });
+    });
+
     socket.on('messages:create', (message) => {
       console.log('EVENT messages:create -', message);
       const chatId = message.chat;
