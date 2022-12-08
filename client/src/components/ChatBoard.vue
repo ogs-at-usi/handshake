@@ -40,15 +40,16 @@
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
-    <v-row class="ma-0 flex-shrink-0 white">
+    <v-row class="ma-0 flex-shrink-0 white elevation-5" style='z-index:10'>
       <v-form class="w-100" @submit.prevent="sendMessage">
         <v-text-field
           v-model="messageString"
           append-outer-icon="mdi-send"
-          class="gap-4 px-5 py-5"
+          class="gap-4 px-5 py-5 elevation-0"
           hide-details
           label="Message"
           outlined
+          single-line
           ref="messagesInput"
           @submit="sendMessage"
           @click:append-outer="sendMessage"
