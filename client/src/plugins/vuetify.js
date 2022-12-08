@@ -18,6 +18,8 @@ export default new Vuetify({
         success: '#4CAF50',
         warning: '#FFC107',
         surface: '#c5c5c5',
+        textOnPrimary: '#ffffff',
+        textOnAccent: '#000000',
       },
       dark: {
         text: '#ffffff',
