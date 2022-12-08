@@ -58,6 +58,19 @@ export default {
     },
   },
   methods: {
+    updateTypingStatus() {
+      if (this.messageString.length > 0) {
+        console.log('You are typing');
+        this.$store.getters.socket.emit('user:typing', {
+          chatId: this.$props.chat._id,
+        });
+      } else {
+        console.log('You are not typing');
+        this.$store.getters.socket.emit('user:notTyping', {
+          chatId: this.$props.chat._id,
+        });
+      }
+    },
     scrollDown() {
       const e = this.$refs.scroll;
       e.scrollTop = e.scrollHeight;
