@@ -57,6 +57,9 @@ function init(server) {
 
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
+
+      onlineUsers.delete(socket.userId);
+      io.emit('users:offline', socket.userId);
     });
   });
 }
