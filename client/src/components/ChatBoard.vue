@@ -7,12 +7,15 @@
   >
     <!-- image & name of the chat: other user image or group image -->
     <v-toolbar
-      class="flex-shrink-1 elevation-3 "
-      style='z-index: 10'
+      class="flex-shrink-1 elevation-3"
+      style="z-index: 10"
       height="70px"
       max-height="70px"
     >
-      <v-app-bar-nav-icon class='me-3 d-block d-sm-none' @click="$store.commit('setActiveChat', {chat:null})">
+      <v-app-bar-nav-icon
+        class="me-3 d-block d-sm-none"
+        @click="$store.commit('setActiveChat', { chat: null })"
+      >
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon>
       <v-avatar>
@@ -25,7 +28,7 @@
         otherPrivateUser.name
       }}</v-toolbar-title>
       <v-spacer />
-      <v-btn class='me-2' icon>
+      <v-btn class="me-2" icon>
         <v-icon>mdi-video</v-icon>
       </v-btn>
       <v-btn icon>
@@ -40,13 +43,14 @@
     >
       <ChatMessage
         v-for="(msg, index) in chat.messages"
+        ref="message"
         :key="index"
         :message="msg"
       ></ChatMessage>
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
-    <v-row class="ma-0 flex-shrink-0 white elevation-5" style='z-index:10'>
+    <v-row class="ma-0 flex-shrink-0 white elevation-5" style="z-index: 10">
       <v-form class="w-100" @submit.prevent="sendMessage">
         <v-text-field
           v-model="messageString"
@@ -88,8 +92,8 @@ export default {
   },
   methods: {
     scrollDown() {
-      const e = this.$refs.scroll;
-      e.scrollTop = e.scrollHeight;
+      // scroll to the bottom of hte chat
+      this.$refs.scroll.$el.scrollTop = this.$refs.scroll.$el.scrollHeight;
     },
     onlySpaces(str) {
       return /^\s*$/.test(str);
