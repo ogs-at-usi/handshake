@@ -4,8 +4,6 @@
       v-for="(chat, index) in chats"
       :key="index"
       :chat="chat"
-      v-on="$listeners"
-      :class="chat._id === $store.getters.activeChat?._id ? 'v-list-item--active' : '' "
     />
   </v-list-item-group>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <!-- UI: CONTACT -->
   <v-list-item
-    class="py-2 gap-3"
+    :class="'py-2 gap-3 ' + (isActive ? 'grey lighten-2' : '')"
     @click="$store.commit('setActiveChat', { chat })"
   >
     <!-- image of the other user or group chat -->
@@ -59,6 +59,9 @@ export default {
       return this.chat.messages && this.chat.messages.length > 0
         ? this.chat.messages[this.chat.messages.length - 1].content
         : '';
+    },
+    isActive() {
+      return this.$store.getters.activeChat._id === this.chat._id;
     },
   },
 };
