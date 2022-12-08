@@ -50,6 +50,17 @@ export default {
       });
     });
 
+    socket.on('users:offline', (userId) => {
+      console.log('EVENT users:offline -', userId);
+      this.chats.forEach((chat) => {
+        chat.members.forEach((member) => {
+          if (member._id === userId) {
+            member.online = false;
+          }
+        });
+      });
+    });
+
     socket.on('messages:create', (message) => {
       console.log('EVENT messages:create -', message);
       const chatId = message.chat;
