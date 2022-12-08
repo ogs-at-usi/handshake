@@ -32,7 +32,7 @@ function init(server) {
 
     let chats = userChats;
     // find all the users in each chat ad add it as a property 'members'
-    return await Promise.all(
+    chats = await Promise.all(
       chats.map(async (chat) => {
         const members = await UserChat.find({ chat: chat._id })
           .populate('user')
