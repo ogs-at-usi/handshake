@@ -52,6 +52,9 @@ function init(server) {
     );
     socket.emit('chats:read', userChats);
 
+    onlineUsers.add(socket.userId);
+    io.emit('users:online', socket.userId);
+
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
     });
