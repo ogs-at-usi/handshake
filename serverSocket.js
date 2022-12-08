@@ -40,6 +40,24 @@ function init(server) {
         return { ...chat._doc, members: members.map((member) => member.user) };
       })
     );
+
+    /**
+     * chats: [ chat, chat, chat ]
+     * chat: {_id: '...', members: [user, user, user], messages: [message, message, message]}
+     * user: {_id: '...', name: '...', email: '...', password: '...', online: ?}
+     */
+
+    chats = chats.map((chat) => {
+      chat.members = chat.members.map((member) => {
+        return {
+          ...member._doc,
+          online: onlineUsers.has(member._id.toString()),
+        };
+      });
+      return chat;
+    });
+
+    return chats;
   }
 
   io.use(authMiddleware);
