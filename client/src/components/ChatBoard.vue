@@ -105,6 +105,9 @@ export default {
         return this.otherPrivateUser.name;
       }
     },
+    status() {
+      return this.otherPrivateUser.online ? 'online' : 'offline';
+    },
   },
   watch: {
     chat() {
