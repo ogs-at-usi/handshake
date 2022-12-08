@@ -6,9 +6,9 @@
   >
     <v-card
       :id="message._id"
-      class="rounded-lg"
+      class="rounded-lg message"
       elevation="2"
-      style="max-width: 70%; height: fit-content"
+      style="height: fit-content"
     >
       <v-card-title
         v-if="!isSelf && isGroup"
@@ -97,4 +97,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.message {
+  max-width: 70%!important;
+}
+@media only screen and (max-width: 600px) {
+  .message {
+    max-width: 85%!important;
+  }
+}
+</style>
