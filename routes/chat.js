@@ -7,7 +7,7 @@ const { Chat } = require('../models/chat');
 const { MessageType } = require('../models/message'); // MessageType is used for verification
 const io = require('../serverSocket').io;
 const serverSocket = require('../serverSocket');
-const { sendMessage } = require('../utils/message.utils');
+const { saveMessage } = require('../utils/message.utils');
 
 /**
  * Responds an array of users that match what the client typed
@@ -155,11 +155,12 @@ router.post('/chats/:chatId/messages', async function (req, res) {
   // chat.messages.push(newMessage._id);
   // await chat.save();
 
-  // // socket io emit to all users in the chat room that a new message has been created and send the new message
-  // io.to(req.params.chatId).emit('messages:create', newMessage);
-
+  // socket io emit to all users in the chat room that a new message has been created and send the new message
+  
   // async function sendMessage(chatId, userId, message, type, params, body)
-  const newMessage = await sendMessage(chatId, req.userId, message, message.type, req.params, req.body);
+  const newMessage = await saveMessage(chatId, req.userId, message.content, message.type);
+  
+  io.to(req.params.chatId).emit('messages:create', newMessage);
 
   if (!newMessage) {
     return res.status(404).end();
