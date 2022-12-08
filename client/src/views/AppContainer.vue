@@ -31,7 +31,7 @@ export default {
   created() {
     const socket = io(':8888');
     console.log('Trying to connect');
-    this.$store.commit('setSocket', socket);
+    this.$store.commit('setSocket', { socket });
 
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
