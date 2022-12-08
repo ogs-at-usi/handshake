@@ -7,7 +7,7 @@
       <v-btn color="white" outlined>About us</v-btn>
     </div>
     <section class="flex-grow-1 justify-center align-center d-flex">
-      <v-card color="transparent" elevation="0">
+      <v-card color="transparent" elevation="0" >
         <v-form ref="form" @submit.prevent='login' >
           <v-card-title class="justify-center pb-7">
             <h2>Login</h2>
@@ -36,7 +36,7 @@
             ></v-text-field>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <v-btn color="text" outlined type='submitg'>Login</v-btn>
+            <v-btn color='primary' large type='submit'>Login</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
