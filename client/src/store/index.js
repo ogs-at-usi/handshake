@@ -15,6 +15,7 @@ export default new Vuex.Store({
     user: (state) => state.user,
     socket: (state) => state.socket,
     activeChat: (state) => state.activeChat,
+    isMobile: () => window.innerWidth < 600,
   },
   mutations: {
     login(state, { user }) {

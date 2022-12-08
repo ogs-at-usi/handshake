@@ -3,7 +3,8 @@
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
-      class='col-12 col-md-4 col-lg-3'
+      v-if='!($store.getters.isMobile && activeChat !== null)'
+      class='col-12 col-sm-5 col-md-4 col-lg-3'
       :chats="chats"
       @userSelected="userSelected($event)"
     ></AppMenu>
@@ -35,8 +36,6 @@ export default {
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
       this.chats = chats.map((chat) => new Chat(chat));
-      this.activeChat = this.chats[0];
-      // this.setActiveChat(this.chats[0]._id);
     });
 
     socket.on('messages:create', (message) => {

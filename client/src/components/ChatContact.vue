@@ -61,7 +61,7 @@ export default {
         : '';
     },
     isActive() {
-      return this.$store.getters.activeChat._id === this.chat._id;
+      return this.$store.getters.activeChat?._id === this.chat?._id;
     },
   },
 };

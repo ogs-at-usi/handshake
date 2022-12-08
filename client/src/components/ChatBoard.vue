@@ -7,11 +7,14 @@
   >
     <!-- image & name of the chat: other user image or group image -->
     <v-toolbar
-      class="flex-shrink-1 elevation-3"
+      class="flex-shrink-1 elevation-3 "
       style='z-index: 10'
       height="70px"
       max-height="70px"
     >
+      <v-app-bar-nav-icon class='me-3 d-block d-sm-none' @click="$store.commit('setActiveChat', {chat:null})">
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-app-bar-nav-icon>
       <v-avatar>
         <img
           alt="icon of person you're chatting with"
@@ -132,6 +135,7 @@ export default {
   },
   watch: {
     chat() {
+      if (this.chat === null) return;
       // updates when you click on a new chat
       this.$nextTick(() => {
         this.scrollDown();
