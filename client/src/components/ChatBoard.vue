@@ -7,8 +7,8 @@
   >
     <!-- image & name of the chat: other user image or group image -->
     <v-toolbar
-      class="flex-shrink-1"
-      elevation="0"
+      class="flex-shrink-1 elevation-3"
+      style='z-index: 10'
       height="70px"
       max-height="70px"
     >
