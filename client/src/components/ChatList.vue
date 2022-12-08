@@ -1,5 +1,5 @@
 <template>
-  <v-list-item-group >
+  <v-list-item-group mandatory >
     <ChatContact
       v-for="(chat, index) in chats"
       :key="index"

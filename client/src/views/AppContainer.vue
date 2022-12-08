@@ -37,6 +37,7 @@ export default {
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
       this.chats = chats.map((chat) => new Chat(chat));
+      this.setActiveChat(this.chats[0]);
       // this.setActiveChat(this.chats[0]._id);
     });
 
