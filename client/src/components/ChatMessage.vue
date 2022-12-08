@@ -1,11 +1,21 @@
 <template>
   <!-- UI: MESSAGE -->
-  <div :id="message._id" :class="`card ${selfClass}`">
-    <!-- message with header of name of sender (none if ours) and message text -->
-    <div class="card-body pb-0">
-      <!-- TODO: change v-if to display only if it is a group, add chat in props -->
-      <h5 v-if="false" class="card-title">{{ senderName }}</h5>
-      <p class="card-text">
+  <div
+    :style="{ justifyContent: isSelf ? 'end' : 'start' }"
+    class="ma-0 d-flex"
+  >
+    <v-card
+      :id="message._id"
+      class="rounded-lg"
+      elevation="2"
+      style="max-width: 70%; height: fit-content"
+    >
+      <v-card-title
+        v-if="!isSelf && isGroup"
+        class="font-weight-regular subtitle-1 pa-3 pb-0"
+        >name</v-card-title
+      >
+      <v-card-text class="pa-3">
         {{ content }}
         <a
           v-if="content.length < message.content.length"
@@ -13,11 +23,11 @@
           @click.prevent="page++"
           >Show more</a
         >
-      </p>
-    </div>
-
-    <!-- timestamp of the message: sent_at for our message, delivered_at for others -->
-    <p class="timestamp text-end pe-2">{{ timestamp }}</p>
+      </v-card-text>
+      <v-card-actions class="justify-end pt-0">
+        <span class="text--secondary body-2">{{ timestamp }}</span>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
@@ -87,8 +97,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.timestamp {
-  margin: 8px;
-}
-</style>
+<style scoped></style>
