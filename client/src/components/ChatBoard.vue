@@ -42,7 +42,6 @@
 import ChatMessage from '@/components/ChatMessage';
 import Chat from '@/classes/chat';
 import Message from '@/classes/message';
-import { io } from 'socket.io-client';
 
 export default {
   name: 'ChatBoard',
