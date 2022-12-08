@@ -81,6 +81,11 @@ function init(server) {
       onlineUsers.delete(socket.userId);
       io.emit('users:offline', socket.userId);
     });
+
+    socket.on('user:typing', (data) => {
+      const { chatId } = data;
+      io.to(chatId).emit('user:typing', data);
+    });
   });
 }
 
