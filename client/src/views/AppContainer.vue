@@ -28,7 +28,7 @@ export default {
       chats: null,
     };
   },
-  mounted() {
+  created() {
     const socket = io(':8888');
     console.log('Trying to connect');
     this.$store.commit('setSocket', socket);
