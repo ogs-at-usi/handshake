@@ -13,9 +13,9 @@
       <v-card-title
         v-if="!isSelf && isGroup"
         class="font-weight-regular subtitle-1 pa-3 pb-0"
-        >name</v-card-title
+        >{{senderName}}</v-card-title
       >
-      <v-card-text class="pa-3">
+      <v-card-text class="pa-3 pb-1 text--primary">
         {{ content }}
         <a
           v-if="content.length < message.content.length"
@@ -25,7 +25,7 @@
         >
       </v-card-text>
       <v-card-actions class="justify-end pt-0">
-        <span class="text--secondary body-2">{{ timestamp }}</span>
+        <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
     </v-card>
   </div>
