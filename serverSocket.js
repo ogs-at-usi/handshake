@@ -62,8 +62,6 @@ function init(server) {
 
   io.use(authMiddleware);
 
-  const onlineUsers = new Set();
-
   io.on('connection', async (socket) => {
     console.log('✅User connected with id ' + socket.id, socket.userId);
     socket.join(socket.userId);
