@@ -4,6 +4,7 @@
     <header class="d-flex flex-row gap-4 align-items-center">
       <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
       <h2 class="m-0 text-truncate">{{ chatName }}</h2>
+      <h4>{{ status }}</h4>
     </header>
 
     <!-- message container -->
