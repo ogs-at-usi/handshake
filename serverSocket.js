@@ -51,7 +51,7 @@ function init(server) {
       chat.members = chat.members.map((member) => {
         return {
           ...member._doc,
-          online: onlineUsers.has(member._id.toString()),
+          online: onlineUsers.has(member._id.toString())
         };
       });
       return chat;
