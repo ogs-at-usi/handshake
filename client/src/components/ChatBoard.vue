@@ -148,6 +148,14 @@ export default {
         this.$refs.messageInput.focus();
       });
     },
+    // messageString() {
+    //   if (this.messageString > 0) {
+    //     console.log('You are typing');
+    //     this.$store.getters.socket.emit('user:typing', {
+    //       chatId: this.$props.chat._id,
+    //     });
+    //   }
+    // },
   },
 };
 </script>
