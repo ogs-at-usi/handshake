@@ -10,6 +10,7 @@
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
     <ChatBoard ref="chatBoard" :chat="activeChat"></ChatBoard>
+    
   </div>
 </template>
 
@@ -29,9 +30,17 @@ export default {
     };
   },
   mounted() {
+
+
+
+
     const socket = io(':8888');
     console.log('Trying to connect');
-    this.$store.commit('setSocket', socket);
+    this.$store.commit('setSocket', {socket});
+
+    
+
+
 
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
@@ -52,7 +61,9 @@ export default {
           this.$refs.chatBoard.scrollDown();
         });
       }
-    });
+    }); 
+
+    // emit 
 
     /**
      * Get newly created chat.

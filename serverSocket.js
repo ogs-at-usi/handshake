@@ -3,6 +3,7 @@ const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
 
+
 // Initialize the socket.io server
 function init(server) {
   io.attach(server);
@@ -52,8 +53,39 @@ function init(server) {
 
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
+
+      socket.leave(socket.userId);
+
+      
     });
+    
+
+
+    // sockets for video chat
+    socket.on('joinCall', (chatId) => {
+      console.log('join-call', chatId);
+      console.log('socket.userId', socket.userId);
+
+      socket.broadcast.to(chatId).emit('user-connected', socket.userId);
+
+    }
+    );
+
+    socket.on('leave-room', (roomId, userId) => {
+      socket.broadcast.to(roomId).emit('user-disconnected', userId);
+    }
+    );
+
   });
+
+
+    
+
+
+
+
+
+
 }
 
 function joinRooms(rooms, socket) {
@@ -69,6 +101,8 @@ function joinRooms(rooms, socket) {
     });
   });
 }
+
+
 
 module.exports = {
   init,
