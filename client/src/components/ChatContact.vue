@@ -1,17 +1,20 @@
 <template>
   <!-- UI: CONTACT -->
-  <v-list-item class='py-2 gap-3'>
+  <v-list-item
+    class="py-2 gap-3"
+    @click="$store.commit('setActiveChat', { chat })"
+  >
     <!-- image of the other user or group chat -->
-    <v-list-item-avatar class='mr-0'>
+    <v-list-item-avatar class="mr-0">
       <img :src="imageId" class="pfp" alt="pfp" />
     </v-list-item-avatar>
 
     <!-- name of the other user or group chat -->
     <v-list-item-content>
-      <v-list-item-title class='text--primary font-weight-bold'>
+      <v-list-item-title class="text--primary font-weight-bold">
         {{ name }}
       </v-list-item-title>
-      <v-list-item-subtitle class='text--secondary'>
+      <v-list-item-subtitle class="text--secondary">
         {{ lastMessage }}
       </v-list-item-subtitle>
     </v-list-item-content>

@@ -5,7 +5,6 @@
     <AppMenu
       class='col-4'
       :chats="chats"
-      @selectChat="setActiveChat($event)"
       @userSelected="userSelected($event)"
     ></AppMenu>
     <!-- content for the right hand side of the app main page -->
@@ -25,7 +24,6 @@ export default {
   name: 'AppContainer',
   data() {
     return {
-      activeChat: null,
       chats: null,
     };
   },
@@ -37,7 +35,7 @@ export default {
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
       this.chats = chats.map((chat) => new Chat(chat));
-      this.setActiveChat(this.chats[0]);
+      this.activeChat = this.chats[0];
       // this.setActiveChat(this.chats[0]._id);
     });
 
@@ -70,10 +68,6 @@ export default {
     });
   },
   methods: {
-    setActiveChat(chat) {
-      console.log('EVENT Active chat - ', chat);
-      this.activeChat = chat;
-    },
     userSelected(otherUser) {
       console.log('EVENT User selected - ', otherUser);
       const chat = this.chats.find((chat) => {
@@ -94,9 +88,15 @@ export default {
         });
       }
     },
-    overrideChat(id) {
-      console.log(id);
-      this.activeChat._id = id;
+  },
+  computed: {
+    activeChat: {
+      get() {
+        return this.$store.getters.activeChat;
+      },
+      set(chat) {
+        this.$store.commit('setActiveChat', {chat});
+      },
     },
   },
   components: { AppMenu, ChatBoard },

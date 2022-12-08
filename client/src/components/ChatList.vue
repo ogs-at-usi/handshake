@@ -1,11 +1,11 @@
 <template>
-  <v-list-item-group mandatory >
+  <v-list-item-group >
     <ChatContact
       v-for="(chat, index) in chats"
       :key="index"
       :chat="chat"
       v-on="$listeners"
-      @click.native="$emit('selectChat', chat)"
+      :class="chat._id === $store.getters.activeChat?._id ? 'v-list-item--active' : '' "
     />
   </v-list-item-group>
 </template>

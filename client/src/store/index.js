@@ -8,11 +8,13 @@ export default new Vuex.Store({
     isLoggedIn: false,
     user: null,
     socket: null,
+    activeChat: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
     user: (state) => state.user,
     socket: (state) => state.socket,
+    activeChat: (state) => state.activeChat,
   },
   mutations: {
     login(state, { user }) {
@@ -25,6 +27,10 @@ export default new Vuex.Store({
     },
     setSocket(state, { socket }) {
       state.socket = socket;
+    },
+    setActiveChat(state, { chat }) {
+      console.log(chat);
+      state.activeChat = chat;
     },
   },
   actions: {
