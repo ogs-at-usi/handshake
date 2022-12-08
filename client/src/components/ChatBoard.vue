@@ -107,13 +107,19 @@ export default {
       }
     },
   },
-  mounted() {
-    const socket = io(':8888');
-    this.$store.commit('setSocket', socket);
-
-    if (this.messageString > 0) {
-      socket.emit('user:typing', this.$props.chat._id);
-    }
+  created() {
+    this.$store.getters.socket.on('user:typing', ({ chatId }) => {
+      console.log('someone is typing', chatId);
+      if (chatId === this.$props.chat._id) {
+        this.otherPrivateUser.typing = true;
+      }
+    });
+    this.$store.getters.socket.on('user:notTyping', ({ chatId }) => {
+      console.log('someone is not typing', chatId);
+      if (chatId === this.$props.chat._id) {
+        this.otherPrivateUser.typing = false;
+      }
+    });
   },
   computed: {
     otherPrivateUser() {
