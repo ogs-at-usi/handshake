@@ -25,6 +25,9 @@
         otherPrivateUser.name
       }}</v-toolbar-title>
       <v-spacer />
+      <v-btn class='me-2' icon>
+        <v-icon>mdi-video</v-icon>
+      </v-btn>
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
