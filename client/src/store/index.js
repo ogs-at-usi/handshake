@@ -24,6 +24,7 @@ export default new Vuex.Store({
       state.user = null;
     },
     setSocket(state, { socket }) {
+      console.log('Setting state: ', socket);
       state.socket = socket;
     },
   },
