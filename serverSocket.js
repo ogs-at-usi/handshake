@@ -30,7 +30,7 @@ function init(server) {
       return lastMessageB.sentAt - lastMessageA.sentAt;
     });
 
-    const chats = userChats;
+    let chats = userChats;
     // find all the users in each chat ad add it as a property 'members'
     return await Promise.all(
       chats.map(async (chat) => {
