@@ -134,7 +134,10 @@ export default {
       }
     },
     status() {
-      return this.otherPrivateUser.online ? 'online' : 'offline';
+      // priority: typing > online > offline
+      if (this.otherPrivateUser.typing) return 'Typing...';
+      if (this.otherPrivateUser.online) return 'Online';
+      return 'Offline';
     },
   },
   watch: {
