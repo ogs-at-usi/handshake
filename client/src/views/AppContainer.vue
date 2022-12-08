@@ -3,13 +3,13 @@
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
-      class='col-4'
+      class='col-12 col-md-4 col-lg-3'
       :chats="chats"
       @userSelected="userSelected($event)"
     ></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard ref="chatBoard" :chat="activeChat" class='col-8'></ChatBoard>
+    <ChatBoard ref="chatBoard" :chat="activeChat" class='flex-grow-1'></ChatBoard>
   </v-container>
 </template>
 
