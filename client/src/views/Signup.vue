@@ -1,35 +1,60 @@
 <template>
   <section class="flex-grow-1 justify-center align-center d-flex">
-    <v-card color="transparent" elevation="0" >
-      <v-form ref="form" @submit.prevent='login' >
+    <v-card color="transparent" elevation="0">
+      <v-form ref="form" lazy-validation @submit.prevent="signup">
         <v-card-title class="justify-center pb-7">
-          <h2>Login</h2>
+          <h2>Sign Up</h2>
         </v-card-title>
         <v-card-text class="pb-3 d-flex flex-column gap-3">
           <v-text-field
             v-model="username"
-            :error="errors !== ''"
             color="text"
-            hide-details
             label="Username"
+            :error-messages="errors.username"
+            :rules="[(v) => !!v || 'Username is required']"
+            hide-details='auto'
             outlined
             required
           ></v-text-field>
           <v-text-field
-            v-model="password"
-            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-            :error-messages="errors"
-            :hide-details="errors === ''"
-            :type="showPassword ? 'text' : 'password'"
+            v-model="email"
+            :error-messages="errors.email"
+            :rules="[
+              (v) => !!v || 'Email is required',
+              (v) => /.+@.+\..+/.test(v) || 'Email must be valid',
+            ]"
             color="text"
-            label="Password"
+            hide-details="auto"
+            label="Email"
             outlined
             required
-            @click:append="showPassword = !showPassword"
+          />
+          <v-text-field
+            v-model="password"
+            :error-messages="errors.password"
+            color="text"
+            label="Password"
+            hide-details="auto"
+            type="password"
+            outlined
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="password2"
+            :error-messages="errors.password2"
+            :rules="[
+              () => (password === password2 ? true : 'Passwords do not match'),
+            ]"
+            color="text"
+            hide-details="auto"
+            label="Confirm Password"
+            outlined
+            required
+            type="password"
           ></v-text-field>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color='primary' large type='submit'>Login</v-btn>
+          <v-btn color="primary" large type="submit">Sign Up</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -45,12 +70,17 @@ export default {
       email: '',
       password: '',
       password2: '',
+      errors: {
+        username: '',
+        email: '',
+        password: '',
+        password2: '',
+      },
     };
   },
   methods: {
     signup() {
-      if (this.password !== this.password2) {
-        alert('Passwords do not match');
+      if (!this.$refs.form.validate()) {
         return;
       }
       this.$api
@@ -59,7 +89,15 @@ export default {
           this.$router.push('/login');
         })
         .catch((err) => {
-          console.log(err);
+          if (!err.response) return;
+          /*
+          The response is gonna be something like:
+          {"username":["A user with that username already exists."],"email":["user with this email address already exists."]}
+           */
+          const { data } = err.response;
+          for (const [key, value] of Object.entries(data)) {
+            this.errors[key] = value;
+          }
         });
     },
   },
