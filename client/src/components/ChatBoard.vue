@@ -41,6 +41,7 @@
 import ChatMessage from '@/components/ChatMessage';
 import Chat from '@/classes/chat';
 import Message from '@/classes/message';
+import { io } from 'socket.io-client';
 
 export default {
   name: 'ChatBoard',
@@ -92,6 +93,14 @@ export default {
         console.error(err);
       }
     },
+  },
+  mounted() {
+    const socket = io(':8888');
+    this.$store.commit('setSocket', socket);
+
+    if (this.messageString > 0) {
+      socket.emit('user:typing', this.$props.chat._id);
+    }
   },
   computed: {
     otherPrivateUser() {
