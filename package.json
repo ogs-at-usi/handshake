@@ -18,6 +18,7 @@
   "dependencies": {
     "@lottiefiles/lottie-interactivity": "^1.6.1",
     "bcrypt": "^5.1.0",
+    "convert-video": "^1.0.0",
     "cookie": "^0.5.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
