@@ -29,6 +29,7 @@
             outlined
             required
           />
+          <v-divider/>
           <v-text-field
             v-model="password"
             :error-messages="errors.password"

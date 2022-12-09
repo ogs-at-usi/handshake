@@ -31,6 +31,9 @@
           <v-card-actions class="justify-center">
             <v-btn color='primary' large type='submit'>Login</v-btn>
           </v-card-actions>
+          <v-card-actions class='justify-center'>
+            <span>Don't have an account? <router-link to='/signup'>Sign up</router-link></span>
+          </v-card-actions>
         </v-form>
       </v-card>
     </section>
