@@ -1,7 +1,7 @@
 <template>
   <!-- MENU WITH OWN IMAGE, SEARCH BAR AND CONTACTS LIST -->
   <v-container class="pa-0 w-100 ma-0 h-100" fluid>
-    <v-navigation-drawer clipped permanent width="100%">
+    <v-navigation-drawer clipped color='surface' permanent width="100%">
       <v-list flat>
         <v-list-item>
           <v-list-item-avatar>

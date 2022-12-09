@@ -68,9 +68,6 @@ html {
 .v-main .v-messages__message {
   color: var(--v-error-base)!important;
 }
-.v-main .v-navigation-drawer {
-  background: var(--v-surface-base)!important;
-}
 
 .theme--light.v-application .text--primary {
   color: var(--v-textPrimary-base)!important
