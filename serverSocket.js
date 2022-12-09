@@ -76,7 +76,6 @@ function init(server, onlineUsers) {
 
     socket.on('user:typing', (data) => {
       const { chatId } = data;
-      console.log(socket.userId + ' is typing in chat ' + chatId);
       io.to(chatId).emit('user:typing', { chatId, userId: socket.userId });
     });
 
