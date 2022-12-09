@@ -1,7 +1,8 @@
 <template>
   <v-container
     v-if="chat !== null"
-    class="w-100 grey lighten-4 pa-0 d-flex flex-column"
+    id='chat-board'
+    class="w-100 pa-0 d-flex flex-column"
     fluid
     style="height: 100vh; overflow: hidden"
   >
@@ -11,6 +12,7 @@
       style="z-index: 10"
       height="70px"
       max-height="70px"
+      color='surface'
     >
       <v-app-bar-nav-icon
         class="me-3 d-block d-sm-none"
@@ -50,7 +52,7 @@
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
-    <v-row class="ma-0 flex-shrink-0 white elevation-5" style="z-index: 10">
+    <v-row class="ma-0 flex-shrink-0 surface elevation-5" style="z-index: 10">
       <v-form class="w-100" @submit.prevent="sendMessage">
         <v-text-field
           dense
@@ -154,4 +156,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#chat-board {
+  height: 100vh;
+}
+</style>
