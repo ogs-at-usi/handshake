@@ -120,7 +120,10 @@ export default {
         this.otherPrivateUser.typing = true;
       }
     });
-    this.$store.getters.socket.on('user:notTyping', ({ chatId }) => {
+    this.$store.getters.socket.on('user:notTyping', ({ chatId, userId }) => {
+      if (this.$props.chat === null) {
+        return;
+      }
       console.log('someone is not typing', chatId);
       if (chatId === this.$props.chat._id) {
         this.otherPrivateUser.typing = false;
