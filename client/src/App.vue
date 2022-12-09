@@ -44,17 +44,18 @@ export default {
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-p {
-  margin: 0!important;
-}
 html {
   overflow-y: auto!important;
 }
 * {
+  box-sizing: border-box;
   color: var(--v-textPrimary-base);
+}
+p {
+  margin: 0!important;
+}
+.text-h1,.text-h2,.text-h3,.text-h4,h1,h2,h3,h4 {
+  font-family: 'Montserrat', sans-serif; font-weight:800!important;
 }
 .v-main {
   background:var(--v-background-base);
