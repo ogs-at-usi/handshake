@@ -20,7 +20,7 @@
     </v-list-item-content>
 
     <!-- notification badge -->
-    <v-list-item-action-text>
+    <v-list-item-action-text class='pb-3 align-self-end'>
       <p class="notification badge rounded-pill text-bg-light">
         {{ lastMessageTimestamp }}
       </p>
