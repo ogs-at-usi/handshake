@@ -5,10 +5,7 @@ const { ObjectId } = require('mongodb');
 
 // Initialize the socket.io server
 
-// the set of online users
-const onlineUsers = new Set();
-
-function init(server) {
+function init(server, onlineUsers) {
   io.attach(server);
 
   async function getChats(userId) {
@@ -51,7 +48,7 @@ function init(server) {
       chat.members = chat.members.map((member) => {
         return {
           ...member._doc,
-          online: onlineUsers.has(member._id.toString())
+          online: onlineUsers.has(member._id.toString()),
         };
       });
       return chat;
@@ -93,7 +90,6 @@ function init(server) {
       console.log(socket.userId + ' is not typing in chat ' + chatId);
       io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
     });
-
   });
 }
 
