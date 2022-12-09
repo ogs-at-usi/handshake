@@ -40,7 +40,6 @@ export default {
     });
 
     socket.on('users:online', (userId) => {
-      console.log('EVENT users:online -', userId);
       if (!this.chats) return;
       this.chats.forEach((chat) => {
         chat.members.forEach((member) => {
