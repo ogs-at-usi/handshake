@@ -53,6 +53,7 @@
     <v-row class="ma-0 flex-shrink-0 white elevation-5" style="z-index: 10">
       <v-form class="w-100" @submit.prevent="sendMessage">
         <v-text-field
+          dense
           v-model="messageString"
           append-outer-icon="mdi-send"
           class="gap-4 px-5 py-5 elevation-0"
