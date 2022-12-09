@@ -11,9 +11,8 @@ import Peer from 'peerjs';
 Vue.use(apiClient, axios);
 Vue.use(VueAxios, axios);
 Vue.use(VuePeerJS, new Peer({
-
-
 }))
+
 Vue.config.productionTip = false;
 
 new Vue({

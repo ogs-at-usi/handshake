@@ -53,59 +53,46 @@ function init(server) {
 
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
-
       socket.leave(socket.userId);
-
-      
     });
-    
 
+    socket.on('join-room', (roomId, userId) => {
+    console.log('join-room', roomId, userId);
+    const newroom = "videocall_"+roomId;
+    socket.join(newroom);
+    socket.broadcast.to(newroom).emit('user-connected', userId, roomId)
 
-    // sockets for video chat
-    socket.on('joinCall', (chatId) => {
-      console.log('join-call', chatId);
-      console.log('socket.userId', socket.userId);
-
-      socket.broadcast.to(chatId).emit('user-connected', socket.userId);
-
-    }
-    );
-
-    socket.on('leave-room', (roomId, userId) => {
-      socket.broadcast.to(roomId).emit('user-disconnected', userId);
-    }
-    );
-
+    socket.on('disconnect', () => {
+      socket.broadcast.to(roomId).emit('user-disconnected', userId)
+    })
   });
 
-
-    
-
-
-
-
-
-
-}
-
-function joinRooms(rooms, socket) {
-  if (!Array.isArray(rooms)) {
-    rooms = [rooms];
-  }
-  if (!Array.isArray(socket)) {
-    socket = [socket];
-  }
-  rooms.forEach((room) => {
-    socket.forEach((socket) => {
-      socket.join(room);
-    });
-  });
+});
 }
 
 
 
-module.exports = {
-  init,
-  joinRooms,
-  io,
-};
+
+    function joinRooms(rooms, socket) {
+      if (!Array.isArray(rooms)) {
+        rooms = [rooms];
+      }
+      if (!Array.isArray(socket)) {
+        socket = [socket];
+      }
+      rooms.forEach((room) => {
+        socket.forEach((socket) => {
+          socket.join(room);
+        });
+      });
+    }
+
+
+
+
+
+    module.exports = {
+      init,
+      joinRooms,
+      io,
+    };

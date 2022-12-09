@@ -50,10 +50,6 @@
 import ChatMessage from '@/components/ChatMessage';
 import Chat from '@/classes/chat';
 import Message from '@/classes/message';
-// import VuePeerJS from 'vue-peerjs'
-
-
-
 
 // Vue.use(VuePeerJS, new Peer());
 
@@ -113,23 +109,21 @@ export default {
       }
     },
 
-    callingFunction() {
-
-
+    async callingFunction() {
       const videoGrid = this.$refs['video-grid'];
       const socket = this.$store.getters.socket;
-
       const myPeer = this.$peer;
-
-      
-      let chatId = this.$props.chat._id;
-
-      socket.emit('joinCall', chatId);
-      console.log('join-call');
-
-      const myVideo = document.createElement('video');
-      myVideo.muted = true;
+      let chatId = this.$props.chat._id  ;
       const peers = {};
+      const myVideo = document.createElement('video');
+
+      socket.emit('join-room', chatId, myPeer.id );
+      
+
+      const browserSupportsMedia = () => {
+    return navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.mzGetUserMedia
+}
+      myVideo.muted = true;
       navigator.mediaDevices
         .getUserMedia({
           video: true,
@@ -139,40 +133,40 @@ export default {
           addVideoStream(myVideo, stream);
 
           myPeer.on('call', (call) => {
-            console.log('call');
             call.answer(stream);
             const video = document.createElement('video');
+            console.log("ANSWERING CALL");
+
             call.on('stream', (userVideoStream) => {
               addVideoStream(video, userVideoStream);
             });
-          });
+          })
 
-          socket.on('user-connected', (userId) => {
+          socket.on('user-connected', (userId, chatId) => {
+            console.log("USER CONNECTED");
             connectToNewUser(userId, stream);
           });
+
         });
-
-
 
       socket.on('user-disconnected', (userId) => {
         if (peers[userId]) peers[userId].close();
       });
-
-      myPeer.on('open', (id) => {
+      myPeer.on('open', id => {
         socket.emit('join-room', chatId, id);
       });
 
       function connectToNewUser(userId, stream) {
         const call = myPeer.call(userId, stream);
-        const video = document.createElement('video');
+        const  video = document.createElement('video');
+        console.log("CALLING USER");
         call.on('stream', (userVideoStream) => {
           addVideoStream(video, userVideoStream);
         });
+
         call.on('close', () => {
           video.remove();
         });
-
-        peers[userId] = call;
       }
 
       function addVideoStream(video, stream) {
@@ -182,6 +176,7 @@ export default {
         });
         videoGrid.append(video);
       }
+      
     },
   },
   computed: {
@@ -206,11 +201,7 @@ export default {
       });
     },
   },
-  mounted() {
-
-
-
-  },
+  mounted() {},
 };
 </script>
 

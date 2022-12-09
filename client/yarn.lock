@@ -2140,7 +2140,7 @@ camel-case@^4.1.2:
     pascal-case "^3.1.2"
     tslib "^2.0.3"
 
-camelcase@^5.0.0:
+camelcase@^5.0.0, camelcase@^5.3.1:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.3.1.tgz#e3c9b31569e106811df242f715725a1f4c494320"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
@@ -6210,6 +6210,13 @@ vue-loader@^17.0.0:
     chalk "^4.1.0"
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
+
+vue-peerjs@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/vue-peerjs/-/vue-peerjs-0.3.0.tgz#07999105a4043064690db0ea44818e1e7de0d136"
+  integrity sha512-IpUOqtUJdIyyeh1L68K+TM3HNgMFzf4uX6RbiGuoIzlT9AFPZot8fR3YLQHaWfDCGhWccMegWtOqRpfBS8HnjQ==
+  dependencies:
+    camelcase "^5.3.1"
 
 vue-router@^3.5.1:
   version "3.6.5"
