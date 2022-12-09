@@ -63,11 +63,15 @@ p {
 .v-main .v-input {
   color: white!important;
 }
-.v-main .v-input * {
-  color: white!important;
+.v-main .v-input, .v-main .v-input * {
+  color: var(--v-textPrimary-base)!important;
 }
-.v-main .v-messages__message {
+.v-main .v-messages__message, .v-application .error--text {
   color: var(--v-error-base)!important;
+  caret-color: var(--v-error-base)!important;
+}
+.v-input.error--text fieldset {
+  color: var(--v-error-base) !important;
 }
 
 .theme--light.v-application .text--primary {
