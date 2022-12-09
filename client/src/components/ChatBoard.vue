@@ -141,6 +141,15 @@ export default {
     },
   },
   watch: {
+    messageString(oldValue, newValue) {
+      if (this.typingTimeout) {
+        clearTimeout(this.typingTimeout);
+      }
+      this.updateTypingStatus(oldValue.length !== newValue.length);
+      this.typingTimeout = setTimeout(() => {
+        this.updateTypingStatus(false);
+      }, 800);
+    },
     chat() {
       // updates when you click on a new chat
       this.$nextTick(() => {
