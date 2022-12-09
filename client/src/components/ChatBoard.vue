@@ -58,8 +58,8 @@ export default {
     },
   },
   methods: {
-    updateTypingStatus() {
-      if (this.messageString.length > 0) {
+    updateTypingStatus(T) {
+      if (T) {
         console.log('You are typing');
         this.$store.getters.socket.emit('user:typing', {
           chatId: this.$props.chat._id,
