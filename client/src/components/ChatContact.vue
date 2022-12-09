@@ -21,7 +21,9 @@
 
     <!-- notification badge -->
     <v-list-item-action-text>
-      <p class="notification badge rounded-pill text-bg-light">test</p>
+      <p class="notification badge rounded-pill text-bg-light">
+        {{ lastMessageTimestamp }}
+      </p>
     </v-list-item-action-text>
   </v-list-item>
 </template>
@@ -29,6 +31,7 @@
 <script>
 import Chat from '@/classes/chat';
 import Group from '@/classes/group';
+import { formatTime } from '@/utils';
 
 export default {
   name: 'ChatContact',
@@ -59,6 +62,10 @@ export default {
       return this.chat.messages && this.chat.messages.length > 0
         ? this.chat.messages[this.chat.messages.length - 1].content
         : '';
+    },
+    lastMessageTimestamp() {
+      const timestamp = this.chat.messages[this.chat.messages.length - 1].sentAt;
+      return formatTime(timestamp);
     },
     isActive() {
       return this.$store.getters.activeChat?._id === this.chat?._id;

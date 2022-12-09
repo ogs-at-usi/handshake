@@ -33,6 +33,7 @@
 
 <script>
 import Message from '@/classes/message';
+import { formatTime } from '@/utils';
 
 export default {
   name: 'ChatMessage',
@@ -66,11 +67,7 @@ export default {
       const time = this.isSelf
         ? this.$props.message.sentAt
         : this.$props.message.deliveredAt;
-      const datetime = new Date(time);
-      const hours = datetime.getHours().toString().padStart(2, '0');
-      const minutes = datetime.getMinutes().toString().padStart(2, '0');
-      const seconds = datetime.getSeconds().toString().padStart(2, '0');
-      return `${hours}:${minutes}:${seconds}`;
+       return formatTime(time);
     },
     content() {
       const retrieveContent = {};
