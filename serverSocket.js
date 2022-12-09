@@ -86,6 +86,11 @@ function init(server) {
       const { chatId } = data;
       io.to(chatId).emit('user:typing', data);
     });
+
+    socket.on('user:notTyping', (data) => {
+      const { chatId } = data;
+      io.to(chatId).emit('user:notTyping', data);
+    });
   });
 }
 
