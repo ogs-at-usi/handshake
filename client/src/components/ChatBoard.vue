@@ -125,7 +125,10 @@ export default {
         return;
       }
       console.log('someone is not typing', chatId);
-      if (chatId === this.$props.chat._id) {
+      if (
+        chatId === this.$props.chat._id &&
+        userId !== this.$store.state.user._id
+      ) {
         this.otherPrivateUser.typing = false;
       }
     });
