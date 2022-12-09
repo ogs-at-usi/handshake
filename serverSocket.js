@@ -4,7 +4,7 @@ const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
 
 // Initialize the socket.io server
-
+// Passing the onlineUsers set to make it accessible to the socket.io server
 function init(server, onlineUsers) {
   io.attach(server);
 
