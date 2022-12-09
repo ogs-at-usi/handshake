@@ -30,7 +30,6 @@
           placeholder="Type something..."
           class="flex-grow-1"
           v-model="messageString"
-          @keydown="updateTypingStatus"
         />
         <button type="submit">💬</button>
       </form>
