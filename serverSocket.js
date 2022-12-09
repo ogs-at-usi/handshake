@@ -84,7 +84,8 @@ function init(server) {
 
     socket.on('user:typing', (data) => {
       const { chatId } = data;
-      io.to(chatId).emit('user:typing', data);
+      console.log(socket.userId + ' is typing in chat ' + chatId);
+      io.to(chatId).emit('user:typing', { chatId, userId: socket.userId });
     });
 
     socket.on('user:notTyping', (data) => {
