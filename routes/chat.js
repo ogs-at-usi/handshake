@@ -93,14 +93,13 @@ router.post('/chats', async function (req, res) {
 
     let members = await UserChat.find({ chat: chatId }).populate('user').exec();
     members = members.map((member) => member.user);
-
+    const onlineUsers = req.app.locals.onlineUsers;
     members = members.map((member) => {
       return {
         ...member._doc,
-        online: req.app.locals.onlineUsers.has(member._id.toString()),
+        online: onlineUsers.has(member._id.toString()),
       };
     });
-
     io.to(req.userId)
       .to(otherId)
       .emit('chats:create', { ...chat._doc, members });
