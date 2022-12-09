@@ -108,9 +108,15 @@ export default {
     },
   },
   created() {
-    this.$store.getters.socket.on('user:typing', ({ chatId }) => {
-      console.log('someone is typing', chatId);
-      if (chatId === this.$props.chat._id) {
+    this.$store.getters.socket.on('user:typing', ({ chatId, userId }) => {
+      console.log('someone is typing', userId, chatId);
+      if (this.$props.chat === null) {
+        return;
+      }
+      if (
+        chatId === this.$props.chat._id &&
+        userId !== this.$store.state.user._id
+      ) {
         this.otherPrivateUser.typing = true;
       }
     });
