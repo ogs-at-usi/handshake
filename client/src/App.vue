@@ -54,7 +54,7 @@ html {
   overflow-y: auto!important;
 }
 * {
-  color: var(--v-textOnPrimary-base);
+  color: var(--v-textPrimary-base);
 }
 .v-main {
   background:var(--v-background-base);
@@ -76,15 +76,20 @@ html {
   color: var(--v-textPrimary-base)!important
 }
 .theme--light.v-application .text--secondary {
-  color: var(--v-textOnPrimary-base)!important;
+  color: var(--v-textPrimary-base)!important;
   filter: brightness(0.7);
 }
 .theme--dark.v-application .text--secondary {
-  color: var(--v-textOnPrimary-base)!important;
+  color: var(--v-textPrimary-base)!important;
   filter: brightness(1.3);
 }
 
 .mdi {
   color: var(--v-textPrimary-base)!important;
+}
+
+.v-divider {
+  background: var(--v-textPrimary-base)!important;
+  opacity: 0.5;
 }
 </style>

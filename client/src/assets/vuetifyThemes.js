@@ -23,8 +23,8 @@ export default {
     warning: '#FFC107',
     surface: '#162d3d',
     background: '#0f1d27',
-    textOnPrimary: '#ffffff',
-    textOnAccent: '#000000',
+    textPrimary: '#ffffff',
+    textAccent: '#000000',
   },
   green: {
     // generate a theme using the following main color: #00a996
@@ -36,8 +36,8 @@ export default {
     success: '#4CAF50',
     warning: '#FFC107',
     surface: '#c5c5c5',
-    textOnPrimary: '#ffffff',
-    textOnAccent: '#000000',
+    textPrimary: '#ffffff',
+    textAccent: '#000000',
   },
   dark: {
     text: '#ffffff',
