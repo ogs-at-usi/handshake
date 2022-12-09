@@ -38,11 +38,6 @@ function init(server, onlineUsers) {
       })
     );
 
-    /**
-     * chats: [ chat, chat, chat ]
-     * chat: {_id: '...', members: [user, user, user], messages: [message, message, message]}
-     * user: {_id: '...', name: '...', email: '...', password: '...', online: ?}
-     */
 
     chats = chats.map((chat) => {
       chat.members = chat.members.map((member) => {
