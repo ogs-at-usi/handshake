@@ -93,6 +93,7 @@ function init(server) {
       console.log(socket.userId + ' is not typing in chat ' + chatId);
       io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
     });
+
   });
 }
 
