@@ -16,7 +16,7 @@
             }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon>
+            <v-btn icon @click="openSettings">
               <v-icon>mdi-cog</v-icon>
             </v-btn>
           </v-list-item-action>
@@ -32,13 +32,13 @@
             prepend-inner-icon="mdi-magnify"
             single-line
           ></v-text-field>
-          <v-menu offset-y >
+          <v-menu offset-y>
             <template #activator="{ on }">
-              <v-btn class='ms-2' icon @click='startCreateGroup' v-on="on">
+              <v-btn class="ms-2" icon @click="startCreateGroup" v-on="on">
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
-            <v-list style='cursor:pointer'>
+            <v-list style="cursor: pointer">
               <v-list-item-group>
                 <v-list-item>
                   <v-list-item-title>New group</v-list-item-title>
@@ -80,6 +80,9 @@ export default {
   methods: {
     startCreateGroup() {
       this.$emit('startCreateGroup');
+    },
+    openSettings() {
+      this.$emit('openSettings');
     },
   },
 };
