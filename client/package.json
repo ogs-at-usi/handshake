@@ -11,6 +11,8 @@
     "style:prettier:fix": "prettier --write ."
   },
   "dependencies": {
+    "@lottiefiles/lottie-interactivity": "^1.6.1",
+    "@lottiefiles/lottie-player": "^1.6.2",
     "axios": "^1.2.0",
     "core-js": "^3.8.3",
     "socket.io-client": "^4.5.4",
