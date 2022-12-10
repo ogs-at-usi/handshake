@@ -3,8 +3,6 @@
   <v-list-item
     active-class="secondary"
     class="py-2 gap-3"
-    color="background"
-    @click="$store.commit('setActiveChat', { chat })"
   >
     <!-- image of the other user or group chat -->
     <v-list-item-avatar class="mr-0">

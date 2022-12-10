@@ -23,7 +23,7 @@ export default {
     warning: '#FFC107',
     surface: '#162d3d',
     background: '#0f1d27',
-    textPrimary: '#e6f1ff',
+    textPrimary: '#d9e8f8',
     textAccent: '#000000',
   },
   green: {
