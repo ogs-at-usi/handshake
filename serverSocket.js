@@ -38,7 +38,6 @@ function init(server, onlineUsers) {
       })
     );
 
-
     chats = chats.map((chat) => {
       chat.members = chat.members.map((member) => {
         return {
