@@ -113,6 +113,30 @@ export default {
       const peers = {};
       const myVideo = document.createElement('video');
 
+
+      // create a bar to show the video buttons 
+      const videoBar = document.createElement('div');
+      // put inside 3 buttons
+      const videoButton = document.createElement('button');
+      const audioButton = document.createElement('button');
+      const endCallButton = document.createElement('button');
+      // add class to the buttons
+      videoButton.classList.add('videoButton');
+      audioButton.classList.add('audioButton');
+      endCallButton.classList.add('endCallButton');
+      // add text to the buttons
+      videoButton.innerHTML = 'Video';
+      audioButton.innerHTML = 'Audio';
+      endCallButton.innerHTML = 'End Call';
+      // add the buttons to the bar
+      videoBar.appendChild(videoButton);
+      videoBar.appendChild(audioButton);
+      videoBar.appendChild(endCallButton);
+      // add class to the bar
+      videoBar.classList.add('videoBar');
+      videoGrid.appendChild(videoBar);
+      
+
       // add class yo myvideo
       myVideo.classList.add('myVideo');
 
