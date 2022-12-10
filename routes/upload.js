@@ -7,6 +7,15 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 50000000 } }); // 50MB
 const uploadDisk = multer({ dest: "./media/temp", limits: { fileSize: 50000000 } }); // 50MB
+const fileStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './media/files');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.originalname);
+    }
+});
+const uploadFile = multer({ storage: fileStorage, limits: { fileSize: 50000000 } }); // 50MB
 const { ObjectId } = require('mongodb');
 const { saveMessage } = require('../utils/message.utils');
 const FluentFfmpeg = require('fluent-ffmpeg');
@@ -92,6 +101,10 @@ router.post('/video', uploadDisk.single('video'), async function (req, res, next
         console.log(`${dir} is deleted!`);
     });
 
+    newMessage.content = newMessage._id + '.mp4';
+
+    await newMessage.save();
+
     res.status(201).json(file);
 });
 
@@ -111,7 +124,7 @@ router.post('/audio', uploadDisk.single('audio'), async function (req, res, next
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatId, userId, '', 'VIDEO');
+    const newMessage = await saveMessage(chatId, userId, '', 'AUDIO');
 
     if (!newMessage) {
         return res.status(404).end();
@@ -142,11 +155,14 @@ router.post('/audio', uploadDisk.single('audio'), async function (req, res, next
         })
         .save(path);
 
+    newMessage.content = newMessage._id + '.mp3';
+
+    await newMessage.save();
 
     res.status(201).json(file);
 });
 
-router.post('/file', upload.single('file'), async function (req, res, next) {
+router.post('/file', uploadFile.single('file'), async function (req, res, next) {
 
     // TODO: change req.body.chatId to whatever the chatId is
     const chatId = req.body.chatId;
@@ -162,18 +178,18 @@ router.post('/file', upload.single('file'), async function (req, res, next) {
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatId, userId, '', 'VIDEO');
+    const newMessage = await saveMessage(chatId, userId, '', 'DOCUMENT');
 
     if (!newMessage) {
         return res.status(404).end();
     }
 
     const extension = req.file.originalname.split('.').pop();
-    const path = './media/files/' + newMessage._id + extension;
+    // const path = './media/files/' + newMessage._id + "." + extension;
 
-    console.log(path);
-    console.log(file);
+    newMessage.content = newMessage._id + "." + extension;
 
+    await newMessage.save();
     res.status(201).json(file);
 });
 
