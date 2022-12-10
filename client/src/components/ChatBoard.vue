@@ -52,27 +52,27 @@
 
     <!-- lower input bar for new message sending -->
     <v-row
-      class="ma-0 ps-3 pe-5 py-5 gap-1 flex-shrink-0 secondary elevation-5 d-flex justify-center align-center"
+      class="ma-0 px-2 px-md-5 py-3 py-md-5 gap-3 flex-shrink-0 secondary elevation-5 d-flex justify-center align-center flex-nowrap"
       style="z-index: 10">
       <v-btn icon>
         <v-icon>mdi-emoticon</v-icon>
       </v-btn>
       <FileUploader :chat-id="chat._id"></FileUploader>
-      <v-form class="flex-grow-1 ml-3" @submit.prevent="sendMessage">
+      <v-form class="flex-grow-1" @submit.prevent="sendMessage">
         <v-text-field
-          class="gap-4 elevation-0 secondary"
+          ref="messagesInput"
           dense
           v-model="messageString"
-          append-outer-icon="mdi-send"
           color="textPrimary"
           hide-details
           label="Message"
           outlined
           single-line
-          ref="messagesInput"
-          @submit="sendMessage"
-          @click:append-outer="sendMessage" />
+          class="elevation-0 secondary"/>
       </v-form>
+      <v-btn icon @click='sendMessage'>
+        <v-icon>mdi-send</v-icon>
+      </v-btn>
     </v-row>
   </v-container>
 </template>
@@ -215,6 +215,6 @@ export default {
 
 <style scoped>
 #chat-board {
-  height: 100vh;
+  height: 100%;
 }
 </style>
