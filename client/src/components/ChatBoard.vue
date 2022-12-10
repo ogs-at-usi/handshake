@@ -22,9 +22,14 @@
           alt="icon of person you're chatting with"
           src="/icons/default_pfp.png" />
       </v-avatar>
-      <v-toolbar-title class="ml-5">{{
-        otherPrivateUser.name
-      }}</v-toolbar-title>
+      <v-toolbar-title class="ml-5">
+        <span class='text--primary'>{{
+            otherPrivateUser.name
+          }}</span>
+        <span class='text--secondary'>
+          {{ status }}
+        </span>
+      </v-toolbar-title>
       <v-spacer />
       <v-btn class="me-2" icon>
         <v-icon>mdi-video</v-icon>
@@ -86,6 +91,7 @@ export default {
   data() {
     return {
       messageString: '',
+      typingTimeout: null,
     };
   },
   props: {
@@ -95,6 +101,19 @@ export default {
     },
   },
   methods: {
+    updateTypingStatus(typing) {
+      if (typing) {
+        console.log('You are typing');
+        this.$store.getters.socket.emit('user:typing', {
+          chatId: this.$props.chat._id,
+        });
+      } else {
+        console.log('You are not typing');
+        this.$store.getters.socket.emit('user:notTyping', {
+          chatId: this.$props.chat._id,
+        });
+      }
+    },
     scrollDown() {
       // scroll to the bottom of hte chat
       this.$refs.scroll.$el.scrollTop = this.$refs.scroll.$el.scrollHeight;
@@ -130,9 +149,32 @@ export default {
         console.error(err);
       }
     },
-    async sendImage() {},
-    async sendVideo() {},
-    async sendFile() {},
+  },
+  created() {
+    this.$store.getters.socket.on('user:typing', ({ chatId, userId }) => {
+      console.log('someone is typing', userId, chatId);
+      if (this.$props.chat === null) {
+        return;
+      }
+      if (
+        chatId === this.$props.chat._id &&
+        userId !== this.$store.state.user._id
+      ) {
+        this.otherPrivateUser.typing = true;
+      }
+    });
+    this.$store.getters.socket.on('user:notTyping', ({ chatId, userId }) => {
+      if (this.$props.chat === null) {
+        return;
+      }
+      console.log('someone is not typing', chatId);
+      if (
+        chatId === this.$props.chat._id &&
+        userId !== this.$store.state.user._id
+      ) {
+        this.otherPrivateUser.typing = false;
+      }
+    });
   },
   computed: {
     otherPrivateUser() {
@@ -146,8 +188,23 @@ export default {
         return this.otherPrivateUser.name;
       }
     },
+    status() {
+      // priority: typing > online > offline
+      if (this.otherPrivateUser.typing) return 'Typing...';
+      if (this.otherPrivateUser.online) return 'Online';
+      return 'Offline';
+    },
   },
   watch: {
+    messageString(oldValue, newValue) {
+      if (this.typingTimeout) {
+        clearTimeout(this.typingTimeout);
+      }
+      this.updateTypingStatus(oldValue.length !== newValue.length);
+      this.typingTimeout = setTimeout(() => {
+        this.updateTypingStatus(false);
+      }, 800);
+    },
     chat() {
       if (this.chat === null) return;
       // updates when you click on a new chat
