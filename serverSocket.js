@@ -35,12 +35,16 @@ function init(server, onlineUsers) {
           .populate('user')
           .exec();
         return {
-          ...member._doc,
-          online: onlineUsers.has(member._id.toString()),
+          ...chat._doc,
+          members: members.map((member) => {
+            return {
+              ...member.user._doc,
+              online: onlineUsers.has(member.user._id.toString()),
+            };
+          }),
         };
-      });
-      return chat;
-    });
+      })
+    );
 
     return chats;
   }
