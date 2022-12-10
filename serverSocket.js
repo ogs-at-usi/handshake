@@ -34,12 +34,6 @@ function init(server, onlineUsers) {
         const members = await UserChat.find({ chat: chat._id })
           .populate('user')
           .exec();
-        return { ...chat._doc, members: members.map((member) => member.user) };
-      })
-    );
-
-    chats = chats.map((chat) => {
-      chat.members = chat.members.map((member) => {
         return {
           ...member._doc,
           online: onlineUsers.has(member._id.toString()),
