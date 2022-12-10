@@ -1,7 +1,9 @@
 <template>
   <!-- UI: CONTACT -->
   <v-list-item
-    :class="'py-2 gap-3 ' + (isActive ? 'grey lighten-2' : '')"
+    active-class='secondary'
+    class="py-2 gap-3 "
+    color='background'
     @click="$store.commit('setActiveChat', { chat })"
   >
     <!-- image of the other user or group chat -->

@@ -9,7 +9,7 @@
           <v-text-field
             v-model="username"
             :error="errors !== ''"
-            color="text"
+            color="textPrimary"
             hide-details
             label="Username"
             outlined
@@ -21,7 +21,7 @@
             :error-messages="errors"
             :hide-details="errors === ''"
             :type="showPassword ? 'text' : 'password'"
-            color="text"
+            color="textPrimary"
             label="Password"
             outlined
             required

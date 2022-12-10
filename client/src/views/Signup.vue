@@ -8,7 +8,7 @@
         <v-card-text class="pb-3 d-flex flex-column gap-3">
           <v-text-field
             v-model="username"
-            color="text"
+            color="textPrimary"
             label="Username"
             :error-messages="errors.username"
             :rules="[(v) => !!v || 'Username is required']"
@@ -23,7 +23,7 @@
               (v) => !!v || 'Email is required',
               (v) => /.+@.+\..+/.test(v) || 'Email must be valid',
             ]"
-            color="text"
+            color="textPrimary"
             hide-details="auto"
             label="Email"
             outlined
@@ -33,7 +33,7 @@
           <v-text-field
             v-model="password"
             :error-messages="errors.password"
-            color="text"
+            color="textPrimary"
             label="Password"
             hide-details="auto"
             type="password"
@@ -46,7 +46,7 @@
             :rules="[
               () => (password === password2 ? true : 'Passwords do not match'),
             ]"
-            color="text"
+            color="textPrimary"
             hide-details="auto"
             label="Confirm Password"
             outlined

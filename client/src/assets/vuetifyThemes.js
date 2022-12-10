@@ -28,14 +28,15 @@ export default {
   },
   green: {
     // generate a theme using the following main color: #00a996
-    primary: '#46b200',
-    secondary: '#424242',
+    primary: '#008c7a',
+    secondary: '#006b5a',
     accent: '#82B1FF',
     error: '#FF5252',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FFC107',
-    surface: '#c5c5c5',
+    surface: '#0f2d2d',
+    background: '#0f1d1d',
     textPrimary: '#ffffff',
     textAccent: '#000000',
   },

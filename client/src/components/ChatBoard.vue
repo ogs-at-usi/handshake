@@ -12,7 +12,7 @@
       style="z-index: 10"
       height="70px"
       max-height="70px"
-      color='surface'
+      color='secondary'
     >
       <v-app-bar-nav-icon
         class="me-3 d-block d-sm-none"
@@ -52,13 +52,14 @@
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
-    <v-row class="ma-0 flex-shrink-0 surface elevation-5" style="z-index: 10">
+    <v-row class="ma-0 flex-shrink-0 secondary elevation-5" style="z-index: 10">
       <v-form class="w-100" @submit.prevent="sendMessage">
         <v-text-field
+          class="gap-4 px-5 py-5 elevation-0 secondary"
           dense
           v-model="messageString"
           append-outer-icon="mdi-send"
-          class="gap-4 px-5 py-5 elevation-0"
+          color='textPrimary'
           hide-details
           label="Message"
           outlined

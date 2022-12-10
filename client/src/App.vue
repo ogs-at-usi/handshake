@@ -60,6 +60,23 @@ p {
 .v-main {
   background:var(--v-background-base);
 }
+.v-main a {
+  color:var(--v-accent-base)!important;
+}
+.v-main .v-list-item {
+  transition: background .2s;
+}
+.v-main .v-item-group .v-list-item:hover:not(.v-list-item--active)::before{
+  display: block;
+  position:absolute;
+  content: '';
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:var(--v-accent-base);
+  opacity:0.1;
+}
 .v-main .v-input {
   color: white!important;
 }

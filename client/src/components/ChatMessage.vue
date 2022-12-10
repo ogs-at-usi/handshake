@@ -9,6 +9,7 @@
       class="rounded-lg message"
       elevation="2"
       style="height: fit-content"
+      color="primary"
     >
       <v-card-title
         v-if="!isSelf && isGroup"
