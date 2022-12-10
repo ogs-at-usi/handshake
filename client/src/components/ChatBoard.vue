@@ -120,9 +120,7 @@ export default {
       socket.emit('join-room', chatId, myPeer.id );
       
 
-      const browserSupportsMedia = () => {
-    return navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.mzGetUserMedia
-}
+
       myVideo.muted = true;
       navigator.mediaDevices
         .getUserMedia({
@@ -148,7 +146,7 @@ export default {
           });
 
         });
-
+        myVideo.controls = true;
       socket.on('user-disconnected', (userId) => {
         if (peers[userId]) peers[userId].close();
       });
@@ -176,10 +174,12 @@ export default {
         });
         videoGrid.append(video);
       }
+
       
     },
   },
   computed: {
+
     otherPrivateUser() {
       const [us1, us2] = this.chat.members;
       return us1._id !== this.$store.getters.user._id ? us1 : us2;
