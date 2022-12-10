@@ -20,14 +20,34 @@ on:
       - develop
 
 jobs:
-  code-style:
+  build-vue:
+    name: Build Vue.js app
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./client
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install packages
+        run: yarn
+
+      - name: Build Vue.js app
+        run: yarn run build
+
+
+  code-style-express:
     name: Run style checks for Express server
 
     runs-on: ${{ matrix.os }}
-
-#    defaults:
-#        run:
-#            working-directory: ./
 
     strategy:
       matrix:
@@ -93,10 +113,6 @@ jobs:
     name: Run tests
 
     runs-on: ${{ matrix.os }}
-
-#    defaults:
-#        run:
-#            working-directory: ./
 
     strategy:
       matrix:
