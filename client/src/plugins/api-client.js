@@ -5,9 +5,9 @@ class ApiClient {
 
   /**
    * Retrieve the list of chats that match the filter.
-   * @param username
-   * @param password
-   * @returns {*}
+   * @param username {String} the username
+   * @param password {String} the password
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
   login(username, password) {
     return this.axiosInstance.post('/auth/login', { username, password });
@@ -56,6 +56,18 @@ class ApiClient {
     return this.axiosInstance.post(`/api/chats/${chatID}/messages`, {
       message,
     });
+  }
+
+  /**
+   * Send a file in a chat.
+   * @param chatID {string} The ID of the chat
+   * @param file {File} The file to send
+   * @param type {string} The type of the file: image / video / file
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  sendFile(chatID, file, type) {
+    // TODO: Sofi implement this
+    console.log(chatID, file, type);
   }
 }
 

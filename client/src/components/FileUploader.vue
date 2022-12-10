@@ -5,36 +5,39 @@
         <v-icon>mdi-paperclip</v-icon>
       </v-btn>
     </template>
-    <v-list color="secondary" style="cursor: pointer">
-      <v-list-item-group color="secondary">
-        <v-list-item>
-          <v-list-item-title @click="sendImage">Send image</v-list-item-title>
+    <v-list color="secondary" flat style="cursor: pointer">
+      <v-list-item-group color="secondary" >
+        <v-list-item @click="sendImage">
+          <v-list-item-title>Send image</v-list-item-title>
           <input
             id="file1"
             ref="fileImage"
             accept="image/*"
             style="display: none"
+            hidden
             type="file"
             @change="onFileChange($event, 'image')"
           />
         </v-list-item>
-        <v-list-item>
-          <v-list-item-title @click="sendVideo">Send video</v-list-item-title>
+        <v-list-item @click="sendVideo">
+          <v-list-item-title>Send video</v-list-item-title>
           <input
             id="file2"
             ref="fileVideo"
             accept="video/*"
+            hidden
             style="display: none"
             type="file"
             @change="onFileChange($event, 'video')"
           />
         </v-list-item>
-        <v-list-item>
-          <v-list-item-title @click="sendFile">Send file</v-list-item-title>
+        <v-list-item @click="sendFile">
+          <v-list-item-title>Send file</v-list-item-title>
           <input
             id="file3"
             ref="fileFile"
             accept="*"
+            hidden
             style="display: none"
             type="file"
             @change="onFileChange($event, 'file')"
@@ -72,7 +75,7 @@ export default {
     onFileChange(e, type) {
       const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
-      console.log(files[0], type);
+      this.$api.sendFile(this.chatId, files[0], type);
     },
   },
 };
