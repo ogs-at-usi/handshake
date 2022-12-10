@@ -10,6 +10,6 @@ server.on('listening', function () {
   console.log('Express server listening on port ' + server.address().port);
 });
 
-serverSocket.init(server);
+serverSocket.init(server, app.locals.onlineUsers);
 initDB();
 server.listen(app.get('port'));

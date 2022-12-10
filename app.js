@@ -31,4 +31,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
+app.locals.onlineUsers = new Set();
+
 module.exports = app;

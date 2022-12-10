@@ -28,15 +28,36 @@ export default {
       chats: null,
     };
   },
-  mounted() {
+  created() {
     const socket = io(':8888');
     console.log('Trying to connect');
-    this.$store.commit('setSocket', socket);
+    this.$store.commit('setSocket', { socket });
 
     socket.on('chats:read', (chats) => {
-      console.log('EVENT chats:read -', chats);
       this.chats = chats.map((chat) => new Chat(chat));
       // this.setActiveChat(this.chats[0]._id);
+    });
+
+    socket.on('users:online', (userId) => {
+      if (!this.chats) return;
+      this.chats.forEach((chat) => {
+        chat.members.forEach((member) => {
+          if (member._id === userId) {
+            member.online = true;
+          }
+        });
+      });
+    });
+
+    socket.on('users:offline', (userId) => {
+      console.log('EVENT users:offline -', userId);
+      this.chats.forEach((chat) => {
+        chat.members.forEach((member) => {
+          if (member._id === userId) {
+            member.online = false;
+          }
+        });
+      });
     });
 
     socket.on('messages:create', (message) => {

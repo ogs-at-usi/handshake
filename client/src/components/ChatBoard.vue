@@ -4,6 +4,7 @@
     <header class="d-flex flex-row gap-4 align-items-center">
       <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
       <h2 class="m-0 text-truncate">{{ chatName }}</h2>
+      <h4>{{ status }}</h4>
     </header>
 
     <!-- message container -->
@@ -47,6 +48,7 @@ export default {
   data() {
     return {
       messageString: '',
+      typingTimeout: null,
     };
   },
   props: {
@@ -56,6 +58,19 @@ export default {
     },
   },
   methods: {
+    updateTypingStatus(typing) {
+      if (typing) {
+        console.log('You are typing');
+        this.$store.getters.socket.emit('user:typing', {
+          chatId: this.$props.chat._id,
+        });
+      } else {
+        console.log('You are not typing');
+        this.$store.getters.socket.emit('user:notTyping', {
+          chatId: this.$props.chat._id,
+        });
+      }
+    },
     scrollDown() {
       const e = this.$refs.scroll;
       e.scrollTop = e.scrollHeight;
@@ -92,6 +107,32 @@ export default {
       }
     },
   },
+  created() {
+    this.$store.getters.socket.on('user:typing', ({ chatId, userId }) => {
+      console.log('someone is typing', userId, chatId);
+      if (this.$props.chat === null) {
+        return;
+      }
+      if (
+        chatId === this.$props.chat._id &&
+        userId !== this.$store.state.user._id
+      ) {
+        this.otherPrivateUser.typing = true;
+      }
+    });
+    this.$store.getters.socket.on('user:notTyping', ({ chatId, userId }) => {
+      if (this.$props.chat === null) {
+        return;
+      }
+      console.log('someone is not typing', chatId);
+      if (
+        chatId === this.$props.chat._id &&
+        userId !== this.$store.state.user._id
+      ) {
+        this.otherPrivateUser.typing = false;
+      }
+    });
+  },
   computed: {
     otherPrivateUser() {
       const [us1, us2] = this.chat.members;
@@ -104,8 +145,23 @@ export default {
         return this.otherPrivateUser.name;
       }
     },
+    status() {
+      // priority: typing > online > offline
+      if (this.otherPrivateUser.typing) return 'Typing...';
+      if (this.otherPrivateUser.online) return 'Online';
+      return 'Offline';
+    },
   },
   watch: {
+    messageString(oldValue, newValue) {
+      if (this.typingTimeout) {
+        clearTimeout(this.typingTimeout);
+      }
+      this.updateTypingStatus(oldValue.length !== newValue.length);
+      this.typingTimeout = setTimeout(() => {
+        this.updateTypingStatus(false);
+      }, 800);
+    },
     chat() {
       // updates when you click on a new chat
       this.$nextTick(() => {
