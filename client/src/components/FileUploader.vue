@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <v-list color="secondary" flat style="cursor: pointer">
-      <v-list-item-group color="secondary" >
+      <v-list-item-group color="secondary">
         <v-list-item @click="sendImage">
           <v-list-item-title>Send image</v-list-item-title>
           <input
