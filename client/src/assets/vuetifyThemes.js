@@ -48,6 +48,14 @@ export default {
     textPrimary: '#ffebd6',
     textAccent: '#000000',
   },
+  pink: {
+    purecolor: '#ee1657',
+    primary: '#7e2b44',
+    secondary: '#8d1439',
+    surface: '#461826',
+    background: '#3a0e1b',
+    textPrimary: '#ffe6ee',
+  },
   dark: {
     text: '#ffffff',
     primary: '#00528c',
