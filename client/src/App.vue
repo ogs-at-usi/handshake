@@ -134,7 +134,7 @@ h4 {
 
 .v-divider.visible {
   background: var(--v-primary-base) !important;
-  opacity: 0.3;
-  filter: brightness(1.2);
+  opacity: 0.2;
+  filter: brightness(1.5);
 }
 </style>
