@@ -69,8 +69,8 @@ function init(server) {
     socket.on('leave-room', (roomId, userId) => {
     console.log('leave-room', roomId, userId);
     const newroom = "videocall_"+roomId;
+    io.to(newroom).emit('user-disconnected', userId, roomId)
     socket.leave(newroom);
-    socket.to(newroom).emit('user-disconnected', userId, roomId)
 
     })
 

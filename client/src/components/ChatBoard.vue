@@ -113,13 +113,14 @@ export default {
       const peers = {};
       const myVideo = document.createElement('video');
 
-
-      // create a bar to show the video buttons 
+      // create a bar to show the video buttons
       const videoBar = document.createElement('div');
       // put inside 3 buttons
       const videoButton = document.createElement('button');
       const audioButton = document.createElement('button');
       const endCallButton = document.createElement('button');
+      let myStream;
+
       // add class to the buttons
       videoButton.classList.add('videoButton');
       audioButton.classList.add('audioButton');
@@ -135,11 +136,10 @@ export default {
       // add class to the bar
       videoBar.classList.add('videoBar');
       videoGrid.appendChild(videoBar);
-      
+
       addFunctionToButtons(videoButton, audioButton, endCallButton, myVideo);
       // add class yo myvideo
       myVideo.classList.add('myVideo');
-
 
       socket.emit('join-room', chatId, myPeer.id);
 
@@ -150,7 +150,7 @@ export default {
           audio: true,
         })
         .then((stream) => {
-          addVideoStream(myVideo, stream , true);
+          addVideoStream(myVideo, stream, true);
 
           myPeer.on('call', (call) => {
             call.answer(stream);
@@ -166,12 +166,24 @@ export default {
           socket.on('user-connected', (userId, chatId) => {
             console.log('USER CONNECTED');
             connectToNewUser(userId, stream);
-          });          
-        });
+          });
 
-      socket.on('user-disconnected', (userId) => {
-        if (peers[userId]) peers[userId].close();
-      });
+          socket.on('user-disconnected', (userId) => {
+            console.log('USER DISCONNECTED');
+            if (peers[userId]) peers[userId].close();
+            var videoTracks = stream.getVideoTracks();
+            videoTracks.forEach(function (track) {
+              track.stop();
+            });
+
+            var audioTracks = stream.getAudioTracks();
+            audioTracks.forEach(function (track) {
+              track.stop();
+            });
+          });
+
+
+        });
       myPeer.on('open', (id) => {
         socket.emit('join-room', chatId, id);
       });
@@ -185,7 +197,7 @@ export default {
         });
 
         // how to call this callback when the user leaves the chat
-        // 
+        //
         call.on('close', () => {
           video.remove();
         });
@@ -199,14 +211,16 @@ export default {
         if (!myvideo) {
           video.classList.add('videoOther');
         }
-        // add class to video 
+        // add class to video
         videoGrid.append(video);
-
       }
 
-      
-      function addFunctionToButtons(videoButton, audioButton, endCallButton, myVideo){
-
+      function addFunctionToButtons(
+        videoButton,
+        audioButton,
+        endCallButton,
+        myVideo
+      ) {
         videoButton.addEventListener('click', () => {
           if (myVideo.srcObject.getVideoTracks()[0].enabled) {
             myVideo.srcObject.getVideoTracks()[0].enabled = false;
@@ -235,18 +249,12 @@ export default {
           myVideo.remove();
           // remove the bar
           videoBar.remove();
-          // remove the video grid
-          videoGrid.remove();
-          // remove the video grid from the chat
-          this.$refs['video-grid'].remove();
-          // remove the video grid from the chat
 
+          // remove the video grid              // turn off the request for video and audio
+          // remove the video grid from the chat
           socket.emit('leave-room', chatId, myPeer.id);
-          // socket.emit('disconnect');
+          // disable the permission for video and audio from navigator
         });
-
-        
-
       }
     },
   },
@@ -298,9 +306,6 @@ export default {
   object-fit: cover;
   margin: 10px;
 }
-
-
-
 
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css');
 </style>
