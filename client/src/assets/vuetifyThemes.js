@@ -23,7 +23,7 @@ export default {
     warning: '#FFC107',
     surface: '#162d3d',
     background: '#0f1d27',
-    textPrimary: '#e1e8f1',
+    textPrimary: '#e6f1ff',
     textAccent: '#000000',
   },
   green: {
@@ -37,7 +37,7 @@ export default {
     warning: '#FFC107',
     surface: '#0f2d2d',
     background: '#0f1d1d',
-    textPrimary: '#e9f6f5',
+    textPrimary: '#e9fffe',
     textAccent: '#000000',
   },
   orange: {
