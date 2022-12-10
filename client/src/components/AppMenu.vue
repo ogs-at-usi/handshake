@@ -47,7 +47,7 @@
             </v-list>
           </v-menu>
         </v-list-item>
-        <v-divider></v-divider>
+        <v-divider class='visible'></v-divider>
         <ChatList v-if="searchedUser === ''" :chats="chats"></ChatList>
         <UsersList
           v-else

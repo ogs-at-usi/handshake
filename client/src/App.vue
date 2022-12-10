@@ -38,7 +38,7 @@ export default {
     },
   },
   created() {
-    this.setTheme('blue');
+    this.setTheme('green');
   }
 };
 </script>
@@ -96,7 +96,7 @@ p {
 }
 .theme--light.v-application .text--secondary {
   color: var(--v-textPrimary-base)!important;
-  filter: brightness(0.7);
+  filter: brightness(0.85);
 }
 .theme--dark.v-application .text--secondary {
   color: var(--v-textPrimary-base)!important;
@@ -107,8 +107,9 @@ p {
   color: var(--v-textPrimary-base)!important;
 }
 
-.v-divider {
-  background: var(--v-textPrimary-base)!important;
-  opacity: 0.5;
+.v-divider.visible {
+  background: var(--v-primary-base)!important;
+  opacity: 0.3;
+  filter:brightness(1.2);
 }
 </style>
