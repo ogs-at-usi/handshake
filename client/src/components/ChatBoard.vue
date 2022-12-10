@@ -26,7 +26,7 @@
         <span class='text--primary'>{{
             otherPrivateUser.name
           }}</span>
-        <span class='text--secondary'>
+        <span class='text--secondary subtitle-2 d-block ' style='line-height:1.1'>
           {{ status }}
         </span>
       </v-toolbar-title>
@@ -103,12 +103,10 @@ export default {
   methods: {
     updateTypingStatus(typing) {
       if (typing) {
-        console.log('You are typing');
         this.$store.getters.socket.emit('user:typing', {
           chatId: this.$props.chat._id,
         });
       } else {
-        console.log('You are not typing');
         this.$store.getters.socket.emit('user:notTyping', {
           chatId: this.$props.chat._id,
         });
@@ -152,7 +150,6 @@ export default {
   },
   created() {
     this.$store.getters.socket.on('user:typing', ({ chatId, userId }) => {
-      console.log('someone is typing', userId, chatId);
       if (this.$props.chat === null) {
         return;
       }
@@ -167,7 +164,6 @@ export default {
       if (this.$props.chat === null) {
         return;
       }
-      console.log('someone is not typing', chatId);
       if (
         chatId === this.$props.chat._id &&
         userId !== this.$store.state.user._id
