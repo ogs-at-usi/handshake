@@ -61,10 +61,11 @@ function init(server) {
     const newroom = "videocall_"+roomId;
     socket.join(newroom);
     socket.broadcast.to(newroom).emit('user-connected', userId, roomId)
-
+      
     socket.on('disconnect', () => {
       socket.broadcast.to(roomId).emit('user-disconnected', userId)
     })
+    
   });
 
 });

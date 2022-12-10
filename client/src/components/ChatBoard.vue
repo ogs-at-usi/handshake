@@ -19,10 +19,6 @@
       ></ChatMessage>
 
       <div ref="video-grid"></div>
-
-      <div class="popup" v-if="showPopup">
-        <div class="video-grid"></div>
-      </div>
     </main>
 
     <!-- lower input bar for new message sending -->
@@ -113,13 +109,15 @@ export default {
       const videoGrid = this.$refs['video-grid'];
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
-      let chatId = this.$props.chat._id  ;
+      let chatId = this.$props.chat._id;
       const peers = {};
       const myVideo = document.createElement('video');
 
-      socket.emit('join-room', chatId, myPeer.id );
-      
+      // add class yo myvideo
+      myVideo.classList.add('myVideo');
 
+
+      socket.emit('join-room', chatId, myPeer.id);
 
       myVideo.muted = true;
       navigator.mediaDevices
@@ -128,38 +126,38 @@ export default {
           audio: true,
         })
         .then((stream) => {
-          addVideoStream(myVideo, stream);
+          addVideoStream(myVideo, stream , true);
 
           myPeer.on('call', (call) => {
             call.answer(stream);
             const video = document.createElement('video');
-            console.log("ANSWERING CALL");
+
+            console.log('ANSWERING CALL');
 
             call.on('stream', (userVideoStream) => {
               addVideoStream(video, userVideoStream);
             });
-          })
-
-          socket.on('user-connected', (userId, chatId) => {
-            console.log("USER CONNECTED");
-            connectToNewUser(userId, stream);
           });
 
+          socket.on('user-connected', (userId, chatId) => {
+            console.log('USER CONNECTED');
+            connectToNewUser(userId, stream);
+          });          
         });
-        myVideo.controls = true;
+
       socket.on('user-disconnected', (userId) => {
         if (peers[userId]) peers[userId].close();
       });
-      myPeer.on('open', id => {
+      myPeer.on('open', (id) => {
         socket.emit('join-room', chatId, id);
       });
 
       function connectToNewUser(userId, stream) {
         const call = myPeer.call(userId, stream);
-        const  video = document.createElement('video');
-        console.log("CALLING USER");
+        const video = document.createElement('video');
+        console.log('CALLING USER');
         call.on('stream', (userVideoStream) => {
-          addVideoStream(video, userVideoStream);
+          addVideoStream(video, userVideoStream, false);
         });
 
         call.on('close', () => {
@@ -167,19 +165,21 @@ export default {
         });
       }
 
-      function addVideoStream(video, stream) {
+      function addVideoStream(video, stream, myvideo = false) {
         video.srcObject = stream;
         video.addEventListener('loadedmetadata', () => {
           video.play();
         });
+        if (!myvideo) {
+          video.classList.add('videoOther');
+        }
+        // add class to video 
         videoGrid.append(video);
-      }
 
-      
+      }
     },
   },
   computed: {
-
     otherPrivateUser() {
       const [us1, us2] = this.chat.members;
       return us1._id !== this.$store.getters.user._id ? us1 : us2;
@@ -212,10 +212,24 @@ export default {
   grid-auto-rows: 300px;
 }
 
-video {
-  width: 100%;
-  height: 100%;
+.myVideo {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
   object-fit: cover;
+  margin: 10px;
 }
+
+.otherVideo {
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin: 10px;
+}
+
+
+
+
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css');
 </style>
