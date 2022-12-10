@@ -4,27 +4,23 @@
     id="chat-board"
     class="w-100 pa-0 d-flex flex-column"
     fluid
-    style="height: 100vh; overflow: hidden"
-  >
+    style="height: 100vh; overflow: hidden">
     <!-- image & name of the chat: other user image or group image -->
     <v-toolbar
       class="flex-shrink-1 elevation-3"
       style="z-index: 10"
       height="70px"
       max-height="70px"
-      color="secondary"
-    >
+      color="secondary">
       <v-app-bar-nav-icon
         class="me-3 d-block d-sm-none"
-        @click="$store.commit('setActiveChat', { chat: null })"
-      >
+        @click="$store.commit('setActiveChat', { chat: null })">
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon>
       <v-avatar>
         <img
           alt="icon of person you're chatting with"
-          src="/icons/default_pfp.png"
-        />
+          src="/icons/default_pfp.png" />
       </v-avatar>
       <v-toolbar-title class="ml-5">{{
         otherPrivateUser.name
@@ -41,21 +37,18 @@
     <!-- message container -->
     <vue-custom-scrollbar
       ref="scroll"
-      class="overflow-y-none h-100 py-5 px-4 gap-3 d-flex flex-column"
-    >
+      class="overflow-y-none h-100 py-5 px-4 gap-3 d-flex flex-column">
       <ChatMessage
         v-for="(msg, index) in chat.messages"
         ref="message"
         :key="index"
-        :message="msg"
-      ></ChatMessage>
+        :message="msg"></ChatMessage>
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
     <v-row
       class="ma-0 ps-3 pe-5 py-5 gap-1 flex-shrink-0 secondary elevation-5 d-flex justify-center align-center"
-      style="z-index: 10"
-    >
+      style="z-index: 10">
       <v-btn icon>
         <v-icon>mdi-emoticon</v-icon>
       </v-btn>
@@ -73,8 +66,7 @@
           single-line
           ref="messagesInput"
           @submit="sendMessage"
-          @click:append-outer="sendMessage"
-        />
+          @click:append-outer="sendMessage" />
       </v-form>
     </v-row>
   </v-container>

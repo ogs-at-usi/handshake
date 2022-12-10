@@ -4,11 +4,9 @@
       <v-container
         v-if="hasLayout"
         class="flex-column h-100 d-flex flex-column pa-0 ma-0 surface--darken2"
-        fluid
-      >
+        fluid>
         <div
-          class="primary d-flex flex-row justify-space-between align-center pa-3"
-        >
+          class="primary d-flex flex-row justify-space-between align-center pa-3">
           <h1 class="white--text">HandShake</h1>
           <v-btn color="white" outlined>About us</v-btn>
         </div>

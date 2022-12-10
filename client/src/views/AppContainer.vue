@@ -6,15 +6,13 @@
       v-if="!($store.getters.isMobile && activeChat !== null)"
       class="col-12 col-sm-5 col-md-4 col-lg-3"
       :chats="chats"
-      @userSelected="userSelected($event)"
-    ></AppMenu>
+      @userSelected="userSelected($event)"></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
     <ChatBoard
       ref="chatBoard"
       :chat="activeChat"
-      class="flex-grow-1"
-    ></ChatBoard>
+      class="flex-grow-1"></ChatBoard>
   </v-container>
 </template>
 

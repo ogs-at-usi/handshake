@@ -1,15 +1,13 @@
 <template>
   <v-container class="pa-0 justify-space-around d-flex flex-column" fluid>
     <div
-      class="primary d-flex flex-row justify-space-between align-center pa-3"
-    >
+      class="primary d-flex flex-row justify-space-between align-center pa-3">
       <h1 class="white--text">HandShake</h1>
       <v-btn color="white" outlined>About us</v-btn>
     </div>
     <section
       id="aboutus"
-      class="d-flex flex-row justify-space-around align-center text-center flex-wrap gap-3 mt-8"
-    >
+      class="d-flex flex-row justify-space-around align-center text-center flex-wrap gap-3 mt-8">
       <section class="col-12 col-md-5">
         <h1 class="text-h1 font-weight-bold primary--text">Hand<br />Shake</h1>
         <p>Connecting the world, one Shake at a time.</p>
@@ -29,8 +27,7 @@
           background="transparent"
           speed="1"
           src="/icons/scroll_down.json"
-          style="width: 100px"
-        >
+          style="width: 100px">
         </lottie-player>
       </section>
 
@@ -41,8 +38,7 @@
           background="transparent"
           speed="1"
           src="/icons/handshake_anim.json"
-          style="width: 100%"
-        >
+          style="width: 100%">
         </lottie-player>
       </section>
 
@@ -54,8 +50,7 @@
       </section>
 
       <v-row
-        class="ma-0 pa-0 d-flex flex-row justify-space-around align-center"
-      >
+        class="ma-0 pa-0 d-flex flex-row justify-space-around align-center">
         <section class="col-12 col-sm-5">
           <lottie-player
             id="lottie_chatmessage"
@@ -63,8 +58,7 @@
             background="transparent"
             speed="1"
             src="/icons/chatmessages.json"
-            style="width: 100%"
-          >
+            style="width: 100%">
           </lottie-player>
         </section>
         <section class="col-12 col-sm-6">
@@ -86,8 +80,7 @@
       </v-row>
 
       <v-row
-        class="pa-0 ma-0 d-flex justify-space-around flex-row mt-5 align-center"
-      >
+        class="pa-0 ma-0 d-flex justify-space-around flex-row mt-5 align-center">
         <section class="col-12 col-md-6 text-center text-md-start">
           <h1 class="display-2">
             A new generation of chat, for a new generation of users.
@@ -105,8 +98,7 @@
             background="transparent"
             speed="1"
             src="/icons/icon_battle.json"
-            style="width: 100%"
-          >
+            style="width: 100%">
           </lottie-player>
         </section>
       </v-row>

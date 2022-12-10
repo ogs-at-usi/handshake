@@ -16,8 +16,7 @@
             style="display: none"
             hidden
             type="file"
-            @change="onFileChange($event, 'image')"
-          />
+            @change="onFileChange($event, 'image')" />
         </v-list-item>
         <v-list-item @click="sendVideo">
           <v-list-item-title>Send video</v-list-item-title>
@@ -28,8 +27,7 @@
             hidden
             style="display: none"
             type="file"
-            @change="onFileChange($event, 'video')"
-          />
+            @change="onFileChange($event, 'video')" />
         </v-list-item>
         <v-list-item @click="sendFile">
           <v-list-item-title>Send file</v-list-item-title>
@@ -40,8 +38,7 @@
             hidden
             style="display: none"
             type="file"
-            @change="onFileChange($event, 'file')"
-          />
+            @change="onFileChange($event, 'file')" />
         </v-list-item>
       </v-list-item-group>
     </v-list>

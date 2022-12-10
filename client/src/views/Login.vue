@@ -13,8 +13,7 @@
             hide-details
             label="Username"
             outlined
-            required
-          ></v-text-field>
+            required></v-text-field>
           <v-text-field
             v-model="password"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -25,8 +24,7 @@
             label="Password"
             outlined
             required
-            @click:append="showPassword = !showPassword"
-          ></v-text-field>
+            @click:append="showPassword = !showPassword"></v-text-field>
         </v-card-text>
         <v-card-actions class="justify-center">
           <v-btn color="primary" large type="submit" :loading="loading"

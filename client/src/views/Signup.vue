@@ -14,8 +14,7 @@
             :rules="[(v) => !!v || 'Username is required']"
             hide-details="auto"
             outlined
-            required
-          ></v-text-field>
+            required></v-text-field>
           <v-text-field
             v-model="email"
             :error-messages="errors.email"
@@ -27,8 +26,7 @@
             hide-details="auto"
             label="Email"
             outlined
-            required
-          />
+            required />
           <v-divider />
           <v-text-field
             v-model="password"
@@ -38,8 +36,7 @@
             hide-details="auto"
             type="password"
             outlined
-            required
-          ></v-text-field>
+            required></v-text-field>
           <v-text-field
             v-model="password2"
             :error-messages="errors.password2"
@@ -51,8 +48,7 @@
             label="Confirm Password"
             outlined
             required
-            type="password"
-          ></v-text-field>
+            type="password"></v-text-field>
         </v-card-text>
         <v-card-actions class="justify-center">
           <v-btn color="primary" large type="submit">Sign Up</v-btn>

@@ -30,8 +30,7 @@
             outlined
             prepend-inner-icon="mdi-magnify"
             single-line
-            color="textPrimary"
-          ></v-text-field>
+            color="textPrimary"></v-text-field>
           <v-menu offset-y>
             <template #activator="{ on }">
               <v-btn class="ms-2" icon @click="startCreateGroup" v-on="on">
@@ -53,8 +52,7 @@
           v-else
           :filter="searchedUser"
           @userSelected="searchedUser = ''"
-          v-on="$listeners"
-        ></UsersList>
+          v-on="$listeners"></UsersList>
       </v-list>
     </v-navigation-drawer>
   </v-container>

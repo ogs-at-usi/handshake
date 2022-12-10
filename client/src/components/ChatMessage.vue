@@ -2,15 +2,13 @@
   <!-- UI: MESSAGE -->
   <div
     :style="{ justifyContent: isSelf ? 'end' : 'start' }"
-    class="ma-0 d-flex"
-  >
+    class="ma-0 d-flex">
     <v-card
       :id="message._id"
       class="rounded-lg message"
       elevation="2"
       style="height: fit-content"
-      color="primary"
-    >
+      color="primary">
       <v-card-title
         v-if="!isSelf && isGroup"
         class="font-weight-regular subtitle-1 pa-3 pb-0"

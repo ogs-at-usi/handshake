@@ -13,8 +13,7 @@
       :key="index"
       :user="user"
       class="ps-4 py-3"
-      @click.native="$emit('userSelected', user)"
-    />
+      @click.native="$emit('userSelected', user)" />
   </v-list-item-group>
 </template>
 
