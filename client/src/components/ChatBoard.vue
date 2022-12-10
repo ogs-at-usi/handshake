@@ -1,7 +1,7 @@
 <template>
   <v-container
     v-if="chat !== null"
-    id='chat-board'
+    id="chat-board"
     class="w-100 pa-0 d-flex flex-column"
     fluid
     style="height: 100vh; overflow: hidden"
@@ -12,7 +12,7 @@
       style="z-index: 10"
       height="70px"
       max-height="70px"
-      color='secondary'
+      color="secondary"
     >
       <v-app-bar-nav-icon
         class="me-3 d-block d-sm-none"
@@ -59,7 +59,7 @@
           dense
           v-model="messageString"
           append-outer-icon="mdi-send"
-          color='textPrimary'
+          color="textPrimary"
           hide-details
           label="Message"
           outlined

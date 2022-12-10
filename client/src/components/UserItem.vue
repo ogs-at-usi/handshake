@@ -1,5 +1,5 @@
 <template>
-  <v-list-item class="py-2 gap-3" color='primary'>
+  <v-list-item class="py-2 gap-3" color="primary">
     <!-- image of the other user or group chat -->
     <v-list-item-avatar class="mr-0">
       <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
@@ -14,7 +14,6 @@
         {{ user.email }}
       </v-list-item-subtitle>
     </v-list-item-content>
-
   </v-list-item>
 </template>
 

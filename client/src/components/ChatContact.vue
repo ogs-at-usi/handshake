@@ -1,9 +1,9 @@
 <template>
   <!-- UI: CONTACT -->
   <v-list-item
-    active-class='secondary'
-    class="py-2 gap-3 "
-    color='background'
+    active-class="secondary"
+    class="py-2 gap-3"
+    color="background"
     @click="$store.commit('setActiveChat', { chat })"
   >
     <!-- image of the other user or group chat -->
@@ -22,7 +22,7 @@
     </v-list-item-content>
 
     <!-- notification badge -->
-    <v-list-item-action-text class='pb-3 align-self-end'>
+    <v-list-item-action-text class="pb-3 align-self-end">
       <p class="notification badge rounded-pill text-bg-light">
         {{ lastMessageTimestamp }}
       </p>
@@ -66,7 +66,8 @@ export default {
         : '';
     },
     lastMessageTimestamp() {
-      const timestamp = this.chat.messages[this.chat.messages.length - 1].sentAt;
+      const timestamp =
+        this.chat.messages[this.chat.messages.length - 1].sentAt;
       return formatTime(timestamp);
     },
     isActive() {

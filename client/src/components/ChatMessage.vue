@@ -14,7 +14,7 @@
       <v-card-title
         v-if="!isSelf && isGroup"
         class="font-weight-regular subtitle-1 pa-3 pb-0"
-        >{{senderName}}</v-card-title
+        >{{ senderName }}</v-card-title
       >
       <v-card-text class="pa-3 pb-1 text--primary">
         {{ content }}
@@ -68,7 +68,7 @@ export default {
       const time = this.isSelf
         ? this.$props.message.sentAt
         : this.$props.message.deliveredAt;
-       return formatTime(time);
+      return formatTime(time);
     },
     content() {
       const retrieveContent = {};
@@ -97,11 +97,11 @@ export default {
 
 <style scoped>
 .message {
-  max-width: 70%!important;
+  max-width: 70% !important;
 }
 @media only screen and (max-width: 600px) {
   .message {
-    max-width: 85%!important;
+    max-width: 85% !important;
   }
 }
 </style>

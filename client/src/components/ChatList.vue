@@ -1,10 +1,6 @@
 <template>
-  <v-list-item-group >
-    <ChatContact
-      v-for="(chat, index) in chats"
-      :key="index"
-      :chat="chat"
-    />
+  <v-list-item-group>
+    <ChatContact v-for="(chat, index) in chats" :key="index" :chat="chat" />
   </v-list-item-group>
 </template>
 

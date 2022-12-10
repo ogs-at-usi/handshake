@@ -1,17 +1,17 @@
 <template>
   <!-- MENU WITH OWN IMAGE, SEARCH BAR AND CONTACTS LIST -->
   <v-container class="pa-0 w-100 ma-0 h-100" fluid>
-    <v-navigation-drawer clipped color='surface' permanent width="100%">
-      <v-list class='pt-0' flat>
-        <v-list-item class='pt-2 secondary'>
+    <v-navigation-drawer clipped color="surface" permanent width="100%">
+      <v-list class="pt-0" flat>
+        <v-list-item class="pt-2 secondary">
           <v-list-item-avatar>
             <img alt="pfp" src="/icons/default_pfp.png" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title class='font-weight-bold'>{{
+            <v-list-item-title class="font-weight-bold">{{
               $store.getters.user.name
             }}</v-list-item-title>
-            <v-list-item-subtitle class='text--secondary'>{{
+            <v-list-item-subtitle class="text--secondary">{{
               $store.getters.user.email
             }}</v-list-item-subtitle>
           </v-list-item-content>
@@ -30,7 +30,7 @@
             outlined
             prepend-inner-icon="mdi-magnify"
             single-line
-            color='textPrimary'
+            color="textPrimary"
           ></v-text-field>
           <v-menu offset-y>
             <template #activator="{ on }">
@@ -38,7 +38,7 @@
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
-            <v-list color='secondary' style="cursor: pointer">
+            <v-list color="secondary" style="cursor: pointer">
               <v-list-item-group>
                 <v-list-item>
                   <v-list-item-title>New group</v-list-item-title>
@@ -47,7 +47,7 @@
             </v-list>
           </v-menu>
         </v-list-item>
-        <v-divider class='visible'></v-divider>
+        <v-divider class="visible"></v-divider>
         <ChatList v-if="searchedUser === ''" :chats="chats"></ChatList>
         <UsersList
           v-else

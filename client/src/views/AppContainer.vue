@@ -1,16 +1,20 @@
 <template>
-  <v-container class='pa-0 d-flex flex-row justify-start h-100 w-100' fluid>
+  <v-container class="pa-0 d-flex flex-row justify-start h-100 w-100" fluid>
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
-      v-if='!($store.getters.isMobile && activeChat !== null)'
-      class='col-12 col-sm-5 col-md-4 col-lg-3'
+      v-if="!($store.getters.isMobile && activeChat !== null)"
+      class="col-12 col-sm-5 col-md-4 col-lg-3"
       :chats="chats"
       @userSelected="userSelected($event)"
     ></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard ref="chatBoard" :chat="activeChat" class='flex-grow-1'></ChatBoard>
+    <ChatBoard
+      ref="chatBoard"
+      :chat="activeChat"
+      class="flex-grow-1"
+    ></ChatBoard>
   </v-container>
 </template>
 
@@ -94,7 +98,7 @@ export default {
         return this.$store.getters.activeChat;
       },
       set(chat) {
-        this.$store.commit('setActiveChat', {chat});
+        this.$store.commit('setActiveChat', { chat });
       },
     },
   },

@@ -12,7 +12,7 @@
             label="Username"
             :error-messages="errors.username"
             :rules="[(v) => !!v || 'Username is required']"
-            hide-details='auto'
+            hide-details="auto"
             outlined
             required
           ></v-text-field>
@@ -29,7 +29,7 @@
             outlined
             required
           />
-          <v-divider/>
+          <v-divider />
           <v-text-field
             v-model="password"
             :error-messages="errors.password"
