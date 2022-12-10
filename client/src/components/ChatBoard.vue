@@ -23,10 +23,10 @@
           src="/icons/default_pfp.png" />
       </v-avatar>
       <v-toolbar-title class="ml-5">
-        <span class='text--primary'>{{
-            otherPrivateUser.name
-          }}</span>
-        <span class='text--secondary subtitle-2 d-block ' style='line-height:1.1'>
+        <span class="text--primary">{{ otherPrivateUser.name }}</span>
+        <span
+          class="text--secondary subtitle-2 d-block"
+          style="line-height: 1.1">
           {{ status }}
         </span>
       </v-toolbar-title>
@@ -68,9 +68,9 @@
           label="Message"
           outlined
           single-line
-          class="elevation-0 secondary"/>
+          class="elevation-0 secondary" />
       </v-form>
-      <v-btn icon @click='sendMessage'>
+      <v-btn icon @click="sendMessage">
         <v-icon>mdi-send</v-icon>
       </v-btn>
     </v-row>
