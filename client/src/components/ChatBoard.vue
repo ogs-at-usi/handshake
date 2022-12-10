@@ -136,7 +136,7 @@ export default {
       videoBar.classList.add('videoBar');
       videoGrid.appendChild(videoBar);
       
-
+      addFunctionToButtons(videoButton, audioButton, endCallButton, myVideo);
       // add class yo myvideo
       myVideo.classList.add('myVideo');
 
@@ -184,6 +184,8 @@ export default {
           addVideoStream(video, userVideoStream, false);
         });
 
+        // how to call this callback when the user leaves the chat
+        // 
         call.on('close', () => {
           video.remove();
         });
@@ -199,6 +201,51 @@ export default {
         }
         // add class to video 
         videoGrid.append(video);
+
+      }
+
+      
+      function addFunctionToButtons(videoButton, audioButton, endCallButton, myVideo){
+
+        videoButton.addEventListener('click', () => {
+          if (myVideo.srcObject.getVideoTracks()[0].enabled) {
+            myVideo.srcObject.getVideoTracks()[0].enabled = false;
+            videoButton.innerHTML = 'Video Off';
+          } else {
+            myVideo.srcObject.getVideoTracks()[0].enabled = true;
+            videoButton.innerHTML = 'Video';
+          }
+        });
+
+        audioButton.addEventListener('click', () => {
+          if (myVideo.srcObject.getAudioTracks()[0].enabled) {
+            myVideo.srcObject.getAudioTracks()[0].enabled = false;
+            audioButton.innerHTML = 'Audio Off';
+          } else {
+            myVideo.srcObject.getAudioTracks()[0].enabled = true;
+            audioButton.innerHTML = 'Audio';
+          }
+        });
+
+        endCallButton.addEventListener('click', () => {
+          myVideo.srcObject.getVideoTracks()[0].enabled = false;
+          myVideo.srcObject.getAudioTracks()[0].enabled = false;
+          videoButton.innerHTML = 'Video Off';
+          audioButton.innerHTML = 'Audio Off';
+          myVideo.remove();
+          // remove the bar
+          videoBar.remove();
+          // remove the video grid
+          videoGrid.remove();
+          // remove the video grid from the chat
+          this.$refs['video-grid'].remove();
+          // remove the video grid from the chat
+
+          socket.emit('leave-room', chatId, myPeer.id);
+          // socket.emit('disconnect');
+        });
+
+        
 
       }
     },
