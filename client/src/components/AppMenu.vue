@@ -8,7 +8,7 @@
             <img alt="pfp" src="/icons/default_pfp.png" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>{{
+            <v-list-item-title class='font-weight-bold'>{{
               $store.getters.user.name
             }}</v-list-item-title>
             <v-list-item-subtitle class='text--secondary'>{{
