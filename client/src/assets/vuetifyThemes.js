@@ -23,13 +23,13 @@ export default {
     warning: '#FFC107',
     surface: '#162d3d',
     background: '#0f1d27',
-    textPrimary: '#ffffff',
+    textPrimary: '#e1e8f1',
     textAccent: '#000000',
   },
   green: {
     // generate a theme using the following main color: #00a996
-    primary: '#008c7a',
-    secondary: '#006b5a',
+    primary: '#00806f',
+    secondary: '#00594a',
     accent: '#82B1FF',
     error: '#FF5252',
     info: '#2196F3',
@@ -37,7 +37,15 @@ export default {
     warning: '#FFC107',
     surface: '#0f2d2d',
     background: '#0f1d1d',
-    textPrimary: '#ffffff',
+    textPrimary: '#e9f6f5',
+    textAccent: '#000000',
+  },
+  orange: {
+    primary: '#a66321',
+    secondary: '#663809',
+    surface: '#412b15',
+    background: '#271809',
+    textPrimary: '#ffebd6',
     textAccent: '#000000',
   },
   dark: {

@@ -38,7 +38,7 @@ export default {
     },
   },
   created() {
-    this.setTheme('green');
+    this.setTheme('orange');
   }
 };
 </script>
