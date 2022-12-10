@@ -52,10 +52,17 @@
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
-    <v-row class="ma-0 flex-shrink-0 secondary elevation-5" style="z-index: 10">
-      <v-form class="w-100" @submit.prevent="sendMessage">
+    <v-row
+      class="ma-0 ps-3 pe-5 py-5 gap-1 flex-shrink-0 secondary elevation-5 d-flex justify-center align-center"
+      style="z-index: 10"
+    >
+      <v-btn icon>
+        <v-icon>mdi-emoticon</v-icon>
+      </v-btn>
+      <FileUploader :chat-id="chat._id"></FileUploader>
+      <v-form class="flex-grow-1 ml-3" @submit.prevent="sendMessage">
         <v-text-field
-          class="gap-4 px-5 py-5 elevation-0 secondary"
+          class="gap-4 elevation-0 secondary"
           dense
           v-model="messageString"
           append-outer-icon="mdi-send"
@@ -79,10 +86,11 @@ import ChatMessage from '@/components/ChatMessage';
 import Chat from '@/classes/chat';
 import Message from '@/classes/message';
 import 'vue-custom-scrollbar/dist/vueScrollbar.css';
+import FileUploader from '@/components/FileUploader';
 
 export default {
   name: 'ChatBoard',
-  components: { ChatMessage, vueCustomScrollbar },
+  components: { FileUploader, ChatMessage, vueCustomScrollbar },
   data() {
     return {
       messageString: '',
@@ -130,6 +138,9 @@ export default {
         console.error(err);
       }
     },
+    async sendImage() {},
+    async sendVideo() {},
+    async sendFile() {},
   },
   computed: {
     otherPrivateUser() {
