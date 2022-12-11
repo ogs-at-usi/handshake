@@ -26,7 +26,7 @@
           link
           @click="setTheme(themeKey)">
           <v-list-item-icon :style="{ color: primaryColor }">
-            ●
+            <v-icon :color="primaryColor + '!important'">mdi-circle</v-icon>
           </v-list-item-icon>
           <v-list-item-title v-text="title"></v-list-item-title>
         </v-list-item>
