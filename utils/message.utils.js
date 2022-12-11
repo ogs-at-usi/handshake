@@ -10,6 +10,8 @@ async function saveMessage(chatId, userId, content, type) {
         user: new ObjectId(userId),
     });
 
+    console.log(result);
+
     // console.log(
     //     `Route: /chat/:chatId/messages, params: ${params}, body: ${body} - Chat of the new message: ${chatId}`
     // );
@@ -27,6 +29,8 @@ async function saveMessage(chatId, userId, content, type) {
         deliveredAt: new Date(),
     });
 
+    console.log(newMessage);
+
     const chat = await Chat.findOne({
         _id: ObjectId(chatId),
     }).exec();
@@ -34,7 +38,7 @@ async function saveMessage(chatId, userId, content, type) {
     chat.messages.push(newMessage._id);
     await chat.save();
 
-    
+    return newMessage;
 }
 
 module.exports = {
