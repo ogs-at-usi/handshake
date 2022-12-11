@@ -59,6 +59,11 @@ export default {
       },
     },
   },
+  methods: {
+    setTheme(theme) {
+      this.$vuetify.theme.themes.light = themesObject[theme];
+    },
+  },
 };
 </script>
 
