@@ -14,21 +14,16 @@ export default {
       type: Array, // of Chats
     },
   },
-  data() {
-    return {
-      active: this.chats?.findIndex(
-        (c) => this.$store.getters.activeChat?._id === c._id
-      ),
-    };
-  },
   components: { ChatContact },
-  watch: {
+  computed: {
     active: {
-      handler: function (newVal) {
-        if (newVal === undefined) {
-          this.$store.commit('setActiveChat', { chat: null });
-        }
-        this.$store.commit('setActiveChat', { chat: this.chats[this.active] });
+      get() {
+        return this.chats?.indexOf(this.$store.state.activeChat);
+      },
+      set(value) {
+        let chat = null;
+        if (value !== undefined) chat = this.chats[value];
+        this.$store.commit('setActiveChat', { chat });
       },
     },
   },
