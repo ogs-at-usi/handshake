@@ -29,6 +29,14 @@ class ApiClient {
   }
 
   /**
+   * Refresh the access token.
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  refreshToken() {
+    return this.axiosInstance.post('/auth/refresh');
+  }
+
+  /**
    * Retrieve the list of users that match the filter.
    * @param filter {string} The filter to apply
    * @returns {Promise<AxiosResponse<any>>} The promise with the response

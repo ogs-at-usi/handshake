@@ -1,5 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VuexPersistence from 'vuex-persist';
+import localforage from 'localforage';
+import router from '../router';
+
+const vuexLocal = new VuexPersistence({
+  storage: localforage,
+  reducer: (state) => ({
+    // Only save the state of the module 'auth'
+    isLoggedIn: state.isLoggedIn,
+    user: state.user,
+  }),
+  asyncStorage: true,
+});
 
 Vue.use(Vuex);
 
@@ -25,12 +38,14 @@ export default new Vuex.Store({
     logout(state) {
       state.isLoggedIn = false;
       state.user = null;
+      router.push('/login').catch(() => {});
+      console.log('logout');
+      if (state.socket) state.socket.disconnect();
     },
     setSocket(state, { socket }) {
       state.socket = socket;
     },
     setActiveChat(state, { chat }) {
-      console.log(chat);
       state.activeChat = chat;
     },
   },
@@ -53,4 +68,5 @@ export default new Vuex.Store({
     },
   },
   modules: {},
+  plugins: [vuexLocal.plugin],
 });

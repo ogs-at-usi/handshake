@@ -50,11 +50,18 @@ const router = new VueRouter({
 /**
  * Middleware to check if user is authenticated before accessing a route
  */
-router.beforeEach((to, from, next) => {
-  if (
-    to.matched.some((record) => record.meta.requiresAuth) &&
-    !store.getters.isLoggedIn
-  ) {
+router.beforeEach(async (to, from, next) => {
+  await store.restored;
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && store.getters.isLoggedIn) {
+    try {
+      await router.app.$api.refreshToken();
+    } catch (e) {
+      store.commit('logout');
+    }
+  }
+  if (requiresAuth && !store.getters.isLoggedIn) {
     next('/login');
   } else {
     next();
