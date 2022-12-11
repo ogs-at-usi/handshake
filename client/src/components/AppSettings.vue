@@ -33,9 +33,9 @@ export default {
   name: 'AppSettings',
   data() {
     return {
-      items: [
-        { title: 'Themes', icon: 'mdi-cog', action: () => {} },
-        { title: 'Logout', icon: 'mdi-logout', action: () => {} },
+      themes: [
+        ['blue', 'mdi-account-multiple-outline'],
+        ['pink', 'mdi-cog-outline'],
       ],
     };
   },
