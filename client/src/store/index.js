@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import localforage from 'localforage';
+import router from '../router';
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
@@ -37,12 +38,14 @@ export default new Vuex.Store({
     logout(state) {
       state.isLoggedIn = false;
       state.user = null;
+      router.push('/login').catch(() => {});
+      console.log('logout');
+      if (state.socket) state.socket.disconnect();
     },
     setSocket(state, { socket }) {
       state.socket = socket;
     },
     setActiveChat(state, { chat }) {
-      console.log(chat);
       state.activeChat = chat;
     },
   },

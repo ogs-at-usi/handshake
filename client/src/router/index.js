@@ -52,10 +52,16 @@ const router = new VueRouter({
  */
 router.beforeEach(async (to, from, next) => {
   await store.restored;
-  if (
-    to.matched.some((record) => record.meta.requiresAuth) &&
-    !store.getters.isLoggedIn
-  ) {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && store.getters.isLoggedIn) {
+    try {
+      await router.app.$api.refreshToken();
+    } catch (e) {
+      store.commit('logout');
+    }
+  }
+  if (requiresAuth && !store.getters.isLoggedIn) {
     next('/login');
   } else {
     next();
