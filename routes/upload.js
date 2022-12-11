@@ -8,6 +8,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 50000000 } }); // 50MB
 const uploadDisk = multer({ dest: "./media/temp", limits: { fileSize: 50000000 } }); // 50MB
+const io = require('../serverSocket').io;
 
 const videoStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -61,6 +62,7 @@ router.post('/image', upload.single('image'), async function (req, res, next) {
     await newMessage.save();
 
     await sharp(file.buffer).flatten({ background: '#ffffff' }).jpeg({ quality: 50 }).toFile(path);
+    io.to(chatID).emit('messages:create', newMessage);
 
     res.status(201).json(file);
 
@@ -127,6 +129,7 @@ router.post('/video', uploadVideo.single('video'), async function (req, res, nex
     // newMessage.content = file.filename;
 
     // await newMessage.save();
+    io.to(chatID).emit('messages:create', newMessage);
 
     res.status(201).json(file);
 });
@@ -181,6 +184,7 @@ router.post('/audio', uploadDisk.single('audio'), async function (req, res, next
     newMessage.content = newMessage._id + '.mp3';
 
     await newMessage.save();
+    io.to(chatID).emit('messages:create', newMessage);
 
     res.status(201).json(file);
 });
@@ -213,6 +217,8 @@ router.post('/file', uploadFile.single('file'), async function (req, res, next) 
     // newMessage.content = file.filename + '.' + extension;
 
     // await newMessage.save();
+    io.to(chatID).emit('messages:create', newMessage);
+
     res.status(201).json(file);
 });
 
