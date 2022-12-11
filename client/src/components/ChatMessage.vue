@@ -71,19 +71,6 @@ export default {
         : this.$props.message.deliveredAt;
       return formatTime(time);
     },
-    content() {
-      const retrieveContent = {};
-      // TODO: substitute with enum field
-      let message = this.$props.message.content.substring(
-        0,
-        this.page * this.maxChars
-      );
-      if (message.length !== this.message.content.length) {
-        message += '...';
-      }
-      retrieveContent.TEXT = message;
-      return retrieveContent[this.$props.message.type];
-    },
     senderName() {
       if (this.isGroup) return null; // this.$props.chat.title;
       console.error(
@@ -100,7 +87,8 @@ export default {
 .message {
   max-width: 70% !important;
 }
-.message-image, .message-video {
+.message-image,
+.message-video {
   width: 400px !important;
 }
 @media only screen and (max-width: 600px) {
