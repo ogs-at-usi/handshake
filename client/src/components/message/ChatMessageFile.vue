@@ -1,9 +1,9 @@
 <template>
-  <v-row class="pa-5 pb-0 ma-0 flex-row align-center gap-3">
+  <v-row class="pa-5 pb-0 ma-0 flex-row align-center gap-3 flex-nowrap">
     <v-btn color="textPrimary" icon outlined @click="download">
       <v-icon class="pa-0" color="textPrimary">mdi-download</v-icon>
     </v-btn>
-    <span class="description-2 text--secondary">
+    <span class="description-2 text--secondary text-truncate">
       {{ message.content }}
     </span>
   </v-row>
