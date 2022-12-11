@@ -1,6 +1,6 @@
 <template>
-  <div class='pa-1'>
-    <v-img :src='image' class='rounded' contain></v-img>
+  <div class="pa-1">
+    <v-img :src="image" class="rounded" contain></v-img>
   </div>
 </template>
 
@@ -12,17 +12,15 @@ export default {
   props: {
     message: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     image() {
-      return getFilePath("images", this.message.content);
-    }
-  }
+      return getFilePath('images', this.message.content);
+    },
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

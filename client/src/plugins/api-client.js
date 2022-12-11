@@ -74,14 +74,14 @@ class ApiClient {
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
   sendFile(chatID, file, type) {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append(type, file);
     formData.append('chatID', chatID);
     // console.log(chatID, file, type, formData);
     return this.axiosInstance.post(`/upload/${type}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     });
   }
 }

@@ -97,7 +97,7 @@ export default {
   max-width: 70% !important;
 }
 .message-image {
-  width: 300px!important
+  width: 300px !important;
 }
 @media only screen and (max-width: 600px) {
   .message {

@@ -1,6 +1,6 @@
 <template>
   <!-- UI: CONTACT -->
-  <v-list-item :ripple='false' active-class="secondary" class="py-2 gap-3">
+  <v-list-item :ripple="false" active-class="secondary" class="py-2 gap-3">
     <!-- image of the other user or group chat -->
     <v-list-item-avatar class="mr-0">
       <img :src="imageId" class="pfp" alt="pfp" />
