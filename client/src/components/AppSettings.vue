@@ -16,19 +16,12 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-divider class="visible"></v-divider>
-      <v-list dense>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
-          @click="item.action">
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
+      <v-list-group :value="false" no-action sub-group>
+        <template #activator>
+          <v-list-item-title>Settings</v-list-item-title>
+        </template>
+        <v-list-item v-for="([title], i) in themes" :key="i" link>
+          <v-list-item-title v-text="title"></v-list-item-title>
         </v-list-item>
       </v-list>
     </v-list>
