@@ -42,8 +42,10 @@ export default {
   data() {
     return {
       themes: [
-        ['blue', 'mdi-account-multiple-outline'],
-        ['pink', 'mdi-cog-outline'],
+        ['Dark blue', 'blue', themesObject.blue.primary],
+        ['Dark green', 'green', themesObject.green.primary],
+        ['Cool orange', 'orange', themesObject.orange.primary],
+        ['Warm pink', 'pink', themesObject.pink.primary],
       ],
     };
   },
