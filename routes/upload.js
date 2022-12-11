@@ -21,8 +21,13 @@ const { saveMessage } = require('../utils/message.utils');
 const FluentFfmpeg = require('fluent-ffmpeg');
 
 router.post('/image', upload.single('image'), async function (req, res, next) {
-    // TODO: change req.body.chatId to whatever the chatId is
-    const chatId = req.body.chatId;
+    console.log(req);
+    console.log(req.file);
+
+
+    // TODO: change req.body.chatID to whatever the chatID is
+    const chatID = req.body.chatID;
+    console.log(chatID);
     const userId = req.userId;
     const file = req.file;
     if (!file) {
@@ -31,13 +36,17 @@ router.post('/image', upload.single('image'), async function (req, res, next) {
         return next(error);
     }
 
-    if (!ObjectId.isValid(chatId)) {
+    if (!ObjectId.isValid(chatID)) {
+        console.log('invalid chat id');
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatId, userId, '', 'IMAGE');
+    console.log('about to save message');
+    const newMessage = await saveMessage(chatID, userId, 'sium', 'IMAGE');
+    console.log(newMessage);
 
     if (!newMessage) {
+        console.log('invalid message');
         return res.status(404).end();
     }
 
@@ -54,8 +63,8 @@ router.post('/image', upload.single('image'), async function (req, res, next) {
 });
 
 router.post('/video', uploadDisk.single('video'), async function (req, res, next) {
-    // TODO: change req.body.chatId to whatever the chatId is
-    const chatId = req.body.chatId;
+    // TODO: change req.body.chatID to whatever the chatID is
+    const chatID = req.body.chatID;
     const userId = req.userId;
     const file = req.file;
     if (!file) {
@@ -64,11 +73,11 @@ router.post('/video', uploadDisk.single('video'), async function (req, res, next
         return next(error);
     }
 
-    if (!ObjectId.isValid(chatId)) {
+    if (!ObjectId.isValid(chatID)) {
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatId, userId, '', 'VIDEO');
+    const newMessage = await saveMessage(chatID, userId, '', 'VIDEO');
 
     if (!newMessage) {
         return res.status(404).end();
@@ -110,8 +119,8 @@ router.post('/video', uploadDisk.single('video'), async function (req, res, next
 
 router.post('/audio', uploadDisk.single('audio'), async function (req, res, next) {
 
-    // TODO: change req.body.chatId to whatever the chatId is
-    const chatId = req.body.chatId;
+    // TODO: change req.body.chatID to whatever the chatID is
+    const chatID = req.body.chatID;
     const userId = req.userId;
     const file = req.file;
     if (!file) {
@@ -120,11 +129,11 @@ router.post('/audio', uploadDisk.single('audio'), async function (req, res, next
         return next(error);
     }
 
-    if (!ObjectId.isValid(chatId)) {
+    if (!ObjectId.isValid(chatID)) {
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatId, userId, '', 'AUDIO');
+    const newMessage = await saveMessage(chatID, userId, '', 'AUDIO');
 
     if (!newMessage) {
         return res.status(404).end();
@@ -164,8 +173,8 @@ router.post('/audio', uploadDisk.single('audio'), async function (req, res, next
 
 router.post('/file', uploadFile.single('file'), async function (req, res, next) {
 
-    // TODO: change req.body.chatId to whatever the chatId is
-    const chatId = req.body.chatId;
+    // TODO: change req.body.chatID to whatever the chatID is
+    const chatID = req.body.chatID;
     const userId = req.userId;
     const file = req.file;
     if (!file) {
@@ -174,11 +183,11 @@ router.post('/file', uploadFile.single('file'), async function (req, res, next) 
         return next(error);
     }
 
-    if (!ObjectId.isValid(chatId)) {
+    if (!ObjectId.isValid(chatID)) {
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatId, userId, '', 'DOCUMENT');
+    const newMessage = await saveMessage(chatID, userId, '', 'DOCUMENT');
 
     if (!newMessage) {
         return res.status(404).end();
