@@ -85,10 +85,8 @@ function init(server) {
     
   });
   
-  socket.on('calling-others', (chatId, myPeer) => {
-    console.log('calling-others', chatId, myPeer);
-    socket.to(chatId).emit('calling-me')
-    socket.to(chatId).emit('change-button', chatId)
+  socket.on('calling-others', (chatId, chatName) => {
+    socket.broadcast.to(chatId).emit('calling-me', chatName);
   });
 });
 } 

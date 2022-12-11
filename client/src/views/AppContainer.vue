@@ -2,10 +2,11 @@
   <div id="app_container" class="justify-content-between d-flex flex-row h-100">
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
+    <div class="popup"></div>
     <AppMenu
-      :chats="chats"
-      @selectChat="setActiveChat($event)"
-      @userSelected="userSelected($event)"
+    :chats="chats"
+    @selectChat="setActiveChat($event)"
+    @userSelected="userSelected($event)"
     ></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
@@ -79,9 +80,24 @@ export default {
     });
 
 
-        socket.on('calling-me', () => {
-          alert ('you are being called');
+
+
+
+        socket.on('calling-me', (chatName) => {
+          // create a pop up to with confirm of reject button
+
+          console.log('calling me');
+          const popupDiv = document.querySelector('.popup');
+          popupDiv.innerHTML =`
+              <h5 class="card-title">Incoming call</h5>
+              <p class="card-text">You are being called by ${chatName}</p>
+              <a href="#" class="btn btn-primary">Accept</a>
+              <a href="#" class="btn btn-danger">Reject</a>
+          `;
+
         });
+
+
   },
   methods: {
     setActiveChat(chat) {
@@ -118,5 +134,18 @@ export default {
 </script>
 
 <style scoped>
+
+.popup {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px; 
+}
 /* put div as flex */
 </style>

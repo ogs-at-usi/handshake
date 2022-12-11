@@ -57,7 +57,7 @@ export default {
     return {
       messageString: '',
       showPopup: false,
-      buttonState: false,
+      buttonState: true,
     };
   },
   props: {
@@ -170,7 +170,7 @@ export default {
       myVideo.classList.add('myVideo');
       
       socket.emit('join-room', chatId, myPeer.id);
-      socket.emit('calling-others', chatId, myPeer.id);
+      socket.emit('calling-others', chatId, this.chatName);
       myVideo.muted = true;
       navigator.mediaDevices
         .getUserMedia({
@@ -223,9 +223,6 @@ export default {
             const video = document.getElementById(userId);
             video.remove();
           });
-
-
-
         });
 
       function addFunctionToButtons(
@@ -295,19 +292,6 @@ export default {
     },
   },
   mounted() {
-
-    
-      const socket = this.$store.getters.socket;
-
-    // const socket = this.$store.getters.socket;
-
-    // socket.on('change-button', (chatId) => {
-    //   console.log('CHANGE BUTTON');
-    //   // if the chatid is the same as the chatid of the chat you are in
-    //   // then change the button
-
-    // }); 
-
 
 
   },
