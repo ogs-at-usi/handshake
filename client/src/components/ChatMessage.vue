@@ -25,6 +25,7 @@
       <ChatMessageAudio
         v-else-if="message.type === 'AUDIO'"
         :message="message" />
+      <ChatMessageFile v-else :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -39,6 +40,7 @@ import ChatMessageText from '@/components/message/ChatMessageText';
 import ChatMessageImage from '@/components/message/ChatMessageImage';
 import ChatMessageVideo from '@/components/message/ChatMessageVideo';
 import ChatMessageAudio from '@/components/message/ChatMessageAudio';
+import ChatMessageFile from '@/components/message/ChatMessageFile';
 
 export default {
   name: 'ChatMessage',
@@ -47,6 +49,7 @@ export default {
     ChatMessageImage,
     ChatMessageText,
     ChatMessageAudio,
+    ChatMessageFile,
   },
   data() {
     return {
