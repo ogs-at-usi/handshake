@@ -105,46 +105,32 @@ export default {
       }
     },
 
-
-      connectToNewUser(userId, stream) {
-
+    connectToNewUser(userId, stream) {
       const myPeer = this.$peer;
-        // call the other user and send the
-        const call = myPeer.call(userId, stream);
-        const video = document.createElement('video');
-        video.setAttribute('id', userId);
+      // call the other user and send the
+      const call = myPeer.call(userId, stream);
+      const video = document.createElement('video');
+      video.setAttribute('id', userId);
 
-
-        call.on('stream', (userVideoStream) => {  
-          this.addVideoStream(video, userVideoStream, false);
-        });
-        call.on('close', () => {
-          video.remove();
-        });
-      },
-
-
-      addVideoStream(video, stream, myvideo = false) {
-        const videoGrid = this.$refs['video-grid'];
-        video.srcObject = stream;
-        video.addEventListener('loadedmetadata', () => {
-          video.play();
-        });
-        if (!myvideo) {
-          video.classList.add('videoOther');
-        }
-        // add class to video
-        videoGrid.append(video);
-      },
-
-
-
-
-
-
-
-
-
+      call.on('stream', (userVideoStream) => {
+        this.addVideoStream(video, userVideoStream, false);
+      });
+      call.on('close', () => {
+        video.remove();
+      });
+    },
+    addVideoStream(video, stream, myvideo = false) {
+      const videoGrid = this.$refs['video-grid'];
+      video.srcObject = stream;
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+      });
+      if (!myvideo) {
+        video.classList.add('videoOther');
+      }
+      // add class to video
+      videoGrid.append(video);
+    },
     async callingFunction() {
       const videoGrid = this.$refs['video-grid'];
       const socket = this.$store.getters.socket;
@@ -152,7 +138,6 @@ export default {
       let chatId = this.$props.chat._id;
       const peers = {};
       const myVideo = document.createElement('video');
-
       // create a bar to show the video buttons
       const videoBar = document.createElement('div');
       // put inside 3 buttons
@@ -179,11 +164,8 @@ export default {
       // add class yo myvideo
       myVideo.classList.add('myVideo');
       
- 
       socket.emit('join-room', chatId, myPeer.id);
-
-
-
+      socket.emit('calling-others', chatId, myPeer.id);
       myVideo.muted = true;
       navigator.mediaDevices
         .getUserMedia({
@@ -193,25 +175,25 @@ export default {
         .then((stream) => {
           this.addVideoStream(myVideo, stream, true);
           myPeer.on('call', (call) => {
-            const answerCall = confirm ('Do you want to answer the call?');
-            if (answerCall){ 
-            call.answer(stream);
-            const video = document.createElement('video');
-            console.log('ANSWERING CALL');
-            // call the other user and send the 
-            call.on('stream', (userVideoStream) => {
-              this.addVideoStream(video, userVideoStream);
-            });
-          } else {
-            console.log('CALL REJECTED');
-          }
+            const answerCall = confirm('Do you want to answer the call?');
+            if (answerCall) {
+              call.answer(stream);
+              const video = document.createElement('video');
+              console.log('ANSWERING CALL');
+              // call the other user and send the
+              call.on('stream', (userVideoStream) => {
+                this.addVideoStream(video, userVideoStream);
+              });
+            } else {
+              console.log('CALL REJECTED');
+            }
           });
 
           socket.on('user-connected', (userId, chatId) => {
             console.log('USER CONNECTED');
             this.connectToNewUser(userId, stream);
           });
-
+          
           socket.on('user-disconnected', (userId) => {
             console.log('USER DISCONNECTED');
             // if (peers[userId]) peers[userId].close();
@@ -226,48 +208,18 @@ export default {
             });
             myVideo.remove();
             videoBar.remove();
-            const video =  document.querySelector('video');
+            const video = document.querySelector('video');
             video.remove();
           });
-
 
           socket.on('otherUser-disconnected', (userId) => {
             console.log('OTHER USER DISCONNECTED');
 
             const video = document.getElementById(userId);
             video.remove();
-            
           });
 
-
         });
-
-      // function connectToNewUser(userId, stream) {
-      //   // call the other user and send the
-      //   const call = myPeer.call(userId, stream);
-      //   const video = document.createElement('video');
-      //   video.setAttribute('id', userId);
-
-
-      //   call.on('stream', (userVideoStream) => {  
-      //     addVideoStream(video, userVideoStream, false);
-      //   });
-      //   call.on('close', () => {
-      //     video.remove();
-      //   });
-      // }
-
-      // function addVideoStream(video, stream, myvideo = false) {
-      //   video.srcObject = stream;
-      //   video.addEventListener('loadedmetadata', () => {
-      //     video.play();
-      //   });
-      //   if (!myvideo) {
-      //     video.classList.add('videoOther');
-      //   }
-      //   // add class to video
-      //   videoGrid.append(video);
-      // }
 
       function addFunctionToButtons(
         videoButton,
@@ -303,8 +255,7 @@ export default {
           myVideo.remove();
           // remove the bar
           videoBar.remove();
-
-
+          
           // leave the room peer
           myPeer.destroy();
           
@@ -336,7 +287,12 @@ export default {
       });
     },
   },
-  mounted() {},
+  mounted() {
+
+
+
+
+  },
 };
 </script>
 

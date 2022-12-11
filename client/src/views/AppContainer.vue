@@ -40,7 +40,7 @@ export default {
 
     
 
-
+ 
 
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
@@ -77,6 +77,11 @@ export default {
         this.activeChat = chat;
       }
     });
+
+
+        socket.on('calling-me', () => {
+          alert ('you are being called');
+        });
   },
   methods: {
     setActiveChat(chat) {
