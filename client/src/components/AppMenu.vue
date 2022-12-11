@@ -70,6 +70,7 @@ export default {
   data: function () {
     return {
       searchedUser: '',
+      openSettings: false,
     };
   },
   props: {
