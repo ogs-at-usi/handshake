@@ -14,15 +14,8 @@
         class="font-weight-regular subtitle-1 pa-3 pb-0"
         >{{ senderName }}</v-card-title
       >
-      <v-card-text class="pa-3 pb-1 text--primary">
-        {{ content }}
-        <a
-          v-if="content.length < message.content.length"
-          style="cursor: pointer"
-          @click.prevent="page++"
-          >Show more</a
-        >
-      </v-card-text>
+
+      <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -33,9 +26,11 @@
 <script>
 import Message from '@/classes/message';
 import { formatTime } from '@/utils';
+import ChatMessageText from '@/components/message/ChatMessageText';
 
 export default {
   name: 'ChatMessage',
+  components: { ChatMessageText },
   data() {
     return {
       page: 1,
