@@ -1,5 +1,7 @@
 <template>
-  <v-img :src='image'></v-img>
+  <div class='pa-1'>
+    <v-img :src='image' class='rounded' contain></v-img>
+  </div>
 </template>
 
 <script>

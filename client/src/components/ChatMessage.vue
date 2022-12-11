@@ -5,7 +5,7 @@
     class="ma-0 d-flex">
     <v-card
       :id="message._id"
-      class="rounded-lg message"
+      :class="`rounded-lg message message-${message.type.toLowerCase()}`"
       elevation="2"
       style="height: fit-content"
       color="primary">
@@ -16,7 +16,9 @@
       >
 
       <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
-      <ChatMessageImage v-else-if="message.type === 'IMAGE'" :message="message" />
+      <ChatMessageImage
+        v-else-if="message.type === 'IMAGE'"
+        :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -94,9 +96,15 @@ export default {
 .message {
   max-width: 70% !important;
 }
+.message-image {
+  width: 300px!important
+}
 @media only screen and (max-width: 600px) {
   .message {
-    max-width: 85% !important;
+    max-width: 75% !important;
   }
+  /*.message-image {*/
+  /*  width: 70%!important;*/
+  /*}*/
 }
 </style>
