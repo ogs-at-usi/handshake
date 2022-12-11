@@ -67,7 +67,16 @@ class ApiClient {
    */
   sendFile(chatID, file, type) {
     // TODO: Sofi implement this
-    console.log(chatID, file, type);
+
+    let formData = new FormData();
+    formData.append(type, file);
+    formData.append('chatID', chatID);
+    console.log(chatID, file, type, formData);
+    return this.axiosInstance.post(`/upload/${type}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   }
 }
 
