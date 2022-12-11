@@ -18,7 +18,7 @@
       </v-list-item>
       <v-list-group :value="false" no-action sub-group>
         <template #activator>
-          <v-list-item-title>Settings</v-list-item-title>
+          <v-list-item-title>Themes</v-list-item-title>
         </template>
         <v-list-item v-for="([title], i) in themes" :key="i" link>
           <v-list-item-title v-text="title"></v-list-item-title>
