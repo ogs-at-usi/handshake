@@ -1,5 +1,17 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VuexPersistence from 'vuex-persist';
+import localforage from 'localforage';
+
+const vuexLocal = new VuexPersistence({
+  storage: localforage,
+  reducer: (state) => ({
+    // Only save the state of the module 'auth'
+    isLoggedIn: state.isLoggedIn,
+    user: state.user,
+  }),
+  asyncStorage: true,
+});
 
 Vue.use(Vuex);
 
@@ -53,4 +65,5 @@ export default new Vuex.Store({
     },
   },
   modules: {},
+  plugins: [vuexLocal.plugin],
 });
