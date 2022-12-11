@@ -82,9 +82,6 @@ export default {
     startCreateGroup() {
       this.$emit('startCreateGroup');
     },
-    openSettings() {
-      this.$emit('openSettings');
-    },
   },
 };
 </script>
