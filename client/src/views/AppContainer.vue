@@ -1,16 +1,19 @@
 <template>
-  <div id="app_container" class="justify-content-between d-flex flex-row h-100">
+  <v-container class="pa-0 d-flex flex-row justify-start h-100 w-100" fluid>
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
+      v-if="!($store.getters.isMobile && activeChat !== null)"
+      class="col-12 col-sm-5 col-md-4 col-lg-3"
       :chats="chats"
-      @selectChat="setActiveChat($event)"
-      @userSelected="userSelected($event)"
-    ></AppMenu>
+      @userSelected="userSelected($event)"></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard ref="chatBoard" :chat="activeChat"></ChatBoard>
-  </div>
+    <ChatBoard
+      ref="chatBoard"
+      :chat="activeChat"
+      class="flex-grow-1"></ChatBoard>
+  </v-container>
 </template>
 
 <script>
@@ -24,7 +27,6 @@ export default {
   name: 'AppContainer',
   data() {
     return {
-      activeChat: null,
       chats: null,
     };
   },
@@ -35,7 +37,6 @@ export default {
 
     socket.on('chats:read', (chats) => {
       this.chats = chats.map((chat) => new Chat(chat));
-      // this.setActiveChat(this.chats[0]._id);
     });
 
     socket.on('users:online', (userId) => {
@@ -89,10 +90,6 @@ export default {
     });
   },
   methods: {
-    setActiveChat(chat) {
-      console.log('EVENT Active chat - ', chat);
-      this.activeChat = chat;
-    },
     userSelected(otherUser) {
       console.log('EVENT User selected - ', otherUser);
       const chat = this.chats.find((chat) => {
@@ -113,9 +110,15 @@ export default {
         });
       }
     },
-    overrideChat(id) {
-      console.log(id);
-      this.activeChat._id = id;
+  },
+  computed: {
+    activeChat: {
+      get() {
+        return this.$store.getters.activeChat;
+      },
+      set(chat) {
+        this.$store.commit('setActiveChat', { chat });
+      },
     },
   },
   components: { AppMenu, ChatBoard },

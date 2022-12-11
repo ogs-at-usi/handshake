@@ -1,19 +1,20 @@
 <template>
-  <div v-if="loading" class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-  <main v-else-if="users.length > 0" class="menu_list">
+  <v-list-item v-if="users.length === 0">
+    <v-list-item-content>
+      <v-progress-circular v-if="loading" indeterminate></v-progress-circular>
+      <v-list-item-title v-else class="text--primary"
+        >No users found</v-list-item-title
+      >
+    </v-list-item-content>
+  </v-list-item>
+  <v-list-item-group v-else-if="users.length > 0">
     <UserItem
       v-for="(user, index) in users"
       :key="index"
       :user="user"
       class="ps-4 py-3"
-      @click.native="$emit('userSelected', user)"
-    />
-  </main>
-  <main v-else class="menu_list">
-    <h3>No users found</h3>
-  </main>
+      @click.native="$emit('userSelected', user)" />
+  </v-list-item-group>
 </template>
 
 <script>

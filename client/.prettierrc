@@ -6,3 +6,4 @@ useTabs: false
 semi: true
 arrowParens: always
 bracketSpacing: true
+bracketSameLine: true

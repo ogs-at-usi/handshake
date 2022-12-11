@@ -8,12 +8,18 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: {
+      layout: true,
+    },
     component: () =>
       import(/* webpackChunkName: "login" */ '../views/Login.vue'),
   },
   {
     path: '/signup',
     name: 'Signup',
+    meta: {
+      layout: true,
+    },
     component: () =>
       import(/* webpackChunkName: "signup" */ '../views/Signup.vue'),
   },
@@ -26,6 +32,12 @@ const routes = [
     },
     component: () =>
       import(/* webpackChunkName: "container" */ '../views/AppContainer.vue'),
+  },
+  {
+    path: '/about',
+    name: 'AboutUs',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AboutUs.vue'),
   },
 ];
 

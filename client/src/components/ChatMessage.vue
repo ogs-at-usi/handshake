@@ -1,11 +1,20 @@
 <template>
   <!-- UI: MESSAGE -->
-  <div :id="message._id" :class="`card ${selfClass}`">
-    <!-- message with header of name of sender (none if ours) and message text -->
-    <div class="card-body pb-0">
-      <!-- TODO: change v-if to display only if it is a group, add chat in props -->
-      <h5 v-if="false" class="card-title">{{ senderName }}</h5>
-      <p class="card-text">
+  <div
+    :style="{ justifyContent: isSelf ? 'end' : 'start' }"
+    class="ma-0 d-flex">
+    <v-card
+      :id="message._id"
+      class="rounded-lg message"
+      elevation="2"
+      style="height: fit-content"
+      color="primary">
+      <v-card-title
+        v-if="!isSelf && isGroup"
+        class="font-weight-regular subtitle-1 pa-3 pb-0"
+        >{{ senderName }}</v-card-title
+      >
+      <v-card-text class="pa-3 pb-1 text--primary">
         {{ content }}
         <a
           v-if="content.length < message.content.length"
@@ -13,16 +22,17 @@
           @click.prevent="page++"
           >Show more</a
         >
-      </p>
-    </div>
-
-    <!-- timestamp of the message: sent_at for our message, delivered_at for others -->
-    <p class="timestamp text-end pe-2">{{ timestamp }}</p>
+      </v-card-text>
+      <v-card-actions class="justify-end pt-0">
+        <span class="text--secondary text-caption">{{ timestamp }}</span>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
 <script>
 import Message from '@/classes/message';
+import { formatTime } from '@/utils';
 
 export default {
   name: 'ChatMessage',
@@ -56,11 +66,7 @@ export default {
       const time = this.isSelf
         ? this.$props.message.sentAt
         : this.$props.message.deliveredAt;
-      const datetime = new Date(time);
-      const hours = datetime.getHours().toString().padStart(2, '0');
-      const minutes = datetime.getMinutes().toString().padStart(2, '0');
-      const seconds = datetime.getSeconds().toString().padStart(2, '0');
-      return `${hours}:${minutes}:${seconds}`;
+      return formatTime(time);
     },
     content() {
       const retrieveContent = {};
@@ -88,7 +94,12 @@ export default {
 </script>
 
 <style scoped>
-.timestamp {
-  margin: 8px;
+.message {
+  max-width: 70% !important;
+}
+@media only screen and (max-width: 600px) {
+  .message {
+    max-width: 85% !important;
+  }
 }
 </style>

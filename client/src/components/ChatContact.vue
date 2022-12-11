@@ -1,31 +1,34 @@
 <template>
   <!-- UI: CONTACT -->
-  <div
-    class="contact justify-content-between d-flex flex-row align-items-center gap-4"
-  >
+  <v-list-item active-class="secondary" class="py-2 gap-3">
     <!-- image of the other user or group chat -->
-    <div>
+    <v-list-item-avatar class="mr-0">
       <img :src="imageId" class="pfp" alt="pfp" />
-    </div>
+    </v-list-item-avatar>
 
     <!-- name of the other user or group chat -->
-    <div class="flex-grow-1 overflow-hidden pa-3">
-      <h3 class="m-0 text-truncate">{{ name }}</h3>
-      <span class="mb-0 text-secondary text-truncate">
+    <v-list-item-content>
+      <v-list-item-title class="text--primary font-weight-bold">
+        {{ name }}
+      </v-list-item-title>
+      <v-list-item-subtitle class="text--secondary">
         {{ lastMessage }}
-      </span>
-    </div>
+      </v-list-item-subtitle>
+    </v-list-item-content>
 
     <!-- notification badge -->
-    <div class="d-none">
-      <p class="notification badge rounded-pill text-bg-light"></p>
-    </div>
-  </div>
+    <v-list-item-action-text class="pb-3 align-self-end">
+      <p class="notification badge rounded-pill text-bg-light">
+        {{ lastMessageTimestamp }}
+      </p>
+    </v-list-item-action-text>
+  </v-list-item>
 </template>
 
 <script>
 import Chat from '@/classes/chat';
 import Group from '@/classes/group';
+import { formatTime } from '@/utils';
 
 export default {
   name: 'ChatContact',
@@ -56,6 +59,14 @@ export default {
       return this.chat.messages && this.chat.messages.length > 0
         ? this.chat.messages[this.chat.messages.length - 1].content
         : '';
+    },
+    lastMessageTimestamp() {
+      const timestamp =
+        this.chat.messages[this.chat.messages.length - 1].sentAt;
+      return formatTime(timestamp);
+    },
+    isActive() {
+      return this.$store.getters.activeChat?._id === this.chat?._id;
     },
   },
 };
