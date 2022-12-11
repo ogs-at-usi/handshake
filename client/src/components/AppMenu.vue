@@ -1,7 +1,7 @@
 <template>
   <!-- MENU WITH OWN IMAGE, SEARCH BAR AND CONTACTS LIST -->
   <v-container class="pa-0 w-100 ma-0 h-100" fluid>
-    <AppSettings v-if="openSettings === true" />
+    <AppSettings v-if="openSettings" />
     <v-navigation-drawer clipped color="surface" permanent width="100%">
       <v-list class="pt-0" flat>
         <v-list-item class="pt-2 secondary">
