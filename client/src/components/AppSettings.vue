@@ -23,7 +23,7 @@
         <v-list-item v-for="([title], i) in themes" :key="i" link>
           <v-list-item-title v-text="title"></v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
