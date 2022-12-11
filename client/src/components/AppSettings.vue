@@ -1,5 +1,39 @@
 <template>
-  <span> miki e down</span>
+  <v-navigation-drawer
+    v-model="opened"
+    color="surface"
+    temporary
+    absolute
+    style="z-index: 100">
+    <v-list class="pt-0" flat>
+      <v-list-item class="pt-2 secondary">
+        <v-list-item-avatar>
+          <img alt="pfp" src="/icons/default_pfp.png" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title class="font-weight-bold">
+            {{ $store.getters.user.name }}
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-divider class="visible"></v-divider>
+
+        <v-list dense>
+          <v-list-item
+            v-for="item in items"
+            :key="item.title"
+            link
+            @click="item.action">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
 <script>
