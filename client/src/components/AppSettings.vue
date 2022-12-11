@@ -12,7 +12,7 @@
         </v-btn>
         <v-list-item-content class="ms-4">
           <v-list-item-title class="font-weight-bold">
-            {{ $store.getters.user.name }}
+            Settings
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
