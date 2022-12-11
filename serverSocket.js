@@ -56,29 +56,35 @@ function init(server) {
       socket.leave(socket.userId);
     });
 
+    
+
     socket.on('join-room', (roomId, userId) => {
-    console.log('join-room', roomId, userId);
-    const newroom = "videocall_"+roomId;
+      const newroom = "videocall_"+roomId;
+      console.log('join-room', newroom, userId);
     socket.join(newroom);
     socket.broadcast.to(newroom).emit('user-connected', userId, roomId)
 
+
     socket.on('disconnect', () => {
-      socket.broadcast.to(roomId).emit('user-disconnected', userId)
-    })
+      socket.emit('user-disconnected', userId)
+      socket.broadcast.to(roomId).emit('otherUser-disconnected', userId)
+    });
 
     socket.on('leave-room', (roomId, userId) => {
     console.log('leave-room', roomId, userId);
     const newroom = "videocall_"+roomId;
-    io.to(newroom).emit('user-disconnected', userId, roomId)
+    socket.emit('user-disconnected', userId)
+    socket.broadcast.to(newroom).emit('otherUser-disconnected', (userId))
     socket.leave(newroom);
+    });
 
-    })
+
 
     
   });
 
 });
-}
+} 
 
 
 
