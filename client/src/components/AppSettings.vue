@@ -43,7 +43,7 @@ export default {
     return {
       themes: [
         ['Dark blue', 'blue', themesObject.blue.primary],
-        ['Dark green', 'green', themesObject.green.primary],
+        ['Vibe green', 'green', themesObject.green.primary],
         ['Cool orange', 'orange', themesObject.orange.primary],
         ['Warm pink', 'pink', themesObject.pink.primary],
       ],
