@@ -20,7 +20,14 @@
         <template #activator>
           <v-list-item-title>Themes</v-list-item-title>
         </template>
-        <v-list-item v-for="([title], i) in themes" :key="i" link>
+        <v-list-item
+          v-for="([title, themeKey, primaryColor], i) in themes"
+          :key="i"
+          link
+          @click="setTheme(themeKey)">
+          <v-list-item-icon>
+            <v-icon>mdi-circle</v-icon>
+          </v-list-item-icon>
           <v-list-item-title v-text="title"></v-list-item-title>
         </v-list-item>
       </v-list-group>
