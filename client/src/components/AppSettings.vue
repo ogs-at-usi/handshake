@@ -39,6 +39,24 @@
 <script>
 export default {
   name: 'AppSettings',
+  data() {
+    return {
+      items: [
+        { title: 'Themes', icon: 'mdi-cog', action: () => {} },
+        { title: 'Logout', icon: 'mdi-logout', action: () => {} },
+      ],
+    };
+  },
+  computed: {
+    opened: {
+      get() {
+        return true;
+      },
+      set(value) {
+        this.$emit('setSettings', value);
+      },
+    },
+  },
 };
 </script>
 
