@@ -63,6 +63,12 @@ export default {
             return lastMessage.content;
           case 'IMAGE':
             return '📸 Image';
+          case 'VIDEO':
+            return '🎥 Video';
+          case 'AUDIO':
+            return '🎵 Audio';
+          case 'DOCUMENT':
+            return '📁 File';
           default:
             return '';
         }
