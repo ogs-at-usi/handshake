@@ -1,5 +1,5 @@
 // const Ffmpeg = require('ffmpeg');
-const fs = require('fs')
+const fs = require('fs');
 const Path = require('path');
 const express = require('express');
 const multer = require('multer');
@@ -7,87 +7,102 @@ const sharp = require('sharp');
 const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 50000000 } }); // 50MB
-const uploadDisk = multer({ dest: "./media/temp", limits: { fileSize: 50000000 } }); // 50MB
+const uploadDisk = multer({
+  dest: './media/temp',
+  limits: { fileSize: 50000000 },
+}); // 50MB
 const io = require('../serverSocket').io;
 
 const videoStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './media/videos');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + Path.extname(file.originalname)); // Appending .jpg
+  },
+});
+
+const uploadVideo = multer({
+  storage: videoStorage,
+  limits: { fileSize: 50000000 },
+}); // 50MB
+const uploadFile = multer({
+  storage: multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './media/videos')
+      cb(null, './media/files');
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + Path.extname(file.originalname)) // Appending .jpg
-    }
-})
+      cb(null, file.originalname);
+    },
+  }),
+});
 
-const uploadVideo = multer({ storage: videoStorage, limits: { fileSize: 50000000 } }); // 50MB
-const uploadFile = multer({ dest: "./media/files", limits: { fileSize: 50000000 } }); // 50MB
 const { ObjectId } = require('mongodb');
 const { saveMessage } = require('../utils/message.utils');
 const FluentFfmpeg = require('fluent-ffmpeg');
 
 router.post('/image', upload.single('image'), async function (req, res, next) {
-    console.log(req);
-    console.log(req.file);
+  const chatID = req.body.chatID;
+  const userId = req.userId;
+  const file = req.file;
+  if (!file) {
+    const error = new Error('Please upload a file');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
 
+  if (!ObjectId.isValid(chatID)) {
+    return res.status(400).end();
+  }
 
-    // TODO: change req.body.chatID to whatever the chatID is
-    const chatID = req.body.chatID;
-    console.log(chatID);
-    const userId = req.userId;
-    const file = req.file;
-    if (!file) {
-        const error = new Error("Please upload a file");
-        error.httpStatusCode = 400;
-        return next(error);
-    }
+  const newMessage = await saveMessage(chatID, userId, 'siumfoto', 'IMAGE');
 
-    if (!ObjectId.isValid(chatID)) {
-        console.log('invalid chat id');
-        return res.status(400).end();
-    }
+  if (!newMessage) {
+    return res.status(404).end();
+  }
 
-    console.log('about to save message');
-    const newMessage = await saveMessage(chatID, userId, 'siumfoto', 'IMAGE');
-    console.log(newMessage);
+  const path = './media/images/' + newMessage._id + '.jpeg';
 
-    if (!newMessage) {
-        console.log('invalid message');
-        return res.status(404).end();
-    }
+  newMessage.content = newMessage._id + '.jpeg';
 
-    const path = './media/images/' + newMessage._id + '.jpeg';
+  await newMessage.save();
 
-    newMessage.content = newMessage._id + '.jpeg';
+  await sharp(file.buffer)
+    .flatten({ background: '#ffffff' })
+    .jpeg({ quality: 50 })
+    .toFile(path);
+  io.to(chatID).emit('messages:create', newMessage);
 
-    await newMessage.save();
-
-    await sharp(file.buffer).flatten({ background: '#ffffff' }).jpeg({ quality: 50 }).toFile(path);
-    io.to(chatID).emit('messages:create', newMessage);
-
-    res.status(201).json(file);
-
+  res.status(201).json(file);
 });
 
-router.post('/video', uploadVideo.single('video'), async function (req, res, next) {
+router.post(
+  '/video',
+  uploadVideo.single('video'),
+  async function (req, res, next) {
     // TODO: change req.body.chatID to whatever the chatID is
     const chatID = req.body.chatID;
     const userId = req.userId;
     const file = req.file;
-    console.log(file);
     if (!file) {
-        const error = new Error("Please upload a file");
-        error.httpStatusCode = 400;
-        return next(error);
+      const error = new Error('Please upload a file');
+      error.httpStatusCode = 400;
+      return next(error);
     }
 
     if (!ObjectId.isValid(chatID)) {
-        return res.status(400).end();
+      return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatID, userId, file.filename, 'VIDEO');
+    const newMessage = await saveMessage(
+      chatID,
+      userId,
+      file.filename,
+      'VIDEO'
+    );
 
     if (!newMessage) {
-        return res.status(404).end();
+      return res.status(404).end();
     }
 
     // const path = './media/videos/' + newMessage._id + '.mp4';
@@ -121,7 +136,6 @@ router.post('/video', uploadVideo.single('video'), async function (req, res, nex
     //     console.log(e.msg);
     // }
 
-
     // const extension = file.originalname.split('.').pop();
 
     // file.filename += '.' + extension;
@@ -132,54 +146,49 @@ router.post('/video', uploadVideo.single('video'), async function (req, res, nex
     io.to(chatID).emit('messages:create', newMessage);
 
     res.status(201).json(file);
-});
+  }
+);
 
-router.post('/audio', uploadDisk.single('audio'), async function (req, res, next) {
-
+router.post(
+  '/audio',
+  uploadDisk.single('audio'),
+  async function (req, res, next) {
     // TODO: change req.body.chatID to whatever the chatID is
     const chatID = req.body.chatID;
     const userId = req.userId;
     const file = req.file;
     if (!file) {
-        const error = new Error("Please upload a file");
-        error.httpStatusCode = 400;
-        return next(error);
+      const error = new Error('Please upload a file');
+      error.httpStatusCode = 400;
+      return next(error);
     }
 
     if (!ObjectId.isValid(chatID)) {
-        return res.status(400).end();
+      return res.status(400).end();
     }
 
     const newMessage = await saveMessage(chatID, userId, 'siumaudio', 'AUDIO');
 
     if (!newMessage) {
-        return res.status(404).end();
+      return res.status(404).end();
     }
-
 
     const path = './media/audio/' + newMessage._id + '.mp3';
     const dir = './media/temp';
 
-
     FluentFfmpeg(file.destination + '/' + file.filename)
-        .toFormat('mp3')
-        .on('error', (err) => {
-            console.log('An error occurred: ' + err.message);
-        })
-        .on('progress', (progress) => {
-            // console.log(JSON.stringify(progress));
-            console.log('Processing: ' + progress.targetSize + ' KB converted');
-        })
-        .on('end', () => {
-            console.log('Processing finished !');
-            fs.rm(dir, { recursive: true }, err => {
-                if (err) {
-                    throw err
-                }
-                console.log(`${dir} is deleted!`);
-            });
-        })
-        .save(path);
+      .toFormat('mp3')
+      .on('error', (err) => {
+        res.status(500).json(err).end();
+      })
+      .on('end', () => {
+        fs.rm(dir, { recursive: true }, (err) => {
+          if (err) {
+            throw err;
+          }
+        });
+      })
+      .save(path);
 
     newMessage.content = newMessage._id + '.mp3';
 
@@ -187,29 +196,36 @@ router.post('/audio', uploadDisk.single('audio'), async function (req, res, next
     io.to(chatID).emit('messages:create', newMessage);
 
     res.status(201).json(file);
-});
+  }
+);
 
-router.post('/file', uploadFile.single('file'), async function (req, res, next) {
-
+router.post(
+  '/file',
+  uploadFile.single('file'),
+  async function (req, res, next) {
     // TODO: change req.body.chatID to whatever the chatID is
     const chatID = req.body.chatID;
     const userId = req.userId;
     const file = req.file;
     if (!file) {
-        const error = new Error("Please upload a file");
-        error.httpStatusCode = 400;
-        return next(error);
+      const error = new Error('Please upload a file');
+      error.httpStatusCode = 400;
+      return next(error);
     }
-    const extension = req.file.originalname.split('.').pop();
 
     if (!ObjectId.isValid(chatID)) {
-        return res.status(400).end();
+      return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatID, userId, file.filename + '.' + extension, 'DOCUMENT');
+    const newMessage = await saveMessage(
+      chatID,
+      userId,
+      req.file.originalname,
+      'DOCUMENT'
+    );
 
     if (!newMessage) {
-        return res.status(404).end();
+      return res.status(404).end();
     }
 
     // const path = './media/files/' + newMessage._id + "." + extension;
@@ -220,7 +236,7 @@ router.post('/file', uploadFile.single('file'), async function (req, res, next) 
     io.to(chatID).emit('messages:create', newMessage);
 
     res.status(201).json(file);
-});
-
+  }
+);
 
 module.exports = router;
