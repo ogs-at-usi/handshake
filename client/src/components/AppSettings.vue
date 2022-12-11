@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import themesObject from '@/assets/vuetifyThemes';
 export default {
   name: 'AppSettings',
   data() {
