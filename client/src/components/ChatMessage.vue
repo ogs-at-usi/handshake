@@ -19,6 +19,9 @@
       <ChatMessageImage
         v-else-if="message.type === 'IMAGE'"
         :message="message" />
+      <ChatMessageVideo
+        v-else-if="message.type === 'VIDEO'"
+        :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -31,10 +34,11 @@ import Message from '@/classes/message';
 import { formatTime } from '@/utils';
 import ChatMessageText from '@/components/message/ChatMessageText';
 import ChatMessageImage from '@/components/message/ChatMessageImage';
+import ChatMessageVideo from '@/components/message/ChatMessageVideo';
 
 export default {
   name: 'ChatMessage',
-  components: { ChatMessageImage, ChatMessageText },
+  components: { ChatMessageVideo, ChatMessageImage, ChatMessageText },
   data() {
     return {
       page: 1,
@@ -96,8 +100,8 @@ export default {
 .message {
   max-width: 70% !important;
 }
-.message-image {
-  width: 300px !important;
+.message-image, .message-video {
+  width: 400px !important;
 }
 @media only screen and (max-width: 600px) {
   .message {
