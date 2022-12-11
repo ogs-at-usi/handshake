@@ -6,8 +6,10 @@
       <h2 class="m-0 text-truncate">{{ chatName }}</h2>
 
       <!-- create a button that make apper a pop up -->
-      <button class="bi bi-telephone" @click="callingFunction()"></button>
-
+      <div>
+      <button v-if= "buttonState" class="bi bi-telephone" @click="callingFunction()"></button>
+      <button v-else class="bi bi-telephone-fill"  @click="changeButton()"></button>
+      </div>
       <!-- popup -->
     </header>
     <!-- message container -->
@@ -17,7 +19,6 @@
         :key="index"
         :message="msg"
       ></ChatMessage>
-
       <div ref="video-grid"></div>
     </main>
 
@@ -56,6 +57,7 @@ export default {
     return {
       messageString: '',
       showPopup: false,
+      buttonState: false,
     };
   },
   props: {
@@ -65,6 +67,9 @@ export default {
     },
   },
   methods: {
+    changeButton() {
+      this.buttonState = true;
+    },
     initForm: function (popup) {
       this[popup.hostElement.id] = popup;
     },
@@ -219,6 +224,8 @@ export default {
             video.remove();
           });
 
+
+
         });
 
       function addFunctionToButtons(
@@ -289,6 +296,17 @@ export default {
   },
   mounted() {
 
+    
+      const socket = this.$store.getters.socket;
+
+    // const socket = this.$store.getters.socket;
+
+    // socket.on('change-button', (chatId) => {
+    //   console.log('CHANGE BUTTON');
+    //   // if the chatid is the same as the chatid of the chat you are in
+    //   // then change the button
+
+    // }); 
 
 
 

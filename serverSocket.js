@@ -56,7 +56,6 @@ function init(server) {
       socket.leave(socket.userId);
     });
 
-    
 
     socket.on('join-room', (roomId, userId) => {
       const newroom = "videocall_"+roomId;
@@ -89,6 +88,7 @@ function init(server) {
   socket.on('calling-others', (chatId, myPeer) => {
     console.log('calling-others', chatId, myPeer);
     socket.to(chatId).emit('calling-me')
+    socket.to(chatId).emit('change-button', chatId)
   });
 });
 } 
