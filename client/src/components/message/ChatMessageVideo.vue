@@ -1,6 +1,6 @@
 <template>
   <div class="pa-1">
-    <video :src="video" class="w-100" controls preload='none' />
+    <video :src="video" class="w-100" controls preload="none" />
   </div>
 </template>
 
