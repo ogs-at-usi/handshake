@@ -6,11 +6,11 @@
     absolute
     style="z-index: 100">
     <v-list class="pt-0" flat>
-      <v-list-item class="pt-2 secondary">
-        <v-list-item-avatar>
-          <img alt="pfp" src="/icons/default_pfp.png" />
-        </v-list-item-avatar>
-        <v-list-item-content>
+      <v-list-item class="pt-2 secondary" style="height: 70px">
+        <v-btn icon @click="opened = false">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        <v-list-item-content class="ms-4">
           <v-list-item-title class="font-weight-bold">
             {{ $store.getters.user.name }}
           </v-list-item-title>
