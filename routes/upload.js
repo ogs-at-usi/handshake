@@ -7,15 +7,7 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 50000000 } }); // 50MB
 const uploadDisk = multer({ dest: "./media/temp", limits: { fileSize: 50000000 } }); // 50MB
-const fileStorage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './media/files');
-    },
-    filename: function (req, file, callback) {
-        callback(null, file.originalname);
-    }
-});
-const uploadFile = multer({ storage: fileStorage, limits: { fileSize: 50000000 } }); // 50MB
+const uploadFile = multer({ dest: "./media/files", limits: { fileSize: 50000000 } }); // 50MB
 const { ObjectId } = require('mongodb');
 const { saveMessage } = require('../utils/message.utils');
 const FluentFfmpeg = require('fluent-ffmpeg');
@@ -42,7 +34,7 @@ router.post('/image', upload.single('image'), async function (req, res, next) {
     }
 
     console.log('about to save message');
-    const newMessage = await saveMessage(chatID, userId, 'sium', 'IMAGE');
+    const newMessage = await saveMessage(chatID, userId, 'siumfoto', 'IMAGE');
     console.log(newMessage);
 
     if (!newMessage) {
@@ -77,7 +69,7 @@ router.post('/video', uploadDisk.single('video'), async function (req, res, next
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatID, userId, '', 'VIDEO');
+    const newMessage = await saveMessage(chatID, userId, 'siumvideo', 'VIDEO');
 
     if (!newMessage) {
         return res.status(404).end();
@@ -133,7 +125,7 @@ router.post('/audio', uploadDisk.single('audio'), async function (req, res, next
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatID, userId, '', 'AUDIO');
+    const newMessage = await saveMessage(chatID, userId, 'siumaudio', 'AUDIO');
 
     if (!newMessage) {
         return res.status(404).end();
@@ -187,16 +179,16 @@ router.post('/file', uploadFile.single('file'), async function (req, res, next) 
         return res.status(400).end();
     }
 
-    const newMessage = await saveMessage(chatID, userId, '', 'DOCUMENT');
+    const newMessage = await saveMessage(chatID, userId, 'siumdoc', 'DOCUMENT');
 
     if (!newMessage) {
         return res.status(404).end();
     }
 
-    const extension = req.file.originalname.split('.').pop();
+    // const extension = req.file.originalname.split('.').pop();
     // const path = './media/files/' + newMessage._id + "." + extension;
 
-    newMessage.content = newMessage._id + "." + extension;
+    newMessage.content = req.file.originalname;
 
     await newMessage.save();
     res.status(201).json(file);
