@@ -1,6 +1,6 @@
 <template>
   <!-- UI: CONTACT -->
-  <v-list-item active-class="secondary" class="py-2 gap-3">
+  <v-list-item :ripple='false' active-class="secondary" class="py-2 gap-3">
     <!-- image of the other user or group chat -->
     <v-list-item-avatar class="mr-0">
       <img :src="imageId" class="pfp" alt="pfp" />
@@ -56,9 +56,18 @@ export default {
       else return this.otherPrivateUser.name;
     },
     lastMessage() {
-      return this.chat.messages && this.chat.messages.length > 0
-        ? this.chat.messages[this.chat.messages.length - 1].content
-        : '';
+      if (this.chat?.messages && this.chat.messages.length > 0) {
+        const lastMessage = this.chat.messages[this.chat.messages.length - 1];
+        switch (lastMessage.type) {
+          case 'TEXT':
+            return lastMessage.content;
+          case 'IMAGE':
+            return '📸 Image';
+          default:
+            return '';
+        }
+      }
+      return '';
     },
     lastMessageTimestamp() {
       const timestamp =
