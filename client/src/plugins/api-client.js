@@ -1,3 +1,5 @@
+import store from '@/store';
+
 class ApiClient {
   constructor(axiosInstance) {
     this.axiosInstance = axiosInstance;
@@ -73,7 +75,10 @@ class ApiClient {
    * @param type {string} The type of the file: image / video / file
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
-  sendFile(chatID, file, type) {
+  async sendFile(chatID, file, type) {
+    // before sending the file, it's best to refresh the token
+    // to avoid the token to expire while the file is being uploaded
+    await store.dispatch('refreshToken');
     const formData = new FormData();
     formData.append(type, file);
     formData.append('chatID', chatID);

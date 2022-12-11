@@ -66,6 +66,13 @@ export default new Vuex.Store({
     signup({ commit }, { username, email, password }) {
       return this._vm.$api.signup(email, username, password);
     },
+    async refreshToken({ commit }) {
+      try {
+        await this._vm.$api.refreshToken();
+      } catch (error) {
+        commit('logout');
+      }
+    },
   },
   modules: {},
   plugins: [vuexLocal.plugin],
