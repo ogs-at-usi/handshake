@@ -16,6 +16,7 @@
       >
 
       <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
+      <ChatMessageImage v-else-if="message.type === 'IMAGE'" :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -27,10 +28,11 @@
 import Message from '@/classes/message';
 import { formatTime } from '@/utils';
 import ChatMessageText from '@/components/message/ChatMessageText';
+import ChatMessageImage from '@/components/message/ChatMessageImage';
 
 export default {
   name: 'ChatMessage',
-  components: { ChatMessageText },
+  components: { ChatMessageImage, ChatMessageText },
   data() {
     return {
       page: 1,
