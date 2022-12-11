@@ -60,7 +60,7 @@ router.post('/image', upload.single('image'), async function (req, res, next) {
 
     await newMessage.save();
 
-    await sharp(file.buffer).jpeg({ quality: 50 }).toFile(path);
+    await sharp(file.buffer).flatten({ background: '#ffffff' }).jpeg({ quality: 50 }).toFile(path);
 
     res.status(201).json(file);
 
