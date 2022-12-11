@@ -17,7 +17,7 @@
             }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="openSettings">
+            <v-btn icon @click="openSettings = true">
               <v-icon>mdi-cog</v-icon>
             </v-btn>
           </v-list-item-action>
