@@ -29,7 +29,7 @@ class User {
     online = false,
     typing = false,
   }) {
-    this._id = _id;
+    this._id = _id && _id.toString(); // when users retrieved from search bar
     this.name = name;
     this.email = email;
     this.online = online;
