@@ -2,7 +2,6 @@ const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
-const ChatData = require('./models/classes/chat').Chat;
 
 /**
  * Initialize the socket.io server
@@ -21,7 +20,8 @@ function init(server, onlineUsers) {
    */
   async function getChats(userId) {
     // get chat objects and sort them by last message date
-    const userChatRelations = await UserChat.find({ user: ObjectId(userId) })
+    const userChatRelations = await UserChat
+      .find({ user: ObjectId(userId) })
       .populate({
         path: 'chat',
         populate: { path: 'messages' }
@@ -32,26 +32,24 @@ function init(server, onlineUsers) {
     // fire condition - if none, return immediately empty array
     if (!userChatRelations) return [];
 
-    let chats = userChats;
+    const userChats = userChatRelations.map(ucr => ucr.chat);
     // find all the users in each chat ad add it as a property 'members'
-    chats = await Promise.all(
-      chats.map(async (chat) => {
-        const members = await UserChat.find({ chat: chat._id })
+    return await Promise.all(
+      userChats.map(async c => {
+        const members = await UserChat.find({ chat: c._id })
           .populate('user')
           .exec();
         return {
-          ...chat._doc,
-          members: members.map((member) => {
+          ...c._doc,
+          members: members.map(m => {
             return {
-              ...member.user._doc,
-              online: onlineUsers.has(member.user._id.toString()),
+              ...m.user._doc,
+              online: onlineUsers.has(m.user._id.toString()),
             };
           }),
         };
       })
     );
-
-    return chats;
   }
 
   io.on('connection', async socket => {
@@ -62,26 +60,26 @@ function init(server, onlineUsers) {
       userChats.map((chat) => chat._id.toString()),
       socket
     );
-    socket.emit('chats:read', userChats);
+    socket.emit('chats:read', JSON.stringify(userChats));
 
     onlineUsers.add(socket.userId);
-    io.emit('users:online', socket.userId);
+    io.emit('users:online', JSON.stringify(socket.userId));
 
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
 
       onlineUsers.delete(socket.userId);
-      io.emit('users:offline', socket.userId);
+      io.emit('users:offline', JSON.stringify(socket.userId));
     });
 
     socket.on('user:typing', (data) => {
       const { chatId } = data;
-      io.to(chatId).emit('user:typing', { chatId, userId: socket.userId });
+      io.to(chatId).emit('user:typing', JSON.stringify({ chatId, userId: socket.userId }));
     });
 
     socket.on('user:notTyping', (data) => {
       const { chatId } = data;
-      io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
+      io.to(chatId).emit('user:notTyping', JSON.stringify({ chatId, userId: socket.userId }));
     });
   });
 }

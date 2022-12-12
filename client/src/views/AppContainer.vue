@@ -41,26 +41,25 @@ export default {
       this.chats = JSON.parse(chatsJSON).map(c => new Chat(c));
     });
 
-    socket.on('users:online', (userId) => {
+    socket.on('users:online', userIdJSON => {
+      //  have no chats, no one online user we have a chat with
       if (!this.chats) return;
-      this.chats.forEach((chat) => {
-        chat.members.forEach((member) => {
-          if (member._id === userId) {
-            member.online = true;
-          }
-        });
-      });
+
+      const userId = JSON.parse(userIdJSON);
+      this.chats.forEach(c =>
+        c.members.forEach(m => {
+          if (m._id === userId) m.online = true;
+        })
+      );
     });
 
-    socket.on('users:offline', (userId) => {
-      console.log('EVENT users:offline -', userId);
-      this.chats.forEach((chat) => {
-        chat.members.forEach((member) => {
-          if (member._id === userId) {
-            member.online = false;
-          }
-        });
-      });
+    socket.on('users:offline', userIdJSON => {
+      console.log('EVENT users:offline -', userIdJSON);
+      this.chats.forEach(c =>
+        c.members.forEach(m => {
+          if (m._id === userIdJSON) m.online = false;
+        })
+      );
     });
 
     socket.on('messages:create', messageJSON => {
