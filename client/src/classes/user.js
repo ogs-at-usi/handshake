@@ -20,8 +20,8 @@ class User {
   name = null;
   email = null;
 
-  constructor({ _id = null, name = null, email = null, chats = null }) {
-    this._id = _id;
+  constructor({ _id = null, name = null, email = null }) {
+    this._id = _id && _id.toString(); // when users retrieved from search bar
     this.name = name;
     this.email = email;
   }
