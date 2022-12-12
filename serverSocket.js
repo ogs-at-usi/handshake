@@ -3,10 +3,19 @@ const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
 
-// Initialize the socket.io server
+/**
+ * Initialize the socket.io server.
+ * @param server object reference for the server
+ */
 function init(server) {
   io.attach(server);
 
+  /**
+   * Retrieve all the user chats with members populated sorted by last message sent
+   * TODO: use the dataclass class to return the chats to the user: models/classes/chat.js
+   * @param userId {String} the userId from db
+   * @returns {Promise<[Chat]>} the chats array as promise
+   */
   async function getChats(userId) {
     let userChats = await UserChat.find({ user: ObjectId(userId) })
       .populate({
@@ -56,18 +65,19 @@ function init(server) {
   });
 }
 
-function joinRooms(rooms, socket) {
-  if (!Array.isArray(rooms)) {
-    rooms = [rooms];
-  }
-  if (!Array.isArray(socket)) {
-    socket = [socket];
-  }
-  rooms.forEach((room) => {
-    socket.forEach((socket) => {
-      socket.join(room);
-    });
-  });
+/**
+ * Join the sockets to all the rooms
+ * TODO: change the mutable parameters rooms and sockets that can also be
+ * TODO: a single room or socket if not an array.
+ * TODO: e.g. throw a silent error if the object is not an array and in the calling
+ * TODO: method report the problem in the server and make the calling request fail.
+ * @param rooms{[String]} array of room ids
+ * @param sockets{Array} array of sockets objects
+ */
+function joinRooms(rooms, sockets) {
+  if (!Array.isArray(rooms)) rooms = [rooms];
+  if (!Array.isArray(sockets)) sockets = [sockets];
+  rooms.forEach(r => sockets.forEach(s => s.join(r)));
 }
 
 module.exports = {
