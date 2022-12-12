@@ -10,6 +10,7 @@ const vuexLocal = new VuexPersistence({
     // Only save the state of the module 'auth'
     isLoggedIn: state.isLoggedIn,
     user: state.user,
+    theme: state.theme,
   }),
   asyncStorage: true,
 });
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     user: null,
     socket: null,
     activeChat: null,
+    theme: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
@@ -29,6 +31,7 @@ export default new Vuex.Store({
     socket: (state) => state.socket,
     activeChat: (state) => state.activeChat,
     isMobile: () => window.innerWidth < 600,
+    theme: (state) => state.theme,
   },
   mutations: {
     login(state, { user }) {
@@ -47,6 +50,9 @@ export default new Vuex.Store({
     },
     setActiveChat(state, { chat }) {
       state.activeChat = chat;
+    },
+    setTheme(state, { theme }) {
+      state.theme = theme;
     },
   },
   actions: {
