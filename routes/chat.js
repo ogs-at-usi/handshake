@@ -9,7 +9,8 @@ const io = require('../serverSocket').io;
 const serverSocket = require('../serverSocket');
 
 /**
- * Responds an array of users that match what the client typed
+ * Given a filter string as a query param for usernames.
+ * return an array of users that match the filter.
  */
 router.get('/users', async function (req, res) {
   const filter = req.query.filter ?? '';
@@ -23,8 +24,10 @@ router.get('/users', async function (req, res) {
   res.json(searchedUsers);
 });
 
-/*
- * Responds a created chat between users and returns the new chat
+/**
+ * Create a chat between the logged user and the other one passed as parameter in the POST body request.
+ * The chat is created only if it doesn't exist yet.
+ * Return the newly created chat.
  */
 router.post('/chats', async function (req, res) {
   const otherId = req.body.otherId;
@@ -114,8 +117,9 @@ router.post('/chats', async function (req, res) {
   }
 });
 
-/*
- * Responds a created a new message and returns the new message
+/**
+ * Create a new message in a chat with the current logged user and broadcast the new message
+ * the route receives { message } JSON object in POST body
  */
 router.post('/chats/:chatId/messages', async function (req, res) {
   const chatId = req.params.chatId;
