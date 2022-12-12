@@ -1,5 +1,5 @@
 <template>
-  <v-card-text class="pa-3 pb-1 text--primary">
+  <v-card-text class="pa-3 pb-1 text--primary" style='font-size:1.1rem;'>
     {{ content }}
     <a
       v-if="content.length < message.content.length"
