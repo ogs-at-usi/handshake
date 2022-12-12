@@ -33,17 +33,17 @@ export default {
     console.log('Trying to connect');
     this.$store.commit('setSocket', socket);
 
-    socket.on('chats:read', (chats) => {
-      console.log('EVENT chats:read -', chats);
-      this.chats = chats.map((chat) => new Chat(chat));
-      // this.setActiveChat(this.chats[0]._id);
+    socket.on('chats:read', chatsJSON => {
+      console.log('EVENT chats:read -', chatsJSON);
+      this.chats = JSON.parse(chatsJSON).map(c => new Chat(c));
     });
 
-    socket.on('messages:create', (message) => {
-      console.log('EVENT messages:create -', message);
+    socket.on('messages:create', messageJSON => {
+      console.log('EVENT messages:create -', messageJSON);
+      const message = new Message(JSON.parse(messageJSON));
       const chatId = message.chat;
-      const chat = this.chats.find((chat) => chat._id === chatId);
-      chat.messages.push(new Message(message));
+      const chat = this.chats.find(c => c._id === chatId);
+      chat.messages.push(message);
       // move the chat to the top of the list
       this.chats = this.chats.filter((chat) => chat._id !== chatId);
       this.chats.unshift(chat);
@@ -57,9 +57,9 @@ export default {
     /**
      * Get newly created chat.
      */
-    socket.on('chats:create', (chatJson) => {
-      console.log('EVENT chats:create -', chatJson);
-      const chat = new Chat(chatJson);
+    socket.on('chats:create', chatJSON => {
+      console.log('EVENT chats:create -', chatJSON);
+      const chat = new Chat(JSON.parse(chatJSON));
       this.chats.unshift(chat);
 
       if (chat.members[0]._id === this.$store.getters.user._id) {
@@ -74,11 +74,10 @@ export default {
     },
     userSelected(otherUser) {
       console.log('EVENT User selected - ', otherUser);
-      const chat = this.chats.find((chat) => {
-        if (chat.members.length === 2) {
-          const otherChatUser = chat.members.find(
-            (member) => member._id !== this.$store.getters.user._id
-          );
+
+      const chat = this.chats.find(c => {
+        if (c.members.length === 2) {
+          const otherChatUser = c.members.find(m => m._id !== this.$store.getters.user._id);
           return otherChatUser._id === otherUser._id;
         }
         return false;
