@@ -1,4 +1,4 @@
-import Chat from '@/classes/chat';
+const { Chat } = require('./chat');
 
 class Group extends Chat {
   _id = null;
@@ -18,4 +18,4 @@ class Group extends Chat {
   }
 }
 
-export default Group;
+module.exports = { Group };
