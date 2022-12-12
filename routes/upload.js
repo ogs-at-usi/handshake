@@ -109,7 +109,6 @@ router.post(
 
     await sharp(req.file.buffer)
       .flatten({ background: '#ffffff' })
-      .trellisQuantization()
       .jpeg({ quality: 60 })
       .toFile(path);
     io.to(chatID).emit('messages:create', newMessage);
