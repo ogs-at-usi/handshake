@@ -2,6 +2,7 @@ const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
+const ChatData = require('./models/classes/chat').Chat;
 
 /**
  * Initialize the socket.io server.
@@ -9,6 +10,7 @@ const { ObjectId } = require('mongodb');
  */
 function init(server) {
   io.attach(server);
+  io.use(authMiddleware);
 
   /**
    * Retrieve all the user chats with members populated sorted by last message sent
@@ -17,51 +19,39 @@ function init(server) {
    * @returns {Promise<[Chat]>} the chats array as promise
    */
   async function getChats(userId) {
-    let userChats = await UserChat.find({ user: ObjectId(userId) })
+    // get chat objects and sort them by last message date
+    const userChatRelations = await UserChat.find({ user: ObjectId(userId) })
       .populate({
         path: 'chat',
-        populate: {
-          path: 'messages',
-        },
+        populate: { path: 'messages' }
       })
+      .sort({ 'chat.messages.date': -1 })
       .exec();
-    if (!userChats) {
-      return [];
-    }
-    userChats = userChats.map((userChat) => userChat.chat);
-    userChats = userChats.sort((a, b) => {
-      const lastMessageA = a.messages[a.messages.length - 1];
-      const lastMessageB = b.messages[b.messages.length - 1];
-      return lastMessageB.sentAt - lastMessageA.sentAt;
-    });
 
-    const chats = userChats;
-    // find all the users in each chat ad add it as a property 'members'
+    // fire condition - if none, return immediately empty array
+    if (!userChatRelations) return [];
+
+    // // get chat objects and sort them by last message date
+    const userChats = userChatRelations.map((ucr) => ucr.chat);
+
+    // find all the users in each chat, retrieve it and add them as property 'members'
     return await Promise.all(
-      chats.map(async (chat) => {
-        const members = await UserChat.find({ chat: chat._id })
-          .populate('user')
-          .exec();
-        return { ...chat._doc, members: members.map((member) => member.user) };
+      userChats.map(async c => {
+        const UserChatMembers = await UserChat.find({ chat: c._id }).populate('user').exec();
+        const members = UserChatMembers.map(ucm => ucm.user);
+        return new ChatData({ ...c._doc, members });
       })
     );
   }
 
-  io.use(authMiddleware);
-
-  io.on('connection', async (socket) => {
-    console.log('✅User connected with id ' + socket.id, socket.userId);
+  io.on('connection', async socket => {
+    console.log(`✅User connected with id ${socket.id} ${socket.userId}`);
     socket.join(socket.userId);
     const userChats = await getChats(socket.userId);
-    joinRooms(
-      userChats.map((chat) => chat._id.toString()),
-      socket
-    );
-    socket.emit('chats:read', userChats);
-
-    socket.on('disconnect', () => {
-      console.log('⛔User disconnected with id ' + socket.id);
-    });
+    const userChatsIds = userChats.map(c => c._id);
+    joinRooms(userChatsIds, socket);
+    socket.emit('chats:read', JSON.stringify(userChats));
+    socket.on('disconnect', () => console.log(`⛔User disconnected with id ${socket.id}`));
   });
 }
 

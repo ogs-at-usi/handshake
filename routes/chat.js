@@ -30,80 +30,27 @@ router.get('/users', async function (req, res) {
  * Return the newly created chat.
  */
 router.post('/chats', async function (req, res) {
-  const otherId = req.body.otherId;
+  const { otherId } = req.body;
 
-  if (!ObjectId.isValid(otherId)) {
-    return res.status(400).end();
-  }
+  // retrieve other user and current user chats object
+  if (!ObjectId.isValid(otherId)) return res.status(400).end();
+  const otherUser = await User.findById(otherId);
+  if (!otherUser) return res.status(400).end();
+  const otherUserChatRelations = await UserChat.find({ user: otherUser._id }).populate('chat').exec();
+  const otherUserChat = otherUserChatRelations.map((ucr) => ucr.chat);
 
-  const otherUser = await User.findOne({
-    _id: ObjectId(otherId),
-  });
-  if (!otherUser) {
-    return res.status(400).end();
-  }
+  const user = await User.findById(req.userId);
+  if (!user) return res.status(406).end();
+  const userChatRelations = await UserChat.find({ user: user._id }).populate('chat').exec();
+  const userChat = userChatRelations.map((ucr) => ucr.chat);
 
-  const user = await User.findOne({
-    _id: ObjectId(req.userId),
-  });
-
-  if (!user) {
-    return res.status(406).end();
-  }
-
-  let otherUserChats = await UserChat.find({
-    user: otherUser._id,
-  })
-    .populate('chat')
-    .exec();
-  otherUserChats = otherUserChats.map((userChat) => userChat.chat);
-
-  let userChats = await UserChat.find({
-    user: user._id,
-  })
-    .populate('chat')
-    .exec();
-  userChats = userChats.map((userChat) => userChat.chat);
-
-  const commonChats = otherUserChats.filter(
-    (value) =>
-      userChats.findIndex(
-        (uc) => uc._id.toString() === value._id.toString()
-      ) !== -1
+  // find the chat between the two users
+  const commonChats = otherUserChat.filter(ouc =>
+      userChat.some(uc => uc._id.toString() === ouc._id.toString())
   );
 
-  if (commonChats.length === 0) {
-    // create
-    const chat = await Chat.create({
-      is_group: false,
-      messages: [],
-    });
-    const chatId = chat._id;
-
-    await UserChat.create({
-      user: user._id,
-      chat: chatId,
-    });
-    await UserChat.create({
-      user: otherUser._id,
-      chat: chatId,
-    });
-
-    serverSocket.joinRooms(
-      chatId.toString(),
-      await io.to(req.userId).to(otherId).fetchSockets()
-    );
-
-    let members = await UserChat.find({ chat: chatId }).populate('user').exec();
-    members = members.map((member) => member.user);
-
-    io.to(req.userId)
-      .to(otherId)
-      .emit('chats:create', { ...chat._doc, members });
-
-    res.status(201).json(chat);
-  } else {
-    // Not meant to happen that a chat already exists between the users
+  // Not meant to happen that a chat already exists between the users
+  if (commonChats.length > 0) {
     res.status(400).json({
       message: 'Error, a chat already exists',
       commonChats,
@@ -131,45 +78,43 @@ router.post('/chats', async function (req, res) {
  * the route receives { message } JSON object in POST body
  */
 router.post('/chats/:chatId/messages', async function (req, res) {
-  const chatId = req.params.chatId;
-  if (!ObjectId.isValid(chatId)) {
-    return res.status(400).end();
-  }
+  console.log(
+    'Route: /chat/:chatId/messages, ' +
+    `params: ${req.params}, body: ${req.body} - ` +
+    `Chat of the new message chatId in params`
+  );
 
-  const message = req.body.message;
+  const { chatId } = req.params;
+  if (!ObjectId.isValid(chatId)) return res.status(400).end();
+
+  const message = new MessageData(req.body.message);
+  // verify message validity TODO: add self-check in class as method
   if (
     message?.type === undefined ||
     message?.content === undefined ||
     message.content.length === 0 ||
     !Object.values(MessageType).includes(message?.type)
-  ) {
-    return res.status(400).end();
-  }
+  ) return res.status(400).end();
 
-  const result = await UserChat.findOne({
+  // check if chat of the current user exists
+  const userChat = await UserChat.findOne({
     chat: new ObjectId(chatId),
     user: new ObjectId(req.userId),
   });
-  console.log(
-    `Route: /chat/:chatId/messages, params: ${req.params}, body: ${req.body} - Chat of the new message: ${chatId}`
-  );
-  if (!result) {
-    return res.status(404).end();
-  }
+  if (!userChat) return res.status(404).end();
 
+  // add new message and put FK of user chat
   const newMessage = await Message.create({
     sender: ObjectId(req.userId),
     chat: ObjectId(chatId),
     type: message.type,
     content: message.content,
-    sentAt: new Date(),
+    sentAt: new Date(), // TODO: put send date from the client
     deliveredAt: new Date(),
   });
 
-  const chat = await Chat.findOne({
-    _id: ObjectId(chatId),
-  }).exec();
-
+  // get chat and push the message PK to the messages array
+  const chat = await Chat.findById(chatId).exec();
   chat.messages.push(newMessage._id);
   await chat.save();
 
