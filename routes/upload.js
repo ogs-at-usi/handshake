@@ -1,5 +1,3 @@
-// const Ffmpeg = require('ffmpeg');
-const fs = require('fs');
 const Path = require('path');
 const express = require('express');
 const multer = require('multer');
@@ -9,7 +7,6 @@ const io = require('../serverSocket').io;
 
 const { ObjectId } = require('mongodb');
 const { saveMessage } = require('../utils/message.utils');
-const FluentFfmpeg = require('fluent-ffmpeg');
 
 const MB = 1000 * 1000;
 const MAX_SIZES = Object.freeze({
@@ -150,7 +147,7 @@ router.post(
     const newMessage = await saveMessage(
       chatId,
       req.userId,
-      'invalid.mp3',
+      req.file.filename,
       'AUDIO'
     );
 
@@ -158,31 +155,7 @@ router.post(
       return res.status(404).end();
     }
 
-    const path = './media/audio/' + newMessage._id + '.mp3';
-    const dir = './media/temp';
-
-    await new Promise((resolve, reject) => {
-      FluentFfmpeg(req.file.destination + '/' + req.file.filename)
-        .audioBitrate(128)
-        .toFormat('mp3')
-        .on('error', (err) => {
-          res.status(500).json(err).end();
-          resolve();
-        })
-        .on('end', () => {
-          fs.rm(dir, { recursive: true }, (err) => {
-            if (err) {
-              return reject(err);
-            }
-            resolve();
-          });
-        })
-        .save(path);
-    });
-
-    newMessage.content = newMessage._id + '.mp3';
-
-    await newMessage.save();
+    // newMessage.content = newMessage._id + '.mp3';
     io.to(chatId).emit('messages:create', newMessage);
 
     res.status(201);
