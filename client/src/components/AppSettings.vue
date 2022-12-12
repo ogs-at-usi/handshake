@@ -49,10 +49,16 @@ export default {
       ],
     };
   },
+  props: {
+    open: {
+      type: Boolean,
+      required: true,
+    },
+  },
   computed: {
     opened: {
       get() {
-        return true;
+        return this.open;
       },
       set(value) {
         this.$emit('setSettings', value);

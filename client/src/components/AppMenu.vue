@@ -3,8 +3,8 @@
   <v-container class="pa-0 w-100 ma-0 h-100" fluid style="position: relative">
     <AppSettings
       class="w-100"
-      v-if="openSettings"
-      @setSettings="openSettings = $event" />
+      @setSettings="openSettings = $event"
+      :open="openSettings" />
     <v-navigation-drawer clipped color="surface" permanent width="100%">
       <v-list class="pt-0" flat>
         <v-list-item class="pt-2 secondary">
