@@ -62,7 +62,6 @@ export default {
   props: {
     chatId: {
       type: String,
-      required: true,
     },
   },
   data() {

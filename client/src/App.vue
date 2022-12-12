@@ -8,7 +8,7 @@
         <div
           class="primary d-flex flex-row justify-space-between align-center pa-3">
           <h1 class="white--text">HandShake</h1>
-          <v-btn color="white" outlined>About us</v-btn>
+          <router-link style='text-decoration:none!important' to='/about'><v-btn color="white" outlined>About us</v-btn></router-link>
         </div>
         <router-view class="background"></router-view>
         <footer class="d-flex justify-center align-center pa-3">
