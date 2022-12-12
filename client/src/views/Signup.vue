@@ -1,67 +1,61 @@
 <template>
-  <div>
-    <div id="title" class="align-items-center justify-content-between">
-      <h1>HandShake</h1>
-      <h2><a class="btn btn-outline-light" href="">About us</a></h2>
-    </div>
-
-    <section
-      id="login"
-      class="d-flex row justify-content-evenly align-items-center text-center"
-    >
-      <section
-        id="signup_form"
-        class="d-flex flex-column position-relative col-12 col-xl-5 gap-2"
-      >
-        <h2>Join HandShake now.</h2>
-
-        <form class="text-center" @submit.prevent="signup">
-          <input
-            name="username"
-            type="text"
-            placeholder="Username"
+  <section class="flex-grow-1 justify-center align-center d-flex">
+    <v-card color="transparent" elevation="0">
+      <v-form ref="form" lazy-validation @submit.prevent="signup">
+        <v-card-title class="justify-center pb-7">
+          <h2>Sign Up</h2>
+        </v-card-title>
+        <v-card-text class="pb-3 d-flex flex-column gap-3">
+          <v-text-field
             v-model="username"
-          />
-          <input
-            name="email"
-            type="text"
-            placeholder="E-mail"
+            color="textPrimary"
+            label="Username"
+            :error-messages="errors.username"
+            :rules="[(v) => !!v || 'Username is required']"
+            hide-details="auto"
+            outlined
+            required></v-text-field>
+          <v-text-field
             v-model="email"
-          />
-          <div class="w-100"></div>
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
+            :error-messages="errors.email"
+            :rules="[
+              (v) => !!v || 'Email is required',
+              (v) => /.+@.+\..+/.test(v) || 'Email must be valid',
+            ]"
+            color="textPrimary"
+            hide-details="auto"
+            label="Email"
+            outlined
+            required />
+          <v-divider />
+          <v-text-field
             v-model="password"
-          />
-          <input
-            name="confirm_password"
+            :error-messages="errors.password"
+            color="textPrimary"
+            label="Password"
+            hide-details="auto"
             type="password"
-            placeholder="Confirm password"
+            outlined
+            required></v-text-field>
+          <v-text-field
             v-model="password2"
-          />
-          <div class="w-100"></div>
-
-          <button class="btn btn-outline-light .mx-auto" type="submit">
-            Sign up
-          </button>
-        </form>
-        <p>Already a user? <a class="btn .mx-auto" href="/login">Login</a></p>
-      </section>
-    </section>
-    <footer id="login_page_footer" class="text-center">
-      <p>
-        made with ♡ by the
-        <a
-          class="link-light"
-          href="https://github.com/ogs-at-usi/sa3-project"
-          target="_blank"
-          >ogs @ USI</a
-        >
-      </p>
-    </footer>
-  </div>
+            :error-messages="errors.password2"
+            :rules="[
+              () => (password === password2 ? true : 'Passwords do not match'),
+            ]"
+            color="textPrimary"
+            hide-details="auto"
+            label="Confirm Password"
+            outlined
+            required
+            type="password"></v-text-field>
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn color="primary" large type="submit">Sign Up</v-btn>
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </section>
 </template>
 
 <script>
@@ -73,12 +67,17 @@ export default {
       email: '',
       password: '',
       password2: '',
+      errors: {
+        username: '',
+        email: '',
+        password: '',
+        password2: '',
+      },
     };
   },
   methods: {
     signup() {
-      if (this.password !== this.password2) {
-        alert('Passwords do not match');
+      if (!this.$refs.form.validate()) {
         return;
       }
       this.$api
@@ -87,7 +86,15 @@ export default {
           this.$router.push('/login');
         })
         .catch((err) => {
-          console.log(err);
+          if (!err.response) return;
+          /*
+          The response is gonna be something like:
+          {"username":["A user with that username already exists."],"email":["user with this email address already exists."]}
+           */
+          const { data } = err.response;
+          for (const [key, value] of Object.entries(data)) {
+            this.errors[key] = value;
+          }
         });
     },
   },

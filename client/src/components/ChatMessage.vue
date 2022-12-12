@@ -1,31 +1,56 @@
 <template>
   <!-- UI: MESSAGE -->
-  <div :id="message._id" :class="`card ${selfClass}`">
-    <!-- message with header of name of sender (none if ours) and message text -->
-    <div class="card-body pb-0">
-      <!-- TODO: change v-if to display only if it is a group, add chat in props -->
-      <h5 v-if="false" class="card-title">{{ senderName }}</h5>
-      <p class="card-text">
-        {{ content }}
-        <a
-          v-if="content.length < message.content.length"
-          style="cursor: pointer"
-          @click.prevent="page++"
-          >Show more</a
-        >
-      </p>
-    </div>
+  <div
+    :style="{ justifyContent: isSelf ? 'end' : 'start' }"
+    class="ma-0 d-flex">
+    <v-card
+      :id="message._id"
+      :class="`rounded-lg message message-${message.type.toLowerCase()}`"
+      elevation="2"
+      style="height: fit-content"
+      color="primary">
+      <v-card-title
+        v-if="!isSelf && isGroup"
+        class="font-weight-regular subtitle-1 pa-3 pb-0"
+        >{{ senderName }}</v-card-title
+      >
 
-    <!-- timestamp of the message: sent_at for our message, delivered_at for others -->
-    <p class="timestamp text-end pe-2">{{ timestamp }}</p>
+      <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
+      <ChatMessageImage
+        v-else-if="message.type === 'IMAGE'"
+        :message="message" />
+      <ChatMessageVideo
+        v-else-if="message.type === 'VIDEO'"
+        :message="message" />
+      <ChatMessageAudio
+        v-else-if="message.type === 'AUDIO'"
+        :message="message" />
+      <ChatMessageFile v-else :message="message" />
+      <v-card-actions class="justify-end pt-0">
+        <span class="text--secondary text-caption">{{ timestamp }}</span>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
 <script>
 import Message from '@/classes/message';
+import { formatTime } from '@/utils';
+import ChatMessageText from '@/components/message/ChatMessageText';
+import ChatMessageImage from '@/components/message/ChatMessageImage';
+import ChatMessageVideo from '@/components/message/ChatMessageVideo';
+import ChatMessageAudio from '@/components/message/ChatMessageAudio';
+import ChatMessageFile from '@/components/message/ChatMessageFile';
 
 export default {
   name: 'ChatMessage',
+  components: {
+    ChatMessageVideo,
+    ChatMessageImage,
+    ChatMessageText,
+    ChatMessageAudio,
+    ChatMessageFile,
+  },
   data() {
     return {
       page: 1,
@@ -56,24 +81,7 @@ export default {
       const time = this.isSelf
         ? this.$props.message.sentAt
         : this.$props.message.deliveredAt;
-      const datetime = new Date(time);
-      const hours = datetime.getHours().toString().padStart(2, '0');
-      const minutes = datetime.getMinutes().toString().padStart(2, '0');
-      const seconds = datetime.getSeconds().toString().padStart(2, '0');
-      return `${hours}:${minutes}:${seconds}`;
-    },
-    content() {
-      const retrieveContent = {};
-      // TODO: substitute with enum field
-      let message = this.$props.message.content.substring(
-        0,
-        this.page * this.maxChars
-      );
-      if (message.length !== this.message.content.length) {
-        message += '...';
-      }
-      retrieveContent.TEXT = message;
-      return retrieveContent[this.$props.message.type];
+      return formatTime(time);
     },
     senderName() {
       if (this.isGroup) return null; // this.$props.chat.title;
@@ -88,7 +96,22 @@ export default {
 </script>
 
 <style scoped>
-.timestamp {
-  margin: 8px;
+.message {
+  max-width: 70% !important;
+}
+.message-image,
+.message-video {
+  width: 400px !important;
+}
+.message-audio {
+  width: 300px !important;
+}
+@media only screen and (max-width: 600px) {
+  .message {
+    max-width: 75% !important;
+  }
+  /*.message-image {*/
+  /*  width: 70%!important;*/
+  /*}*/
 }
 </style>

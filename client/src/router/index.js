@@ -8,12 +8,18 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: {
+      layout: true,
+    },
     component: () =>
       import(/* webpackChunkName: "login" */ '../views/Login.vue'),
   },
   {
     path: '/signup',
     name: 'Signup',
+    meta: {
+      layout: true,
+    },
     component: () =>
       import(/* webpackChunkName: "signup" */ '../views/Signup.vue'),
   },
@@ -27,6 +33,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "container" */ '../views/AppContainer.vue'),
   },
+  {
+    path: '/about',
+    name: 'AboutUs',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/AboutUs.vue'),
+  },
 ];
 
 const router = new VueRouter({
@@ -38,11 +50,14 @@ const router = new VueRouter({
 /**
  * Middleware to check if user is authenticated before accessing a route
  */
-router.beforeEach((to, from, next) => {
-  if (
-    to.matched.some((record) => record.meta.requiresAuth) &&
-    !store.getters.isLoggedIn
-  ) {
+router.beforeEach(async (to, from, next) => {
+  await store.restored;
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && store.getters.isLoggedIn) {
+    await store.dispatch('refreshToken');
+  }
+  if (requiresAuth && !store.getters.isLoggedIn) {
     next('/login');
   } else {
     next();

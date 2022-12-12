@@ -1,16 +1,22 @@
 <template>
-  <div id="app_container" class="justify-content-between d-flex flex-row h-100">
+  <v-container
+    class="overflow-hidden pa-0 d-flex flex-row justify-start h-100 w-100 background"
+    fluid
+    style="max-width: 1450px; position: relative">
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
+      v-if="!($store.getters.isMobile && activeChat !== null)"
+      class="col-12 col-sm-5 col-md-4 col-lg-4"
       :chats="chats"
-      @selectChat="setActiveChat($event)"
-      @userSelected="userSelected($event)"
-    ></AppMenu>
+      @userSelected="userSelected($event)"></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard ref="chatBoard" :chat="activeChat"></ChatBoard>
-  </div>
+    <ChatBoard
+      ref="chatBoard"
+      :chat="activeChat"
+      class="flex-grow-1"></ChatBoard>
+  </v-container>
 </template>
 
 <script>
@@ -24,19 +30,38 @@ export default {
   name: 'AppContainer',
   data() {
     return {
-      activeChat: null,
       chats: null,
     };
   },
-  mounted() {
+  created() {
     const socket = io(':8888');
     console.log('Trying to connect');
-    this.$store.commit('setSocket', socket);
+    this.$store.commit('setSocket', { socket });
 
     socket.on('chats:read', (chats) => {
-      console.log('EVENT chats:read -', chats);
       this.chats = chats.map((chat) => new Chat(chat));
-      // this.setActiveChat(this.chats[0]._id);
+    });
+
+    socket.on('users:online', (userId) => {
+      if (!this.chats) return;
+      this.chats.forEach((chat) => {
+        chat.members.forEach((member) => {
+          if (member._id === userId) {
+            member.online = true;
+          }
+        });
+      });
+    });
+
+    socket.on('users:offline', (userId) => {
+      console.log('EVENT users:offline -', userId);
+      this.chats.forEach((chat) => {
+        chat.members.forEach((member) => {
+          if (member._id === userId) {
+            member.online = false;
+          }
+        });
+      });
     });
 
     socket.on('messages:create', (message) => {
@@ -68,10 +93,6 @@ export default {
     });
   },
   methods: {
-    setActiveChat(chat) {
-      console.log('EVENT Active chat - ', chat);
-      this.activeChat = chat;
-    },
     userSelected(otherUser) {
       console.log('EVENT User selected - ', otherUser);
       const chat = this.chats.find((chat) => {
@@ -92,9 +113,15 @@ export default {
         });
       }
     },
-    overrideChat(id) {
-      console.log(id);
-      this.activeChat._id = id;
+  },
+  computed: {
+    activeChat: {
+      get() {
+        return this.$store.getters.activeChat;
+      },
+      set(chat) {
+        this.$store.commit('setActiveChat', { chat });
+      },
     },
   },
   components: { AppMenu, ChatBoard },

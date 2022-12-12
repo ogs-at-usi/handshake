@@ -1,16 +1,7 @@
 <template>
-  <main id="menu_list">
-    <ul class="ps-0">
-      <ChatContact
-        v-for="(chat, index) in chats"
-        :key="index"
-        :chat="chat"
-        class="ps-4 py-3"
-        v-on="$listeners"
-        @click.native="$emit('selectChat', chat)"
-      />
-    </ul>
-  </main>
+  <v-list-item-group v-model="active">
+    <ChatContact v-for="(chat, index) in chats" :key="index" :chat="chat" />
+  </v-list-item-group>
 </template>
 
 <script>
@@ -24,6 +15,18 @@ export default {
     },
   },
   components: { ChatContact },
+  computed: {
+    active: {
+      get() {
+        return this.chats?.indexOf(this.$store.state.activeChat);
+      },
+      set(value) {
+        let chat = null;
+        if (value !== undefined) chat = this.chats[value];
+        this.$store.commit('setActiveChat', { chat });
+      },
+    },
+  },
 };
 </script>
 

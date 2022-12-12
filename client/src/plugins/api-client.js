@@ -1,3 +1,5 @@
+import store from '@/store';
+
 class ApiClient {
   constructor(axiosInstance) {
     this.axiosInstance = axiosInstance;
@@ -5,9 +7,9 @@ class ApiClient {
 
   /**
    * Retrieve the list of chats that match the filter.
-   * @param username
-   * @param password
-   * @returns {*}
+   * @param username {String} the username
+   * @param password {String} the password
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
   login(username, password) {
     return this.axiosInstance.post('/auth/login', { username, password });
@@ -26,6 +28,14 @@ class ApiClient {
       username,
       password,
     });
+  }
+
+  /**
+   * Refresh the access token.
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  refreshToken() {
+    return this.axiosInstance.post('/auth/refresh');
   }
 
   /**
@@ -48,13 +58,35 @@ class ApiClient {
 
   /**
    * Create a message in a chat.
-   * @param chatID {string} The ID of the chat
+   * @param chatId {string} The ID of the chat
    * @param message {Message} The message to create
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
    */
-  sendMessage(chatID, message) {
-    return this.axiosInstance.post(`/api/chats/${chatID}/messages`, {
+  sendMessage(chatId, message) {
+    return this.axiosInstance.post(`/api/chats/${chatId}/messages`, {
       message,
+    });
+  }
+
+  /**
+   * Send a file in a chat.
+   * @param chatId {string} The ID of the chat
+   * @param file {File} The file to send
+   * @param type {string} The type of the file: image / video / file
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  async sendFile(chatId, file, type) {
+    // before sending the file, it's best to refresh the token
+    // to avoid the token to expire while the file is being uploaded
+    await store.dispatch('refreshToken');
+    const formData = new FormData();
+    formData.append(type, file);
+    formData.append('chatId', chatId);
+    // console.log(chatId, file, type, formData);
+    return this.axiosInstance.post(`/upload/${type}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
   }
 }
