@@ -9,12 +9,6 @@ async function saveMessage(chatId, userId, content, type) {
     user: new ObjectId(userId),
   });
 
-  console.log(result);
-
-  // console.log(
-  //     `Route: /chat/:chatId/messages, params: ${params}, body: ${body} - Chat of the new message: ${chatId}`
-  // );
-
   if (!result) {
     return null;
   }
@@ -27,8 +21,6 @@ async function saveMessage(chatId, userId, content, type) {
     sentAt: new Date(),
     deliveredAt: new Date(),
   });
-
-  console.log(newMessage);
 
   const chat = await Chat.findOne({
     _id: ObjectId(chatId),
