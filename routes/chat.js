@@ -7,6 +7,9 @@ const { Chat } = require('../models/chat');
 const { Message, MessageType } = require('../models/message'); // MessageType is used for verification
 const io = require('../serverSocket').io;
 const serverSocket = require('../serverSocket');
+const ChatData = require('../models/classes/chat').Chat;
+const UserData = require('../models/classes/user').User;
+const MessageData = require('../models/classes/message').Message;
 
 /**
  * Given a filter string as a query param for usernames.
@@ -106,6 +109,21 @@ router.post('/chats', async function (req, res) {
       commonChats,
     });
   }
+
+  // create the chat in db, make members join the room
+  // TODO: add creation in database error handling
+  const chat = await Chat.create({ is_group: false, messages: [] });
+  await UserChat.create({ user: user._id, chat: chat._id });
+  await UserChat.create({ user: otherUser._id, chat: chat._id });
+  const socketsMembers = await io.to(req.userId).to(otherId).fetchSockets();
+  serverSocket.joinRooms([chat._id.toString()], socketsMembers);
+
+  // retrieve members objects from ids and return the chat to members with status 201
+  const membersUserChatRelations = await UserChat.find({ chat: chat._id }).populate('user').exec();
+  const members = membersUserChatRelations.map(uc => new UserData(uc.user));
+  const chatData = new ChatData({ ...chat._doc, members });
+  members.forEach((m) => io.to(m._id).emit('chats:create', JSON.stringify(chatData)));
+  res.status(201).json(chat);
 });
 
 /**
@@ -155,9 +173,9 @@ router.post('/chats/:chatId/messages', async function (req, res) {
   chat.messages.push(newMessage._id);
   await chat.save();
 
-  // socket io emit to all users in the chat room that a new message has been created and send the new message
-  io.to(req.params.chatId).emit('messages:create', newMessage);
-
+  // broadcast to chat users in the room a new message has been created
+  const newMessageData = new MessageData({ ...newMessage._doc });
+  io.to(chatId).emit('messages:create', JSON.stringify(newMessageData));
   res.status(201).json(newMessage);
 });
 
