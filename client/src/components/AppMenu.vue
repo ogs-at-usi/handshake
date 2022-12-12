@@ -1,6 +1,10 @@
 <template>
   <!-- MENU WITH OWN IMAGE, SEARCH BAR AND CONTACTS LIST -->
-  <v-container class="pa-0 w-100 ma-0 h-100" fluid>
+  <v-container class="pa-0 w-100 ma-0 h-100" fluid style="position: relative">
+    <AppSettings
+      class="w-100"
+      @setSettings="openSettings = $event"
+      :open="openSettings" />
     <v-navigation-drawer clipped color="surface" permanent width="100%">
       <v-list class="pt-0" flat>
         <v-list-item class="pt-2 secondary">
@@ -16,7 +20,7 @@
             }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon @click="openSettings">
+            <v-btn icon @click="openSettings = true">
               <v-icon>mdi-cog</v-icon>
             </v-btn>
           </v-list-item-action>
@@ -61,13 +65,15 @@
 <script>
 import ChatList from '@/components/ChatList.vue';
 import UsersList from '@/components/UsersList';
+import AppSettings from '@/components/AppSettings.vue';
 
 export default {
   name: 'AppMenu',
-  components: { UsersList, ChatList },
+  components: { AppSettings, UsersList, ChatList },
   data: function () {
     return {
       searchedUser: '',
+      openSettings: false,
     };
   },
   props: {
@@ -78,9 +84,6 @@ export default {
   methods: {
     startCreateGroup() {
       this.$emit('startCreateGroup');
-    },
-    openSettings() {
-      this.$emit('openSettings');
     },
   },
 };
