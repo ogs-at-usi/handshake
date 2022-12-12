@@ -14,7 +14,7 @@
         class="font-weight-regular subtitle-1 pa-3 pb-0"
         >{{ senderName }}</v-card-title
       >
-      <v-card-text class="pa-3 pb-1 text--primary">
+      <v-card-text class="pa-3 pb-1 text--primary" style='font-size:1.1rem!important;'>
         {{ content }}
         <a
           v-if="content.length < message.content.length"
