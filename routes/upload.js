@@ -104,10 +104,15 @@ router.post(
 
     await newMessage.save();
 
-    await sharp(req.file.buffer)
-      .flatten({ background: '#ffffff' })
-      .jpeg({ quality: 60 })
-      .toFile(path);
+    try {
+      await sharp(req.file.buffer)
+        .flatten({ background: '#ffffff' })
+        .jpeg({ quality: 60 })
+        .toFile(path);
+    } catch (e) {
+      return res.status(500).end();
+    }
+
     io.to(chatId).emit('messages:create', newMessage);
 
     res.status(201);
