@@ -63,7 +63,6 @@ export default {
   },
   methods: {
     async login() {
-      // write an array with 3 numbers
       try {
         await this.$store.dispatch('login', {
           username: this.username,

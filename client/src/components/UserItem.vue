@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import User from '@/classes/user';
+import { User } from '@/classes/user';
 
 export default {
   name: 'UserItem',

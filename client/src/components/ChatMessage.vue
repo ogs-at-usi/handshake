@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import Message from '@/classes/message';
+import { Message } from '@/classes/message';
 
 export default {
   name: 'ChatMessage',

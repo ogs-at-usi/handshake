@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import Chat from '@/classes/chat';
-import Group from '@/classes/group';
+import { Chat } from '@/classes/chat';
+import { Group } from '@/classes/group';
 
 export default {
   name: 'ChatContact',
