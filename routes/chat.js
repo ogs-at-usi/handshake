@@ -4,9 +4,10 @@ const { UserChat } = require('../models/userChat');
 const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
-const { Message, MessageType } = require('../models/message'); // MessageType is used for verification
+const { MessageType } = require('../models/message'); // MessageType is used for verification
 const io = require('../serverSocket').io;
 const serverSocket = require('../serverSocket');
+const { saveMessage } = require('../utils/message.utils');
 
 /**
  * Responds an array of users that match what the client typed
@@ -133,35 +134,48 @@ router.post('/chats/:chatId/messages', async function (req, res) {
     return res.status(400).end();
   }
 
-  const result = await UserChat.findOne({
-    chat: new ObjectId(chatId),
-    user: new ObjectId(req.userId),
-  });
-  console.log(
-    `Route: /chat/:chatId/messages, params: ${req.params}, body: ${req.body} - Chat of the new message: ${chatId}`
-  );
-  if (!result) {
-    return res.status(404).end();
-  }
+  // const result = await UserChat.findOne({
+  //   chat: new ObjectId(chatId),
+  //   user: new ObjectId(req.userId),
+  // });
+  // console.log(
+  //   `Route: /chat/:chatId/messages, params: ${req.params}, body: ${req.body} - Chat of the new message: ${chatId}`
+  // );
+  // if (!result) {
+  //   return res.status(404).end();
+  // }
 
-  const newMessage = await Message.create({
-    sender: ObjectId(req.userId),
-    chat: ObjectId(chatId),
-    type: message.type,
-    content: message.content,
-    sentAt: new Date(),
-    deliveredAt: new Date(),
-  });
+  // const newMessage = await Message.create({
+  //   sender: ObjectId(req.userId),
+  //   chat: ObjectId(chatId),
+  //   type: message.type,
+  //   content: message.content,
+  //   sentAt: new Date(),
+  //   deliveredAt: new Date(),
+  // });
 
-  const chat = await Chat.findOne({
-    _id: ObjectId(chatId),
-  }).exec();
+  // const chat = await Chat.findOne({
+  //   _id: ObjectId(chatId),
+  // }).exec();
 
-  chat.messages.push(newMessage._id);
-  await chat.save();
+  // chat.messages.push(newMessage._id);
+  // await chat.save();
 
   // socket io emit to all users in the chat room that a new message has been created and send the new message
+
+  // async function sendMessage(chatId, userId, message, type, params, body)
+  const newMessage = await saveMessage(
+    chatId,
+    req.userId,
+    message.content,
+    message.type
+  );
+
   io.to(req.params.chatId).emit('messages:create', newMessage);
+
+  if (!newMessage) {
+    return res.status(404).end();
+  }
 
   res.status(201).json(newMessage);
 });

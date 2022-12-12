@@ -29,6 +29,17 @@
             type="file"
             @change="onFileChange($event, 'video')" />
         </v-list-item>
+        <v-list-item @click="sendAudio">
+          <v-list-item-title>Send audio</v-list-item-title>
+          <input
+            id="file3"
+            ref="fileAudio"
+            accept="audio/*"
+            hidden
+            style="display: none"
+            type="file"
+            @change="onFileChange($event, 'audio')" />
+        </v-list-item>
         <v-list-item @click="sendFile">
           <v-list-item-title>Send file</v-list-item-title>
           <input
@@ -65,6 +76,9 @@ export default {
     },
     sendVideo() {
       this.$refs.fileVideo.click();
+    },
+    sendAudio() {
+      this.$refs.fileAudio.click();
     },
     sendFile() {
       this.$refs.fileFile.click();
