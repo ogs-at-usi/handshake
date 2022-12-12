@@ -88,7 +88,7 @@ export default {
       } else {
         this.activeChat = new Chat({
           members: [otherUser, this.$store.getters.user],
-          messages: [],
+          messages: []
         });
       }
     },
