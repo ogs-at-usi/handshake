@@ -3,7 +3,7 @@
 ## Client
 - Interface structure (HTML structure, single page, EJS views)
 - UI (CSS, page structure)
-- JavaScript (views, router, API client, Socket client)
+- JavaScript (views, router, API client, Socket client, axios)
 
 ## Backend
 - Express (EJS compiler, package, routes)
@@ -18,3 +18,8 @@
 - Homepage
 - Aliases for users
 - Log in / Sign up
+
+### Axios
+Regarding axios, all content in request body is automatically converted in JSON and sent as it.
+Same thing happens when receiving a response, the response body is automatically parsed from JSON to a JS object.
+To change this behaviour, you can use the third parameter in axios request alias `config`.
