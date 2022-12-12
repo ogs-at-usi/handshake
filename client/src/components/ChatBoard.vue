@@ -97,7 +97,7 @@ export default {
   },
   props: {
     chat: {
-      type: Chat,
+      type: [ Chat, Group ],
       default: null,
     },
   },
