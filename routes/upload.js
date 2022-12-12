@@ -69,12 +69,12 @@ const multerUploads = Object.freeze({
 });
 
 const validateUpload = (req, res, next) => {
-  const { chatID } = req.body;
-  if (!chatID) {
-    return res.status(400).send('No chatID provided');
+  const { chatId } = req.body;
+  if (!chatId) {
+    return res.status(400).send('No chatId provided');
   }
-  if (!ObjectId.isValid(chatID)) {
-    return res.status(400).send('Invalid chatID');
+  if (!ObjectId.isValid(chatId)) {
+    return res.status(400).send('Invalid chatId');
   }
   if (!req.file) {
     return res.status(400).send('No file provided');
@@ -88,10 +88,10 @@ router.post(
   validateUpload,
   async function (req, res) {
     const userId = req.userId;
-    const { chatID } = req.body;
+    const { chatId } = req.body;
 
     const newMessage = await saveMessage(
-      chatID,
+      chatId,
       userId,
       'invalid.jpeg',
       'IMAGE'
@@ -111,7 +111,7 @@ router.post(
       .flatten({ background: '#ffffff' })
       .jpeg({ quality: 60 })
       .toFile(path);
-    io.to(chatID).emit('messages:create', newMessage);
+    io.to(chatId).emit('messages:create', newMessage);
 
     res.status(201);
   }
@@ -122,10 +122,10 @@ router.post(
   multerUploads.video,
   validateUpload,
   async function (req, res, _) {
-    const { chatID } = req.body;
+    const { chatId } = req.body;
 
     const newMessage = await saveMessage(
-      chatID,
+      chatId,
       req.userId,
       req.file.filename,
       'VIDEO'
@@ -135,7 +135,7 @@ router.post(
       return res.status(404).end();
     }
 
-    io.to(chatID).emit('messages:create', newMessage);
+    io.to(chatId).emit('messages:create', newMessage);
 
     res.status(201);
   }
@@ -146,9 +146,9 @@ router.post(
   multerUploads.audio,
   validateUpload,
   async function (req, res) {
-    const { chatID } = req.body;
+    const { chatId } = req.body;
     const newMessage = await saveMessage(
-      chatID,
+      chatId,
       req.userId,
       'invalid.mp3',
       'AUDIO'
@@ -183,7 +183,7 @@ router.post(
     newMessage.content = newMessage._id + '.mp3';
 
     await newMessage.save();
-    io.to(chatID).emit('messages:create', newMessage);
+    io.to(chatId).emit('messages:create', newMessage);
 
     res.status(201);
   }
@@ -194,10 +194,10 @@ router.post(
   multerUploads.file,
   validateUpload,
   async function (req, res) {
-    const { chatID } = req.body;
+    const { chatId } = req.body;
 
     const newMessage = await saveMessage(
-      chatID,
+      chatId,
       req.userId,
       req.file.originalname,
       'DOCUMENT'
@@ -207,7 +207,7 @@ router.post(
       return res.status(404).end();
     }
 
-    io.to(chatID).emit('messages:create', newMessage);
+    io.to(chatId).emit('messages:create', newMessage);
 
     res.status(201);
   }
