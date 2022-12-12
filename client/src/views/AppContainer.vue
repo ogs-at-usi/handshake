@@ -20,6 +20,7 @@
 import AppMenu from '@/components/AppMenu';
 import ChatBoard from '@/components/ChatBoard';
 import { Chat } from '@/classes/chat';
+import { Group } from '@/classes/group';
 import { Message } from '@/classes/message';
 import { io } from 'socket.io-client';
 
@@ -83,7 +84,8 @@ export default {
      */
     socket.on('chats:create', chatJSON => {
       console.log('EVENT chats:create -', chatJSON);
-      const chat = new Chat(JSON.parse(chatJSON));
+      const parsed = JSON.parse(chatJSON);
+      const chat = parsed.isGroup ? new Group(parsed) : new Chat(parsed);
       this.chats.unshift(chat);
 
       if (chat.members[0]._id === this.$store.getters.user._id) {
