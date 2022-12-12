@@ -1,6 +1,6 @@
 <template>
   <v-container
-    class="pa-0 d-flex flex-row justify-start h-100 w-100 background"
+    class="overflow-hidden pa-0 d-flex flex-row justify-start h-100 w-100 background"
     fluid
     style="max-width: 1450px; position:relative">
     <!-- content for the left hand side of the app main page -->
