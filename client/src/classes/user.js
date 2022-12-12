@@ -19,7 +19,6 @@ class User {
   _id = null;
   name = null;
   email = null;
-  chats = null;
   online = false;
   typing = false;
 
@@ -27,14 +26,12 @@ class User {
     _id = null,
     name = null,
     email = null,
-    chats = null,
     online = false,
     typing = false,
   }) {
     this._id = _id;
     this.name = name;
     this.email = email;
-    this.chats = chats;
     this.online = online;
     this.typing = typing;
   }
