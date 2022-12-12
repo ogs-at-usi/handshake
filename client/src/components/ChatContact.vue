@@ -76,9 +76,12 @@ export default {
       return '';
     },
     lastMessageTimestamp() {
-      const timestamp =
-        this.chat.messages[this.chat.messages.length - 1].sentAt;
-      return formatTime(timestamp);
+      if (this.chat.messages && this.chat.messages.length > 0) {
+        const timestamp =
+          this.chat.messages[this.chat.messages.length - 1].sentAt;
+        return formatTime(timestamp);
+      }
+      return '';
     },
     isActive() {
       return this.$store.getters.activeChat?._id === this.chat?._id;
