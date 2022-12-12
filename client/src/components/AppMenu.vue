@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import ChatList from '@/components/ChatList.vue';
+import ChatList from '@/components/ChatList';
 import UsersList from '@/components/UsersList';
 
 export default {

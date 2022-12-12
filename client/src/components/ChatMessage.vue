@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Message from '@/classes/message';
+import { Message } from '@/classes/message';
 import { formatTime } from '@/utils';
 
 export default {

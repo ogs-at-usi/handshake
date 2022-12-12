@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import AppMenu from '@/components/AppMenu.vue';
-import ChatBoard from '@/components/ChatBoard.vue';
-import Chat from '@/classes/chat';
+import AppMenu from '@/components/AppMenu';
+import ChatBoard from '@/components/ChatBoard';
+import { Chat } from '@/classes/chat';
+import { Message } from '@/classes/message';
 import { io } from 'socket.io-client';
-import Message from '@/classes/message';
 
 export default {
   name: 'AppContainer',
@@ -101,6 +101,7 @@ export default {
         }
         return false;
       });
+
       if (chat) {
         this.activeChat = chat;
       } else {

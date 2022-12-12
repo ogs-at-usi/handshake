@@ -80,10 +80,11 @@
 <script>
 import vueCustomScrollbar from 'vue-custom-scrollbar';
 import ChatMessage from '@/components/ChatMessage';
-import Chat from '@/classes/chat';
-import Message from '@/classes/message';
 import 'vue-custom-scrollbar/dist/vueScrollbar.css';
 import FileUploader from '@/components/FileUploader';
+import { Chat } from '@/classes/chat';
+import { Group } from '@/classes/group';
+import { Message } from '@/classes/message';
 
 export default {
   name: 'ChatBoard',
@@ -120,10 +121,7 @@ export default {
       return /^\s*$/.test(str);
     },
     async sendMessage() {
-      if (this.onlySpaces(this.messageString)) {
-        return;
-      }
-
+      if (this.onlySpaces(this.messageString)) return;
       let chatId = this.$props.chat._id;
       // if the chat does not exist we create a new one and get the save the id
       if (chatId === null) {

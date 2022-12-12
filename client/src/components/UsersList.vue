@@ -19,7 +19,7 @@
 
 <script>
 import UserItem from '@/components/UserItem';
-import User from '@/classes/user';
+import { User } from '@/classes/user';
 
 export default {
   name: 'UsersList',
