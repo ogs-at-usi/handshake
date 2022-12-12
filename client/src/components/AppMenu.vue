@@ -16,7 +16,7 @@
     <nav id="searchbar" class="align-items-center d-flex flex-row">
       <form
         id="search-bar"
-        class="d-flex flex-row-reverse gap-2 alig-items-center"
+        class="d-flex flex-row-reverse gap-2 align-items-center"
         @click.prevent=""
       >
         <input
