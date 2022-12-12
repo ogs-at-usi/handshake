@@ -13,7 +13,8 @@ const { saveMessage } = require('../utils/message.utils');
  * Responds an array of users that match what the client typed
  */
 router.get('/users', async function (req, res) {
-  const filter = req.query.filter ?? '';
+  let filter = req.query.filter ?? '';
+  filter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   const searchedUsers = await User.find({
     name: {
