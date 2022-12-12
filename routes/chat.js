@@ -49,21 +49,7 @@ router.post('/chats', async function (req, res) {
       userChat.some(uc => uc._id.toString() === ouc._id.toString())
   );
 
-    let members = await UserChat.find({ chat: chatId }).populate('user').exec();
-    members = members.map((member) => member.user);
-    const onlineUsers = req.app.locals.onlineUsers;
-    members = members.map((member) => {
-      return {
-        ...member._doc,
-        online: onlineUsers.has(member._id.toString()),
-      };
-    });
-    io.to(req.userId)
-      .to(otherId)
-      .emit('chats:create', { ...chat._doc, members });
-
-    res.status(201).json(chat);
-  } else {
+  if (commonChats.length > 0) {
     // Not meant to happen that a chat already exists between the users
     res.status(400).json({
       message: 'Error, a chat already exists',
@@ -81,9 +67,16 @@ router.post('/chats', async function (req, res) {
 
   // retrieve members objects from ids and return the chat to members with status 201
   const membersUserChatRelations = await UserChat.find({ chat: chat._id }).populate('user').exec();
-  const members = membersUserChatRelations.map(uc => new UserData(uc.user));
-  const chatData = new ChatData({ ...chat._doc, members });
-  members.forEach((m) => io.to(m._id).emit('chats:create', JSON.stringify(chatData)));
+  const members = membersUserChatRelations.map(uc => uc.user);
+  const onlineUsers = req.app.locals.onlineUsers;
+  const membersWithStatus = members.map(m => {
+    return {
+      ...m._doc,
+      online: onlineUsers.has(m._id.toString()),
+    };
+  });
+  const chatData = new ChatData({ ...chat._doc, members: membersWithStatus });
+  membersWithStatus.forEach((m) => io.to(m._id).emit('chats:create', JSON.stringify(chatData)));
   res.status(201).json(chat);
 });
 
