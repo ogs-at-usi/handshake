@@ -1,1 +1,1 @@
-module.exports = require('../../public/js/classes/chat');
+module.exports = require('../../client/src/classes/chat');
