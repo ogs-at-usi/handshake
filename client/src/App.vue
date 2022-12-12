@@ -39,8 +39,9 @@ export default {
       this.$vuetify.theme.themes.light = themes[theme];
     },
   },
-  created() {
-    this.setTheme('blue');
+  async created() {
+    await this.$store.restored;
+    this.setTheme(this.$store.getters.theme || 'blue');
   },
 };
 </script>

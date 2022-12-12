@@ -68,6 +68,7 @@ export default {
   methods: {
     setTheme(theme) {
       this.$vuetify.theme.themes.light = themesObject[theme];
+      this.$store.commit('setTheme', { theme });
     },
   },
 };
