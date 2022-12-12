@@ -1,10 +1,13 @@
 <template>
-  <v-container class="pa-0 d-flex flex-row justify-start h-100 w-100" fluid>
+  <v-container
+    class="overflow-hidden pa-0 d-flex flex-row justify-start h-100 w-100 background"
+    fluid
+    style="max-width: 1450px; position: relative">
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
     <AppMenu
       v-if="!($store.getters.isMobile && activeChat !== null)"
-      class="col-12 col-sm-5 col-md-4 col-lg-3"
+      class="col-12 col-sm-5 col-md-4 col-lg-4"
       :chats="chats"
       @userSelected="userSelected($event)"></AppMenu>
     <!-- content for the right hand side of the app main page -->
