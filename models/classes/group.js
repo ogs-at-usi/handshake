@@ -1,1 +1,1 @@
-module.exports = require('../../public/js/classes/group');
+module.exports = require('../../client/src/classes/group');
