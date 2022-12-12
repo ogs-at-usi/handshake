@@ -1,5 +1,5 @@
-import User from '@/classes/user';
-import Message from '@/classes/message';
+const { User } = require('./user');
+const { Message } = require('./message');
 
 class Chat {
   _id = null;
@@ -28,4 +28,4 @@ class Chat {
   }
 }
 
-export default Chat;
+module.exports = { Chat };

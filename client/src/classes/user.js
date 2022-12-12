@@ -40,4 +40,4 @@ class User {
   }
 }
 
-export default User;
+module.exports = { User };
