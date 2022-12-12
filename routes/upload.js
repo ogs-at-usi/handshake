@@ -68,186 +68,150 @@ const multerUploads = Object.freeze({
   ).single(REQUEST_FILE_NAMES.file),
 });
 
-router.post('/image', multerUploads.image, async function (req, res, next) {
-  const chatID = req.body.chatID;
-  const userId = req.userId;
-  const file = req.file;
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
+const validateUpload = (req, res, next) => {
+  const { chatID } = req.body;
+  if (!chatID) {
+    return res.status(400).send('No chatID provided');
   }
-
   if (!ObjectId.isValid(chatID)) {
-    return res.status(400).end();
+    return res.status(400).send('Invalid chatID');
   }
-
-  const newMessage = await saveMessage(chatID, userId, 'siumfoto', 'IMAGE');
-
-  if (!newMessage) {
-    return res.status(404).end();
+  if (!req.file) {
+    return res.status(400).send('No file provided');
   }
+  next();
+};
 
-  const path = './media/images/' + newMessage._id + '.jpeg';
+router.post(
+  '/image',
+  multerUploads.image,
+  validateUpload,
+  async function (req, res) {
+    const userId = req.userId;
+    const { chatID } = req.body;
 
-  newMessage.content = newMessage._id + '.jpeg';
+    const newMessage = await saveMessage(
+      chatID,
+      userId,
+      'invalid.jpeg',
+      'IMAGE'
+    );
 
-  await newMessage.save();
+    if (!newMessage) {
+      return res.status(404).end();
+    }
 
-  await sharp(file.buffer)
-    .flatten({ background: '#ffffff' })
-    .jpeg({ quality: 50 })
-    .toFile(path);
-  io.to(chatID).emit('messages:create', newMessage);
+    const path = './media/images/' + newMessage._id + '.jpeg';
 
-  res.status(201).json(file);
-});
+    newMessage.content = newMessage._id + '.jpeg';
 
-router.post('/video', multerUploads.video, async function (req, res, next) {
-  // TODO: change req.body.chatID to whatever the chatID is
-  const chatID = req.body.chatID;
-  const userId = req.userId;
-  const file = req.file;
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
+    await newMessage.save();
+
+    await sharp(req.file.buffer)
+      .flatten({ background: '#ffffff' })
+      .trellisQuantization()
+      .jpeg({ quality: 60 })
+      .toFile(path);
+    io.to(chatID).emit('messages:create', newMessage);
+
+    res.status(201);
   }
+);
 
-  if (!ObjectId.isValid(chatID)) {
-    return res.status(400).end();
+router.post(
+  '/video',
+  multerUploads.video,
+  validateUpload,
+  async function (req, res, _) {
+    const { chatID } = req.body;
+
+    const newMessage = await saveMessage(
+      chatID,
+      req.userId,
+      req.file.filename,
+      'VIDEO'
+    );
+
+    if (!newMessage) {
+      return res.status(404).end();
+    }
+
+    io.to(chatID).emit('messages:create', newMessage);
+
+    res.status(201);
   }
+);
 
-  const newMessage = await saveMessage(chatID, userId, file.filename, 'VIDEO');
+router.post(
+  '/audio',
+  multerUploads.audio,
+  validateUpload,
+  async function (req, res) {
+    const { chatID } = req.body;
+    const newMessage = await saveMessage(
+      chatID,
+      req.userId,
+      'invalid.mp3',
+      'AUDIO'
+    );
 
-  if (!newMessage) {
-    return res.status(404).end();
+    if (!newMessage) {
+      return res.status(404).end();
+    }
+
+    const path = './media/audio/' + newMessage._id + '.mp3';
+    const dir = './media/temp';
+
+    await new Promise((resolve, reject) => {
+      FluentFfmpeg(req.file.destination + '/' + req.file.filename)
+        .audioBitrate(128)
+        .toFormat('mp3')
+        .on('error', (err) => {
+          res.status(500).json(err).end();
+          resolve();
+        })
+        .on('end', () => {
+          fs.rm(dir, { recursive: true }, (err) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve();
+          });
+        })
+        .save(path);
+    });
+
+    newMessage.content = newMessage._id + '.mp3';
+
+    await newMessage.save();
+    io.to(chatID).emit('messages:create', newMessage);
+
+    res.status(201);
   }
+);
 
-  // const path = './media/videos/' + newMessage._id + '.mp4';
-  // const dir = './media/temp';
+router.post(
+  '/file',
+  multerUploads.file,
+  validateUpload,
+  async function (req, res) {
+    const { chatID } = req.body;
 
-  // try {
-  //     const process = new Ffmpeg(file.path);
+    const newMessage = await saveMessage(
+      chatID,
+      req.userId,
+      req.file.originalname,
+      'DOCUMENT'
+    );
 
-  //     process.then(async function (video) {
-  //         console.log('The video is ready to be processed');
-  //         await video/* .setVideoFormat('mp4') */.save(path, function (error, file) {
-  //             console.log('saving video');
-  //             if (!error)
-  //                 console.log('Video file: ' + file);
+    if (!newMessage) {
+      return res.status(404).end();
+    }
 
-  //         });
-  //         return video;
-  //     }, function (err) {
-  //         console.log('Error: ' + err);
-  //     }).then((video) => {
+    io.to(chatID).emit('messages:create', newMessage);
 
-  //         fs.rm(dir, { recursive: true }, err => {
-  //             if (err) {
-  //                 throw err
-  //             }
-  //             console.log(`${dir} is deleted!`);
-  //         });
-  //     });
-  // } catch (e) {
-  //     console.log(e.code);
-  //     console.log(e.msg);
-  // }
-
-  // const extension = file.originalname.split('.').pop();
-
-  // file.filename += '.' + extension;
-
-  // newMessage.content = file.filename;
-
-  // await newMessage.save();
-  io.to(chatID).emit('messages:create', newMessage);
-
-  res.status(201).json(file);
-});
-
-router.post('/audio', multerUploads.audio, async function (req, res, next) {
-  // TODO: change req.body.chatID to whatever the chatID is
-  const chatID = req.body.chatID;
-  const userId = req.userId;
-  const file = req.file;
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
+    res.status(201);
   }
-
-  if (!ObjectId.isValid(chatID)) {
-    return res.status(400).end();
-  }
-
-  const newMessage = await saveMessage(chatID, userId, 'siumaudio', 'AUDIO');
-
-  if (!newMessage) {
-    return res.status(404).end();
-  }
-
-  const path = './media/audio/' + newMessage._id + '.mp3';
-  const dir = './media/temp';
-
-  FluentFfmpeg(file.destination + '/' + file.filename)
-    .audioBitrate(128)
-    .toFormat('mp3')
-    .on('error', (err) => {
-      res.status(500).json(err).end();
-    })
-    .on('end', () => {
-      fs.rm(dir, { recursive: true }, (err) => {
-        if (err) {
-          throw err;
-        }
-      });
-    })
-    .save(path);
-
-  newMessage.content = newMessage._id + '.mp3';
-
-  await newMessage.save();
-  io.to(chatID).emit('messages:create', newMessage);
-
-  res.status(201).json(file);
-});
-
-router.post('/file', multerUploads.file, async function (req, res, next) {
-  // TODO: change req.body.chatID to whatever the chatID is
-  const chatID = req.body.chatID;
-  const userId = req.userId;
-  const file = req.file;
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
-  }
-
-  if (!ObjectId.isValid(chatID)) {
-    return res.status(400).end();
-  }
-
-  const newMessage = await saveMessage(
-    chatID,
-    userId,
-    req.file.originalname,
-    'DOCUMENT'
-  );
-
-  if (!newMessage) {
-    return res.status(404).end();
-  }
-
-  // const path = './media/files/' + newMessage._id + "." + extension;
-
-  // newMessage.content = file.filename + '.' + extension;
-
-  // await newMessage.save();
-  io.to(chatID).emit('messages:create', newMessage);
-
-  res.status(201).json(file);
-});
+);
 
 module.exports = router;
