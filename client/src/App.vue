@@ -10,7 +10,7 @@
           <h1 class="white--text">HandShake</h1>
           <v-btn color="white" outlined>About us</v-btn>
         </div>
-        <router-view class='background'></router-view>
+        <router-view class="background"></router-view>
         <footer class="d-flex justify-center align-center pa-3">
           <p class="font-weight-bold">
             made with ♡ by the
@@ -47,7 +47,7 @@ export default {
 
 <style scoped>
 .bg {
-/*  write a gradient from --v-background-base to --v-primary-base back to --v-background-base */
+  /*  write a gradient from --v-background-base to --v-primary-base back to --v-background-base */
   /* make the --v-primary-base phase vey short
 
    */
