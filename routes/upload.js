@@ -52,7 +52,7 @@ const multerUploads = Object.freeze({
 
   audio: multer(
     {
-      storage: diskStorage('temp'),
+      storage: diskStorage('audio'),
     },
     { limits: { fileSize: MAX_SIZES.audio } }
   ).single(REQUEST_FILE_NAMES.audio),
