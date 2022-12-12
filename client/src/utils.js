@@ -4,3 +4,7 @@ export function formatTime(time) {
   const minutes = datetime.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 }
+
+export function getFilePath(folder, filename) {
+  return `/media/${folder}/${filename}`;
+}
