@@ -13,15 +13,12 @@ const serverSocket = require('../serverSocket');
  * return an array of users that match the filter.
  */
 router.get('/users', async function (req, res) {
-  const filter = req.query.filter ?? '';
-
+  const { filter } = req.query;
+  const userRegex =  filter?.replace(/[^a-z0-9]/gi, '') ?? '';
   const searchedUsers = await User.find({
-    name: {
-      $regex: `^${filter}`,
-    },
+    name: { $regex: `^${userRegex}` }
   });
-
-  res.json(searchedUsers);
+  return res.json(searchedUsers);
 });
 
 /**
