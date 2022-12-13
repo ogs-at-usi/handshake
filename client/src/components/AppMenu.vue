@@ -38,19 +38,18 @@
             outlined
             prepend-inner-icon="mdi-magnify"
             single-line
-            color="textPrimary">
-          </v-text-field>
+            color="textPrimary"/>
 
           <v-menu offset-y>
             <template #activator="{ on }">
-              <v-btn class="ms-2" icon @click="startCreateGroup" v-on="on">
+              <v-btn class="ms-2" icon v-on="on">
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
 
             <v-list color="secondary" style="cursor: pointer">
               <v-list-item-group>
-                <v-list-item>
+                <v-list-item @click="createGroup">
                   <v-list-item-title>New group</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
@@ -58,14 +57,13 @@
           </v-menu>
         </v-list-item>
         <!-- contacts (chats) or user (search) list -->
-        <v-divider class="visible"></v-divider>
-        <ChatList v-if="searchedUser === ''" :chats="chats"></ChatList>
+        <v-divider class="visible"/>
+        <ChatList v-if="searchedUser === ''" :chats="chats"/>
         <UsersList
           v-else
           :filter="searchedUser"
           @userSelected="searchedUser = ''"
-          v-on="$listeners">
-        </UsersList>
+          v-on="$listeners"/>
       </v-list>
     </v-navigation-drawer>
   </v-container>
@@ -74,6 +72,7 @@
 <script>
 import ChatList from '@/components/ChatList';
 import UsersList from '@/components/UsersList';
+import AppSettings from '@/components/AppSettings';
 
 export default {
   name: 'AppMenu',
@@ -90,8 +89,13 @@ export default {
     },
   },
   methods: {
-    startCreateGroup() {
-      this.$emit('startCreateGroup');
+    /**
+     * pop up a dialog to create a new group where you can add a title and
+     * search for users to add to the group.
+     */
+    createGroup() {
+      console.log('create group');
+      // this.$emit('createGroup');
     },
   },
 };
