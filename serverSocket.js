@@ -1,5 +1,6 @@
 const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
+const { Group } = require('./models/group');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
 
@@ -47,8 +48,17 @@ function init(server, onlineUsers) {
           ...uc.user._doc,
         }));
 
+        // get possible groups
+        // TODO: add chat field isGroup in schema
+        const groupMatch = await Group.findOne({ chat: c._id }).exec();
+        const groupFields = groupMatch ? {
+          _idGroup: groupMatch._doc._id,
+          title: groupMatch._doc.title,
+          description: groupMatch._doc.description,
+        } : {};
+
         // return chat raw object
-        return { members, ...c._doc };
+        return { members, ...groupFields, ...c._doc };
       })
     );
   }
