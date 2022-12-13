@@ -44,8 +44,9 @@ export default {
       return us1._id !== this.$store.getters.user._id ? us1 : us2;
     },
     imageId() {
-      if (this.chat instanceof Group) return this.chat._id;
-      else {
+      if (this.chat instanceof Group) {
+        return 'icons/default_gc_pfp.png';
+      } else {
         // TODO: check if the user has an image with a axios HTTP request
         // then if exist, return this.otherPrivateUser._id;
         return 'icons/default_pfp.png';
