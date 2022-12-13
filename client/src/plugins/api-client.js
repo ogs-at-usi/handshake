@@ -57,6 +57,23 @@ class ApiClient {
   }
 
   /**
+   * create a group with the logged user and the select user ids list given a title.
+   * @param group {Group} The group to create
+   */
+  createGroup(group) {
+    if (!group?.isGroup) {
+      console.error('group must be an instance of Group');
+      return;
+    }
+
+    const body = {
+      title: group.title,
+      membersIds: group.members.map((m) => m._id),
+    };
+    return this.axiosInstance.post('/api/groups', body);
+  }
+
+  /**
    * Create a message in a chat.
    * @param chatId {string} The ID of the chat
    * @param message {Message} The message to create
