@@ -119,14 +119,6 @@ export default {
         });
       }
     },
-    /**
-     * HTTP post request to the server to create a group chat given title and members.
-     * @param group {Group} - group to be created containing title and members IdS
-     */
-    createGroup(group) {
-      console.log('EVENT Create group - ', group);
-      this.$api.createGroup(group);
-    },
   },
   computed: {
     activeChat: {
