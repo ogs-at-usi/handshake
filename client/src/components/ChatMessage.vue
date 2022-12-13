@@ -35,7 +35,7 @@
 
 <script>
 import Message from '@/classes/message';
-import { formatTime } from '@/utils';
+import { formatTime } from '@/utils/message.utils';
 import ChatMessageText from '@/components/message/ChatMessageText';
 import ChatMessageImage from '@/components/message/ChatMessageImage';
 import ChatMessageVideo from '@/components/message/ChatMessageVideo';

@@ -28,7 +28,7 @@
 <script>
 import Chat from '@/classes/chat';
 import Group from '@/classes/group';
-import { formatTime } from '@/utils';
+import { formatTime } from '@/utils/message.utils';
 
 export default {
   name: 'ChatContact',

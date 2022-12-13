@@ -11,7 +11,7 @@
 
 <script>
 import Message from '@/classes/message';
-import { getFilePath } from '@/utils';
+import { getFilePath } from '@/utils/message.utils';
 export default {
   name: 'ChatMessageFile',
   props: {
