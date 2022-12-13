@@ -18,13 +18,13 @@ app.use(
   express.static(path.join(__dirname, 'public'), { index: 'index.html' })
 );
 app.use('/media', express.static(path.join(__dirname, 'media')));
-
 app.set('view engine', 'html');
 
 // TODO - controllers
 app.use('/auth', require('./routes/auth'));
 app.use('/api', authenticate, require('./routes/chat'));
 app.use('/upload', authenticate, require('./routes/upload'));
+
 
 // serve Vue app if no matching route is found
 app.get('*', (req, res) => {

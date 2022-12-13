@@ -3,7 +3,6 @@ const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
 
-
 // Initialize the socket.io server
 // Passing the onlineUsers set to make it accessible to the socket.io server
 function init(server, onlineUsers) {
@@ -82,64 +81,54 @@ function init(server, onlineUsers) {
       io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
     });
 
+    socket.on('join-room', async (roomId, userId, chatName) => {
 
-    socket.on('join-room', (roomId, userId) => {
-      const newroom = "videocall_"+roomId;
-      console.log('join-room', newroom, userId);
-    socket.join(newroom);
-    socket.broadcast.to(newroom).emit('user-connected', userId, roomId)
+      const newRoom = 'videocall_' + roomId;
+      console.log('join-room', newRoom, userId);
+      socket.join(newRoom);
 
+      const sockets = await io.to(newRoom).fetchSockets();
+      console.log("sockets ", sockets);
+      if(sockets.length === 1) {
+        socket.broadcast.to(roomId).emit('calling-me', chatName);
+      }
 
-    socket.on('disconnect', () => {
-      socket.emit('user-disconnected', userId)
-      socket.broadcast.to(roomId).emit('otherUser-disconnected', userId)
+      socket.broadcast.to(newRoom).emit('user-connected', userId, roomId);
+
+      socket.on('disconnect', () => {
+        socket.emit('user-disconnected', userId);
+        socket.broadcast.to(roomId).emit('otherUser-disconnected', userId);
+      });
+
+      socket.on('leave-room', (roomId, userId) => {
+        console.log('leave-room', roomId, userId);
+        const newroom = 'videocall_' + roomId;
+        socket.emit('user-disconnected', userId);
+        socket.broadcast.to(newroom).emit('otherUser-disconnected', userId);
+        socket.leave(newroom);
+      });
     });
-
-    socket.on('leave-room', (roomId, userId) => {
-    console.log('leave-room', roomId, userId);
-    const newroom = "videocall_"+roomId;
-    socket.emit('user-disconnected', userId)
-    socket.broadcast.to(newroom).emit('otherUser-disconnected', (userId))
-    socket.leave(newroom);
-    });
-
-
-
-
-
 
 
   });
-
-  socket.on('calling-others', (chatId, chatName) => {
-    socket.broadcast.to(chatId).emit('calling-me', chatName);
-  });
-});
 }
 
+function joinRooms(rooms, socket) {
+  if (!Array.isArray(rooms)) {
+    rooms = [rooms];
+  }
+  if (!Array.isArray(socket)) {
+    socket = [socket];
+  }
+  rooms.forEach((room) => {
+    socket.forEach((socket) => {
+      socket.join(room);
+    });
+  });
+}
 
-
-
-    function joinRooms(rooms, socket) {
-      if (!Array.isArray(rooms)) {
-        rooms = [rooms];
-      }
-      if (!Array.isArray(socket)) {
-        socket = [socket];
-      }
-      rooms.forEach((room) => {
-        socket.forEach((socket) => {
-          socket.join(room);
-        });
-      });
-    }
-
-
-
-
-
-    module.exports = {
-      init,
-      joinRooms,
-      io,
-    };
+module.exports = {
+  init,
+  joinRooms,
+  io,
+};

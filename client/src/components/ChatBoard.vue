@@ -188,8 +188,7 @@ export default {
       const videoGrid = this.$refs['video-grid'];
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
-      let chatId = this.$props.chat._id;
-      const peers = {};
+      const chatId = this.$props.chat._id;
       const myVideo = document.createElement('video');
       // create a bar to show the video buttons
       const videoBar = document.createElement('div');
@@ -216,9 +215,9 @@ export default {
       addFunctionToButtons(videoButton, audioButton, endCallButton, myVideo);
       // add class yo myvideo
       myVideo.classList.add('myVideo');
+      const chatName = this.$store.getters.user.name;
+      socket.emit('join-room', chatId, myPeer.id, chatName );
 
-      socket.emit('join-room', chatId, myPeer.id);
-      socket.emit('calling-others', chatId, this.chatName);
       myVideo.muted = true;
       navigator.mediaDevices
         .getUserMedia({
