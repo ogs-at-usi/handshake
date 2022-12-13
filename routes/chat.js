@@ -4,6 +4,8 @@ const { UserChat } = require('../models/userChat');
 const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
+const ChatData = require('../models/classes/chat').Chat;
+const MessageData = require('../models/classes/message').Message;
 const { MessageType } = require('../models/message'); // MessageType is used for verification
 const io = require('../serverSocket').io;
 const serverSocket = require('../serverSocket');
@@ -18,7 +20,7 @@ router.get('/users', async function (req, res) {
   filter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   const searchedUsers = await User.find({
-    name: { $regex: `^${userRegex}` }
+    name: { $regex: `^${filter}` }
   });
   return res.json(searchedUsers);
 });
