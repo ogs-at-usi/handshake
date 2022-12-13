@@ -38,32 +38,88 @@
             outlined
             prepend-inner-icon="mdi-magnify"
             single-line
-            color="textPrimary"/>
+            color="textPrimary" />
 
-          <v-menu offset-y>
+          <v-menu offset-y v-if="!groupCreation">
             <template #activator="{ on }">
               <v-btn class="ms-2" icon v-on="on">
-                <v-icon>mdi-plus</v-icon>
+                <v-icon>mdi-account-multiple-plus</v-icon>
               </v-btn>
             </template>
 
             <v-list color="secondary" style="cursor: pointer">
               <v-list-item-group>
-                <v-list-item @click="createGroup">
+                <v-list-item @click="startGroupCreation">
                   <v-list-item-title>New group</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
             </v-list>
           </v-menu>
+
+          <!-- x cancel button to cancel group creation -->
+          <v-btn
+            class="ms-2"
+            icon
+            v-if="groupCreation"
+            @click="defaultGroupData">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+
+          <!-- check button to confirm group creation -->
+          <v-btn class="ms-2" icon v-if="groupCreation" @click="createGroup">
+            <v-icon>mdi-send</v-icon>
+          </v-btn>
         </v-list-item>
         <!-- contacts (chats) or user (search) list -->
-        <v-divider class="visible"/>
-        <ChatList v-if="searchedUser === ''" :chats="chats"/>
+        <v-divider class="visible" />
+
+        <!-- group title visible only when creating a group -->
+        <v-text-field
+          v-if="groupCreation"
+          v-model="groupTitle"
+          label="Group Title"
+          dense
+          hide-details
+          outlined
+          prepend-inner-icon="md-text-short"
+          single-line
+          color="textPrimary" />
+
+        <ChatList v-if="searchedUser === '' && !groupCreation" :chats="chats" />
+        <!-- with groupCreation, it becomes multi selectable -->
         <UsersList
-          v-else
+          v-else-if="!groupCreation"
           :filter="searchedUser"
+          :groupCreation="groupCreation"
           @userSelected="searchedUser = ''"
-          v-on="$listeners"/>
+          v-on="$listeners" />
+
+        <!-- group creation list -->
+        <v-list-item-group v-if="groupCreation" multiple>
+          <template v-for="(user, i) in groupUsersSearch">
+            <v-divider v-if="!user" :key="`divider-${i}`"></v-divider>
+
+            <v-list-item
+              v-else
+              :key="`item-${i}`"
+              :value="user"
+              active-class="deep-purple--text text--accent-4">
+
+              <template v-slot:default="{ active }">
+                <v-list-item-content>
+                  <v-list-item-title v-text="user.name"/>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <v-checkbox
+                    :input-value="active"
+                    @click="clickedUser(user, active)"
+                    color="deep-purple accent-4"/>
+                </v-list-item-action>
+              </template>
+            </v-list-item>
+          </template>
+        </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
   </v-container>
@@ -73,6 +129,8 @@
 import ChatList from '@/components/ChatList';
 import UsersList from '@/components/UsersList';
 import AppSettings from '@/components/AppSettings';
+import { User } from '@/classes/user';
+import { Group } from '@/classes/group';
 
 export default {
   name: 'AppMenu',
@@ -81,6 +139,10 @@ export default {
     return {
       searchedUser: '',
       openSettings: false,
+      groupCreation: false,
+      groupUsers: new Set(),
+      groupTitle: '',
+      groupUsersSearch: [],
     };
   },
   props: {
@@ -89,15 +151,51 @@ export default {
     },
   },
   methods: {
+    defaultGroupData() {
+      this.groupCreation = false;
+      this.groupUsers.clear();
+      this.groupTitle = '';
+      this.groupUsersSearch = [];
+    },
+    startGroupCreation() {
+      this.groupCreation = true;
+      this.getUsers();
+    },
     /**
      * pop up a dialog to create a new group where you can add a title and
      * search for users to add to the group.
      */
-    createGroup() {
-      console.log('create group');
-      // this.$emit('createGroup');
+    async createGroup() {
+      console.log('create group', Array.from(this.groupUsers));
+      this.groupTitle = this.groupTitle.replace(' ', '');
+      if (this.groupTitle === '' || this.groupUsers.size === 0) return;
+      const group = new Group({ title: this.groupTitle, members: Array.from(this.groupUsers) });
+      await this.$api.createGroup(group);
+      this.defaultGroupData();
     },
+    async getUsers() {
+      const { data } = await this.$api.getUsers(this.searchedUser);
+      this.groupUsersSearch = data.map((user) => new User(user));
+      this.groupUsersSearch = this.groupUsersSearch.filter(
+        (u) => u._id !== this.$store.getters.user._id
+      );
+    },
+    clickedUser(user, active) {
+      const realStatus = !active;
+      console.log('clicked user', user, realStatus);
+      if (realStatus) {
+        this.groupUsers.add(user);
+      } else {
+        if (this.groupUsers.has(user)) this.groupUsers.delete(user);
+      }
+      console.log('group users', this.groupUsers);
+    }
   },
+  watch: {
+    searchedUser() {
+      if (this.groupCreation) this.getUsers();
+    },
+  }
 };
 </script>
 
