@@ -50,7 +50,8 @@ router.post('/group', async function (req, res) {
     members,
     ...chat._doc
   });
-  members.forEach((m) => io.to(m._id).emit('chats:create', groupData));
+
+  members.forEach((m) => io.to(m._doc._id.toString()).emit('chats:create', groupData));
   res.status(201).json(chat);
 });
 
