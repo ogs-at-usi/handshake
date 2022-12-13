@@ -47,7 +47,9 @@
         v-for="(msg, index) in chat.messages"
         ref="message"
         :key="index"
-        :message="msg"></ChatMessage>
+        :message="msg"
+        :chat="chat">
+      </ChatMessage>
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->

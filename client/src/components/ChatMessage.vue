@@ -9,11 +9,12 @@
       elevation="2"
       style="height: fit-content"
       color="primary">
+
       <v-card-title
-        v-if="!isSelf && isGroup"
-        class="font-weight-regular subtitle-1 pa-3 pb-0"
-        >{{ senderName }}</v-card-title
-      >
+        v-if="!isSelf && chat.isGroup"
+        class="font-weight-regular subtitle-1 pa-3 pb-0">
+        {{ senderName }}
+      </v-card-title>
 
       <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
       <ChatMessageImage
@@ -35,6 +36,7 @@
 
 <script>
 import { Message } from '@/classes/message';
+import { Chat } from '@/classes/chat';
 import { formatTime } from '@/utils';
 import ChatMessageText from '@/components/message/ChatMessageText';
 import ChatMessageImage from '@/components/message/ChatMessageImage';
@@ -59,8 +61,14 @@ export default {
   props: {
     message: {
       type: Message,
-      required: true,
+      required: true
     },
+    chat: {
+      type: Chat,
+      required: true
+    }
+  },
+  methods: {
   },
   computed: {
     maxChars() {
@@ -68,11 +76,6 @@ export default {
     },
     isSelf() {
       return this.$props.message.sender === this.$store.getters.user._id;
-    },
-    isGroup() {
-      // TODO: M3 pass also the chat class
-      // this.$props.chat instanceof Group
-      return null;
     },
     selfClass() {
       return this.isSelf ? 'self' : '';
@@ -84,7 +87,13 @@ export default {
       return formatTime(time);
     },
     senderName() {
-      if (this.isGroup) return null; // this.$props.chat.title;
+      if (this.$props.chat.isGroup) {
+        const sender = this.$props.chat.members.find(
+          (member) => member._id === this.$props.message.sender
+        );
+        return sender.name;
+      }
+
       console.error(
         'this function should never be reached',
         this.$props.message
