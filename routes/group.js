@@ -14,28 +14,43 @@ router.post('/group', async function (req, res) {
   const { title, membersId } = req.body;
 
   // fire condition - minimal sanity check
-  if (!title || !membersId) return res.status(400).send("not all params").end();
-  if (membersId.some(id => !ObjectId.isValid(id))) return res.status(400).send("invalid ObjectsId").end();
+  if (!title || !membersId) return res.status(400).send('not all params').end();
+  if (membersId.some((id) => !ObjectId.isValid(id)))
+    return res.status(400).send('invalid ObjectsId').end();
 
   // create chat and the relation userChat for each member
-  const titleSanitized = title.replace(/[^a-zA-Z0-9 ]/g, "");
+  const titleSanitized = title.replace(/[^a-zA-Z0-9 ]/g, '');
   const chat = await Chat.create({ is_group: true, messages: [] });
   const membersIdWithCreator = [...membersId, req.userId];
-  await Promise.all(membersIdWithCreator.map(async id => await UserChat.create({ user: id, chat: chat._id })));
+  await Promise.all(
+    membersIdWithCreator.map(
+      async (id) => await UserChat.create({ user: id, chat: chat._id })
+    )
+  );
   // create group
   const group = await Group.create({ title: titleSanitized, chat: chat._id });
 
   // join members in chat socket room
-  const socketsMembers = await Promise.all(membersIdWithCreator.map(async id => await io.to(id).fetchSockets()));
+  const socketsMembers = await Promise.all(
+    membersIdWithCreator.map(async (id) => await io.to(id).fetchSockets())
+  );
   joinRooms([chat._id.toString()], socketsMembers);
 
   // retrieve member objects
-  const membersUserChatRelations = await UserChat.find({ chat: chat._id }).populate('user').exec();
+  const membersUserChatRelations = await UserChat.find({ chat: chat._id })
+    .populate('user')
+    .exec();
   const members = membersUserChatRelations.map((ucr) => ucr.user);
 
   // create group objects to members
-  const groupData = new GroupData({ _idGroup: group._id, members, ...chat._doc });
-  members.forEach(m => io.to(m._id).emit('chats:create', groupData));
+  const groupData = new GroupData({
+    _idGroup: group._id,
+    title: group.title,
+    description: group.description,
+    members,
+    ...chat._doc
+  });
+  members.forEach((m) => io.to(m._id).emit('chats:create', groupData));
   res.status(201).json(chat);
 });
 
