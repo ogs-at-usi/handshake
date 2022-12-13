@@ -11,15 +11,21 @@
     "style:prettier:fix": "prettier --write ."
   },
   "dependencies": {
+    "@lottiefiles/lottie-interactivity": "^1.6.1",
+    "@lottiefiles/lottie-player": "^1.6.2",
     "axios": "^1.2.0",
     "core-js": "^3.8.3",
     "peerjs": "^1.4.7",
     "socket.io-client": "^4.5.4",
+    "localforage": "^1.10.0",
     "vue": "^2.6.14",
     "vue-axios": "^3.5.2",
     "vue-peerjs": "^0.3.0",
+    "vue-custom-scrollbar": "^1.4.4",
     "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
+    "vuetify": "^2.6.0",
+    "vuex": "^3.6.2",
+    "vuex-persist": "^3.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -36,6 +42,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^8.0.3",
-    "vue-template-compiler": "^2.6.14"
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.5.8",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify-loader": "^1.7.0"
   }
 }

@@ -3,8 +3,9 @@ import VueAxios from 'vue-axios';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import axios from './plugin/axios';
-import apiClient from './plugin/api-client';
+import axios from './plugins/axios';
+import apiClient from './plugins/api-client';
+import vuetify from './plugins/vuetify';
 import VuePeerJS from 'vue-peerjs';
 import Peer from 'peerjs';
 
@@ -19,5 +20,6 @@ new Vue({
   router,
   store,
   axios,
+  vuetify,
   render: (h) => h(App),
 }).$mount('#app');

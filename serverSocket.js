@@ -5,7 +5,8 @@ const { ObjectId } = require('mongodb');
 
 
 // Initialize the socket.io server
-function init(server) {
+// Passing the onlineUsers set to make it accessible to the socket.io server
+function init(server, onlineUsers) {
   io.attach(server);
 
   async function getChats(userId) {
@@ -27,16 +28,26 @@ function init(server) {
       return lastMessageB.sentAt - lastMessageA.sentAt;
     });
 
-    const chats = userChats;
+    let chats = userChats;
     // find all the users in each chat ad add it as a property 'members'
-    return await Promise.all(
+    chats = await Promise.all(
       chats.map(async (chat) => {
         const members = await UserChat.find({ chat: chat._id })
           .populate('user')
           .exec();
-        return { ...chat._doc, members: members.map((member) => member.user) };
+        return {
+          ...chat._doc,
+          members: members.map((member) => {
+            return {
+              ...member.user._doc,
+              online: onlineUsers.has(member.user._id.toString()),
+            };
+          }),
+        };
       })
     );
+
+    return chats;
   }
 
   io.use(authMiddleware);
@@ -51,9 +62,24 @@ function init(server) {
     );
     socket.emit('chats:read', userChats);
 
+    onlineUsers.add(socket.userId);
+    io.emit('users:online', socket.userId);
+
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
-      socket.leave(socket.userId);
+
+      onlineUsers.delete(socket.userId);
+      io.emit('users:offline', socket.userId);
+    });
+
+    socket.on('user:typing', (data) => {
+      const { chatId } = data;
+      io.to(chatId).emit('user:typing', { chatId, userId: socket.userId });
+    });
+
+    socket.on('user:notTyping', (data) => {
+      const { chatId } = data;
+      io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
     });
 
 
@@ -79,17 +105,17 @@ function init(server) {
 
 
 
-    
-    
-    
-    
+
+
+
+
   });
-  
+
   socket.on('calling-others', (chatId, chatName) => {
     socket.broadcast.to(chatId).emit('calling-me', chatName);
   });
 });
-} 
+}
 
 
 
