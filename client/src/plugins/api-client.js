@@ -61,6 +61,7 @@ class ApiClient {
    * @param group {Group} The group to create
    */
   createGroup(group) {
+    console.log("api create group:", group);
     if (!group?.isGroup) {
       console.error('group must be an instance of Group');
       return;
@@ -68,9 +69,9 @@ class ApiClient {
 
     const body = {
       title: group.title,
-      membersIds: group.members.map((m) => m._id),
+      membersId: group.members.map((m) => m._id),
     };
-    return this.axiosInstance.post('/api/groups', body);
+    return this.axiosInstance.post('/api/group', body);
   }
 
   /**
