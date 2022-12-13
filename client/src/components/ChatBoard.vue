@@ -20,10 +20,10 @@
       <v-avatar>
         <img
           alt="icon of person you're chatting with"
-          src="/icons/default_pfp.png" />
+          :src="imageId" />
       </v-avatar>
       <v-toolbar-title class="ml-5">
-        <span class="text--primary">{{ otherPrivateUser.name }}</span>
+        <span class="text--primary">{{ chatName }}</span>
         <span
           class="text--secondary subtitle-2 d-block"
           style="line-height: 1.1">
@@ -175,19 +175,29 @@ export default {
       const [us1, us2] = this.chat.members;
       return us1._id !== this.$store.getters.user._id ? us1 : us2;
     },
-    chatName() {
-      if (this.$props.chat.isGroup) {
-        return this.$props.chat.title;
-      } else {
-        return this.otherPrivateUser.name;
-      }
-    },
     status() {
       // priority: typing > online > offline
+      if (this.chat.isGroup) return;
       if (this.otherPrivateUser.typing) return 'Typing...';
       if (this.otherPrivateUser.online) return 'Online';
       return 'Offline';
     },
+    imageId() {
+      if (this.chat instanceof Group) {
+        return 'icons/default_gc_pfp.png';
+      } else {
+        // TODO: check if the user has an image with a axios HTTP request
+        // then if exist, return this.otherPrivateUser._id;
+        return 'icons/default_pfp.png';
+      }
+    },
+    chatName() {
+      if (this.chat.isGroup) {
+        return this.chat.title;
+      } else {
+        return this.otherPrivateUser.name;
+      }
+    }
   },
   watch: {
     messageString(oldValue, newValue) {
