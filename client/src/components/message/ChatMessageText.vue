@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Message from '@/classes/message';
+import { Message } from '@/classes/message';
 const MAX_CHARS = 500;
 
 export default {
