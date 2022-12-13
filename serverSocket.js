@@ -16,15 +16,14 @@ function init(server, onlineUsers) {
    * Retrieve all the user chats with members populated sorted by last message sent
    * TODO: use the dataclass class to return the chats to the user: models/classes/chat.js
    * @param userId {String} the userId from db
-   * @returns {Promise<[Chat]>} the chats array as promise
+   * @returns {Promise<[Chat]>} the chats array as promise containing users with status
    */
   async function getChats(userId) {
     // get chat objects and sort them by last message date
-    const userChatRelations = await UserChat
-      .find({ user: ObjectId(userId) })
+    const userChatRelations = await UserChat.find({ user: ObjectId(userId) })
       .populate({
         path: 'chat',
-        populate: { path: 'messages' }
+        populate: { path: 'messages' },
       })
       .sort({ 'chat.messages.date': -1 })
       .exec();
@@ -32,27 +31,29 @@ function init(server, onlineUsers) {
     // fire condition - if none, return immediately empty array
     if (!userChatRelations) return [];
 
-    const userChats = userChatRelations.map(ucr => ucr.chat);
-    // find all the users in each chat ad add it as a property 'members'
+    // get chats objects from userChatRelations,
+    const userChats = userChatRelations.map((ucr) => ucr.chat);
+    // find all the users in each chat and add it as a property 'members' + status
     return await Promise.all(
-      userChats.map(async c => {
-        const members = await UserChat.find({ chat: c._id })
+      userChats.map(async (c) => {
+        // get all the members of the chat in userChatRelations
+        const userChatRelationsWithUser = await UserChat.find({ chat: c._id })
           .populate('user')
           .exec();
-        return {
-          ...c._doc,
-          members: members.map(m => {
-            return {
-              ...m.user._doc,
-              online: onlineUsers.has(m.user._id.toString()),
-            };
-          }),
-        };
+
+        // get the user members with own status from userChatRelationsWithUser
+        const members = userChatRelationsWithUser.map((uc) => ({
+          online: onlineUsers.has(uc.user._id.toString()),
+          ...uc.user._doc,
+        }));
+
+        // return chat raw object
+        return { members, ...c._doc };
       })
     );
   }
 
-  io.on('connection', async socket => {
+  io.on('connection', async (socket) => {
     console.log(`✅User connected with id ${socket.id} ${socket.userId}`);
     socket.join(socket.userId);
     const userChats = await getChats(socket.userId);
@@ -60,26 +61,25 @@ function init(server, onlineUsers) {
       userChats.map((chat) => chat._id.toString()),
       socket
     );
-    socket.emit('chats:read', JSON.stringify(userChats));
+    socket.emit('chats:read', userChats);
 
     onlineUsers.add(socket.userId);
-    io.emit('users:online', JSON.stringify(socket.userId));
+    io.emit('users:online', socket.userId);
 
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
-
       onlineUsers.delete(socket.userId);
-      io.emit('users:offline', JSON.stringify(socket.userId));
+      io.emit('users:offline', socket.userId);
     });
 
     socket.on('user:typing', (data) => {
       const { chatId } = data;
-      io.to(chatId).emit('user:typing', JSON.stringify({ chatId, userId: socket.userId }));
+      io.to(chatId).emit('user:typing', { chatId, userId: socket.userId });
     });
 
     socket.on('user:notTyping', (data) => {
       const { chatId } = data;
-      io.to(chatId).emit('user:notTyping', JSON.stringify({ chatId, userId: socket.userId }));
+      io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
     });
   });
 }
@@ -96,7 +96,7 @@ function init(server, onlineUsers) {
 function joinRooms(rooms, sockets) {
   if (!Array.isArray(rooms)) rooms = [rooms];
   if (!Array.isArray(sockets)) sockets = [sockets];
-  rooms.forEach(r => sockets.forEach(s => s.join(r)));
+  rooms.forEach((r) => sockets.forEach((s) => s.join(r)));
 }
 
 module.exports = {

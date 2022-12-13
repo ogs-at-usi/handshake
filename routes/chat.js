@@ -8,7 +8,6 @@ const { Message, MessageType } = require('../models/message'); // MessageType is
 const io = require('../serverSocket').io;
 const serverSocket = require('../serverSocket');
 const ChatData = require('../models/classes/chat').Chat;
-const UserData = require('../models/classes/user').User;
 const MessageData = require('../models/classes/message').Message;
 
 /**
@@ -76,7 +75,7 @@ router.post('/chats', async function (req, res) {
     };
   });
   const chatData = new ChatData({ ...chat._doc, members: membersWithStatus });
-  membersWithStatus.forEach((m) => io.to(m._id).emit('chats:create', JSON.stringify(chatData)));
+  membersWithStatus.forEach((m) => io.to(m._id).emit('chats:create', chatData));
   res.status(201).json(chat);
 });
 
@@ -127,7 +126,7 @@ router.post('/chats/:chatId/messages', async function (req, res) {
 
   // broadcast to chat users in the room a new message has been created
   const newMessageData = new MessageData({ ...newMessage._doc });
-  io.to(chatId).emit('messages:create', JSON.stringify(newMessageData));
+  io.to(chatId).emit('messages:create', newMessageData);
   res.status(201).json(newMessage);
 });
 

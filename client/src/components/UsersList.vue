@@ -2,11 +2,12 @@
   <v-list-item v-if="users.length === 0">
     <v-list-item-content>
       <v-progress-circular v-if="loading" indeterminate></v-progress-circular>
-      <v-list-item-title v-else class="text--primary"
-        >No users found</v-list-item-title
-      >
+      <v-list-item-title v-else class="text--primary">
+        No users found
+      </v-list-item-title>
     </v-list-item-content>
   </v-list-item>
+
   <v-list-item-group v-else-if="users.length > 0">
     <UserItem
       v-for="(user, index) in users"
@@ -42,7 +43,7 @@ export default {
       const { data } = await this.$api.getUsers(this.filter);
       this.users = data.map((user) => new User(user));
       this.users = this.users.filter(
-        (user) => user._id !== this.$store.getters.user._id
+        (u) => u._id !== this.$store.getters.user._id
       );
       this.loading = false;
     },

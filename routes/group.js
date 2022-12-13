@@ -35,7 +35,7 @@ router.post('/group', async function (req, res) {
 
   // create group objects to members
   const groupData = new GroupData({ _idGroup: group._id, members, ...chat._doc });
-  members.forEach(m => io.to(m._id).emit('chats:create', JSON.stringify(groupData)));
+  members.forEach(m => io.to(m._id).emit('chats:create', groupData));
   res.status(201).json(chat);
 });
 

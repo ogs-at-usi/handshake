@@ -36,41 +36,41 @@ export default {
     console.log('Trying to connect');
     this.$store.commit('setSocket', { socket });
 
-    socket.on('chats:read', chatsJSON => {
-      console.log('EVENT chats:read -', chatsJSON);
-      this.chats = JSON.parse(chatsJSON).map(c => new Chat(c));
+    socket.on('chats:read', (chats) => {
+      console.log('EVENT chats:read -', chats);
+      this.chats = chats.map((c) => new Chat(c));
     });
 
-    socket.on('users:online', userIdJSON => {
+    socket.on('users:online', (userId) => {
       //  have no chats, no one online user we have a chat with
       if (!this.chats) return;
 
-      const userId = JSON.parse(userIdJSON);
-      this.chats.forEach(c =>
-        c.members.forEach(m => {
+      this.chats.forEach((c) =>
+        c.members.forEach((m) => {
           if (m._id === userId) m.online = true;
         })
       );
     });
 
-    socket.on('users:offline', userIdJSON => {
-      console.log('EVENT users:offline -', userIdJSON);
-      this.chats.forEach(c =>
-        c.members.forEach(m => {
-          if (m._id === userIdJSON) m.online = false;
+    socket.on('users:offline', (userId) => {
+      console.log('EVENT users:offline -', userId);
+      this.chats.forEach((c) =>
+        c.members.forEach((m) => {
+          if (m._id === userId) m.online = false;
         })
       );
     });
 
-    socket.on('messages:create', messageJSON => {
-      console.log('EVENT messages:create -', messageJSON);
-      const message = new Message(JSON.parse(messageJSON));
+    socket.on('messages:create', (message) => {
+      console.log('EVENT messages:create -', message);
+      message = new Message(message);
       const chatId = message.chat;
-      const chat = this.chats.find(c => c._id === chatId);
+      const chat = this.chats.find((c) => c._id === chatId);
       chat.messages.push(message);
       // move the chat to the top of the list
-      this.chats = this.chats.filter((chat) => chat._id !== chatId);
+      this.chats = this.chats.filter((c) => c._id !== chatId);
       this.chats.unshift(chat);
+
       if (this.activeChat && this.activeChat._id === chatId) {
         this.$nextTick(() => {
           this.$refs.chatBoard.scrollDown();
@@ -81,10 +81,9 @@ export default {
     /**
      * Get newly created chat.
      */
-    socket.on('chats:create', chatJSON => {
-      console.log('EVENT chats:create -', chatJSON);
-      const parsed = JSON.parse(chatJSON);
-      const chat = parsed.isGroup ? new Group(parsed) : new Chat(parsed);
+    socket.on('chats:create', (chat) => {
+      console.log('EVENT chats:create -', chat);
+      chat = chat.isGroup ? new Group(chat) : new Chat(chat);
       this.chats.unshift(chat);
 
       if (chat.members[0]._id === this.$store.getters.user._id) {
@@ -96,9 +95,11 @@ export default {
     userSelected(otherUser) {
       console.log('EVENT User selected - ', otherUser);
 
-      const chat = this.chats.find(c => {
+      const chat = this.chats.find((c) => {
         if (c.members.length === 2) {
-          const otherChatUser = c.members.find(m => m._id !== this.$store.getters.user._id);
+          const otherChatUser = c.members.find(
+            (m) => m._id !== this.$store.getters.user._id
+          );
           return otherChatUser._id === otherUser._id;
         }
         return false;
@@ -109,7 +110,7 @@ export default {
       } else {
         this.activeChat = new Chat({
           members: [otherUser, this.$store.getters.user],
-          messages: []
+          messages: [],
         });
       }
     },
