@@ -2,14 +2,17 @@
   <v-container class="pa-0 justify-space-around d-flex flex-column" fluid>
     <div
       class="primary d-flex flex-row justify-space-between align-center pa-3">
-      <h1 class="white--text">HandShake</h1>
-      <v-btn color="white" outlined>About us</v-btn>
+      <h1 class="text--primary">HandShake</h1>
     </div>
     <section
       id="aboutus"
       class="d-flex flex-row justify-space-around align-center text-center flex-wrap gap-3 mt-8">
       <section class="col-12 col-md-5">
-        <h1 class="text-h1 font-weight-bold primary--text">Hand<br />Shake</h1>
+        <h1
+          class="text-h1 font-weight-bold text--primary"
+          style="font-family: 'Montserrat', sans-serif !important">
+          Hand<br />Shake
+        </h1>
         <p>Connecting the world, one Shake at a time.</p>
       </section>
       <section class="col-12 col-md-5">
@@ -222,8 +225,6 @@ export default {
 .display-8 {
   font-size: 1.5rem;
 }
-
-* {
-  font-family: 'Francois One', sans-serif;
+h1 {
 }
 </style>

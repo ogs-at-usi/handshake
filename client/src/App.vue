@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main class="m">
+    <v-main class="m bg">
       <v-container
         v-if="hasLayout"
         class="flex-column h-100 d-flex flex-column pa-0 ma-0 surface--darken2"
@@ -8,9 +8,9 @@
         <div
           class="primary d-flex flex-row justify-space-between align-center pa-3">
           <h1 class="white--text">HandShake</h1>
-          <v-btn color="white" outlined>About us</v-btn>
+          <router-link style='text-decoration:none!important' to='/about'><v-btn color="white" outlined>About us</v-btn></router-link>
         </div>
-        <router-view></router-view>
+        <router-view class="background"></router-view>
         <footer class="d-flex justify-center align-center pa-3">
           <p class="font-weight-bold">
             made with ♡ by the
@@ -39,11 +39,28 @@ export default {
       this.$vuetify.theme.themes.light = themes[theme];
     },
   },
-  created() {
-    this.setTheme('blue');
+  async created() {
+    await this.$store.restored;
+    this.setTheme(this.$store.getters.theme || 'blue');
   },
 };
 </script>
+
+<style scoped>
+.bg {
+  /*  write a gradient from --v-background-base to --v-primary-base back to --v-background-base */
+  /* make the --v-primary-base phase vey short
+
+   */
+  background: linear-gradient(
+    90deg,
+    var(--v-background-base) 0%,
+    var(--v-secondary-base) 50%,
+    var(--v-secondary-base) 50%,
+    var(--v-background-base) 100%
+  );
+}
+</style>
 
 <style>
 html {
@@ -77,9 +94,6 @@ h3,
 h4 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800 !important;
-}
-.v-main {
-  background: var(--v-background-base);
 }
 .v-main a {
   color: var(--v-accent-base) !important;

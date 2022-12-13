@@ -4,19 +4,19 @@ const { UserChat } = require('../models/userChat');
 const { ObjectId } = require('mongodb');
 const { User } = require('../models/user');
 const { Chat } = require('../models/chat');
-const { Message, MessageType } = require('../models/message'); // MessageType is used for verification
+const { MessageType } = require('../models/message'); // MessageType is used for verification
 const io = require('../serverSocket').io;
 const serverSocket = require('../serverSocket');
-const ChatData = require('../models/classes/chat').Chat;
-const MessageData = require('../models/classes/message').Message;
+const { saveMessage } = require('../utils/message.utils');
 
 /**
  * Given a filter string as a query param for usernames.
  * return an array of users that match the filter.
  */
 router.get('/users', async function (req, res) {
-  const { filter } = req.query;
-  const userRegex =  filter?.replace(/[^a-z0-9]/gi, '') ?? '';
+  let filter = req.query.filter ?? '';
+  filter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
   const searchedUsers = await User.find({
     name: { $regex: `^${userRegex}` }
   });
@@ -102,31 +102,49 @@ router.post('/chats/:chatId/messages', async function (req, res) {
     !Object.values(MessageType).includes(message?.type)
   ) return res.status(400).end();
 
-  // check if chat of the current user exists
-  const userChat = await UserChat.findOne({
-    chat: new ObjectId(chatId),
-    user: new ObjectId(req.userId),
-  });
-  if (!userChat) return res.status(404).end();
+  // const result = await UserChat.findOne({
+  //   chat: new ObjectId(chatId),
+  //   user: new ObjectId(req.userId),
+  // });
+  // console.log(
+  //   `Route: /chat/:chatId/messages, params: ${req.params}, body: ${req.body} - Chat of the new message: ${chatId}`
+  // );
+  // if (!result) {
+  //   return res.status(404).end();
+  // }
 
-  // add new message and put FK of user chat
-  const newMessage = await Message.create({
-    sender: ObjectId(req.userId),
-    chat: ObjectId(chatId),
-    type: message.type,
-    content: message.content,
-    sentAt: new Date(), // TODO: put send date from the client
-    deliveredAt: new Date(),
-  });
+  // const newMessage = await Message.create({
+  //   sender: ObjectId(req.userId),
+  //   chat: ObjectId(chatId),
+  //   type: message.type,
+  //   content: message.content,
+  //   sentAt: new Date(),
+  //   deliveredAt: new Date(),
+  // });
 
-  // get chat and push the message PK to the messages array
-  const chat = await Chat.findById(chatId).exec();
-  chat.messages.push(newMessage._id);
-  await chat.save();
+  // const chat = await Chat.findOne({
+  //   _id: ObjectId(chatId),
+  // }).exec();
 
-  // broadcast to chat users in the room a new message has been created
-  const newMessageData = new MessageData({ ...newMessage._doc });
-  io.to(chatId).emit('messages:create', newMessageData);
+  // chat.messages.push(newMessage._id);
+  // await chat.save();
+
+  // socket io emit to all users in the chat room that a new message has been created and send the new message
+
+  // async function sendMessage(chatId, userId, message, type, params, body)
+  const newMessage = await saveMessage(
+    chatId,
+    req.userId,
+    message.content,
+    message.type
+  );
+
+  io.to(req.params.chatId).emit('messages:create', newMessage);
+
+  if (!newMessage) {
+    return res.status(404).end();
+  }
+
   res.status(201).json(newMessage);
 });
 

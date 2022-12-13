@@ -5,7 +5,7 @@
     class="ma-0 d-flex">
     <v-card
       :id="message._id"
-      class="rounded-lg message"
+      :class="`rounded-lg message message-${message.type.toLowerCase()}`"
       elevation="2"
       style="height: fit-content"
       color="primary">
@@ -14,15 +14,18 @@
         class="font-weight-regular subtitle-1 pa-3 pb-0"
         >{{ senderName }}</v-card-title
       >
-      <v-card-text class="pa-3 pb-1 text--primary">
-        {{ content }}
-        <a
-          v-if="content.length < message.content.length"
-          style="cursor: pointer"
-          @click.prevent="page++"
-          >Show more</a
-        >
-      </v-card-text>
+
+      <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
+      <ChatMessageImage
+        v-else-if="message.type === 'IMAGE'"
+        :message="message" />
+      <ChatMessageVideo
+        v-else-if="message.type === 'VIDEO'"
+        :message="message" />
+      <ChatMessageAudio
+        v-else-if="message.type === 'AUDIO'"
+        :message="message" />
+      <ChatMessageFile v-else :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -33,9 +36,21 @@
 <script>
 import { Message } from '@/classes/message';
 import { formatTime } from '@/utils';
+import ChatMessageText from '@/components/message/ChatMessageText';
+import ChatMessageImage from '@/components/message/ChatMessageImage';
+import ChatMessageVideo from '@/components/message/ChatMessageVideo';
+import ChatMessageAudio from '@/components/message/ChatMessageAudio';
+import ChatMessageFile from '@/components/message/ChatMessageFile';
 
 export default {
   name: 'ChatMessage',
+  components: {
+    ChatMessageVideo,
+    ChatMessageImage,
+    ChatMessageText,
+    ChatMessageAudio,
+    ChatMessageFile,
+  },
   data() {
     return {
       page: 1,
@@ -68,19 +83,6 @@ export default {
         : this.$props.message.deliveredAt;
       return formatTime(time);
     },
-    content() {
-      const retrieveContent = {};
-      // TODO: substitute with enum field
-      let message = this.$props.message.content.substring(
-        0,
-        this.page * this.maxChars
-      );
-      if (message.length !== this.message.content.length) {
-        message += '...';
-      }
-      retrieveContent.TEXT = message;
-      return retrieveContent[this.$props.message.type];
-    },
     senderName() {
       if (this.isGroup) return null; // this.$props.chat.title;
       console.error(
@@ -97,9 +99,19 @@ export default {
 .message {
   max-width: 70% !important;
 }
+.message-image,
+.message-video {
+  width: 400px !important;
+}
+.message-audio {
+  width: 300px !important;
+}
 @media only screen and (max-width: 600px) {
   .message {
-    max-width: 85% !important;
+    max-width: 75% !important;
   }
+  /*.message-image {*/
+  /*  width: 70%!important;*/
+  /*}*/
 }
 </style>
