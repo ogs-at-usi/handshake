@@ -9,13 +9,14 @@
       v-if="!($store.getters.isMobile && activeChat !== null)"
       class="col-12 col-sm-5 col-md-4 col-lg-4"
       :chats="chats"
-      @userSelected="userSelected($event)"></AppMenu>
+      @userSelected="userSelected($event)"
+      @createGroup="createGroup($event)" />
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
     <ChatBoard
       ref="chatBoard"
       :chat="activeChat"
-      class="flex-grow-1"></ChatBoard>
+      class="flex-grow-1"/>
   </v-container>
 </template>
 
@@ -41,7 +42,8 @@ export default {
 
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
-      this.chats = chats.map((c) => new Chat(c));
+      // TODO: change is_group to isGroup in Chat schema in db
+      this.chats = chats.map((c) => c.is_group ? new Group(c) : new Chat(c));
     });
 
     socket.on('users:online', (userId) => {
@@ -116,6 +118,14 @@ export default {
           messages: [],
         });
       }
+    },
+    /**
+     * HTTP post request to the server to create a group chat given title and members.
+     * @param group {Group} - group to be created containing title and members IdS
+     */
+    createGroup(group) {
+      console.log('EVENT Create group - ', group);
+      this.$api.createGroup(group);
     },
   },
   computed: {
