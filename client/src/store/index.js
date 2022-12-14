@@ -24,6 +24,7 @@ export default new Vuex.Store({
     socket: null,
     activeChat: null,
     theme: null,
+    calling: "n",
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     activeChat: (state) => state.activeChat,
     isMobile: () => window.innerWidth < 600,
     theme: (state) => state.theme,
+    calling: (state) => state.calling,
   },
   mutations: {
     login(state, { user }) {
@@ -54,6 +56,9 @@ export default new Vuex.Store({
     setTheme(state, { theme }) {
       state.theme = theme;
     },
+    setCalling(state, {roomId}){
+      state.calling = roomId;
+    }
   },
   actions: {
     login({ commit }, { username, password }) {
