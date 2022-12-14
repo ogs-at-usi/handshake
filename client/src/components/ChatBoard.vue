@@ -31,7 +31,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn class="me-2"  @click = "callingFunction()" icon>
+      <v-btn class="me-2"  @click = "calling()" icon>
         <v-icon>mdi-video</v-icon>
       </v-btn>
       <v-btn icon>
@@ -48,7 +48,10 @@
         ref="message"
         :key="index"
         :message="msg"></ChatMessage>
-      <div ref="video-grid"></div>
+
+      <div ref="video-grid">
+
+      </div>
     </vue-custom-scrollbar>
 
 
@@ -96,6 +99,7 @@ export default {
       showPopup: false,
       buttonState: true,
       typingTimeout: null,
+
     };
   },
   props: {
@@ -107,9 +111,6 @@ export default {
   methods: {
     changeButton() {
       this.buttonState = true;
-    },
-    initForm: function (popup) {
-      this[popup.hostElement.id] = popup;
     },
     updateTypingStatus(typing) {
       if (typing) {
@@ -159,7 +160,10 @@ export default {
     },
 
     connectToNewUser(userId, stream) {
+      // call the function prova that is declared in AppContainer.vue
+
       const myPeer = this.$peer;
+      console.log(this.$peer.id);
       // call the other user and send the
       const call = myPeer.call(userId, stream);
       const video = document.createElement('video');
@@ -184,7 +188,9 @@ export default {
       // add class to video
       videoGrid.append(video);
     },
-    async callingFunction() {
+    async calling() {
+      console.log("my peer: ", this.$peer.id);
+
       const videoGrid = this.$refs['video-grid'];
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
@@ -217,18 +223,20 @@ export default {
       myVideo.classList.add('myVideo');
       const chatName = this.$store.getters.user.name;
       socket.emit('join-room', chatId, myPeer.id, chatName );
+      // set the chatId in the store of the state calling
+      this.$store.commit('setCalling', chatId);
+
+
 
       myVideo.muted = true;
       navigator.mediaDevices
-        .getUserMedia({
-          video: true,
-          audio: true,
-        })
-        .then((stream) => {
-          this.addVideoStream(myVideo, stream, true);
-          myPeer.on('call', (call) => {
-            const answerCall = confirm('Do you want to answer the call?');
-            if (answerCall) {
+          .getUserMedia({
+            video: true,
+            audio: true,
+          })
+          .then((stream) => {
+            this.addVideoStream(myVideo, stream, true);
+            myPeer.on('call', (call) => {
               call.answer(stream);
               const video = document.createElement('video');
               console.log('ANSWERING CALL');
@@ -236,41 +244,46 @@ export default {
               call.on('stream', (userVideoStream) => {
                 this.addVideoStream(video, userVideoStream);
               });
-            } else {
-              console.log('CALL REJECTED');
-            }
-          });
-
-          socket.on('user-connected', (userId, chatId) => {
-            console.log('USER CONNECTED');
-            this.connectToNewUser(userId, stream);
-          });
-
-          socket.on('user-disconnected', (userId) => {
-            console.log('USER DISCONNECTED');
-            // if (peers[userId]) peers[userId].close();
-            var videoTracks = stream.getVideoTracks();
-            videoTracks.forEach(function (track) {
-              track.stop();
+            });
+            socket.on('user-connected', (userId, chatId) => {
+              console.log('USER CONNECTED');
+              this.connectToNewUser(userId, stream);
             });
 
-            var audioTracks = stream.getAudioTracks();
-            audioTracks.forEach(function (track) {
-              track.stop();
+            socket.on('user-disconnected', (userId) => {
+              console.log('USER DISCONNECTED');
+              // if (peers[userId]) peers[userId].close();
+              const videoTracks = stream.getVideoTracks();
+              videoTracks.forEach(function(track) {
+                track.stop();
+              });
+
+              const audioTracks = stream.getAudioTracks();
+              audioTracks.forEach(function(track) {
+                track.stop();
+              });
+              myVideo.remove();
+              videoBar.remove();
+              const video = document.querySelector('video');
+              video.remove();
+
+              myPeer.destroy();
+              socket.emit('leave-room', chatId, myPeer.id);
             });
-            myVideo.remove();
-            videoBar.remove();
-            const video = document.querySelector('video');
-            video.remove();
+
+            // //
+            // myPeer.destroy();
+            //
+            // socket.emit('leave-room', chatId, myPeer.id);
+
+            socket.on('otherUser-disconnected', (userId) => {
+              console.log('OTHER USER DISCONNECTED');
+
+              const video = document.getElementById(userId);
+              video.remove();
+            });
           });
 
-          socket.on('otherUser-disconnected', (userId) => {
-            console.log('OTHER USER DISCONNECTED');
-
-            const video = document.getElementById(userId);
-            video.remove();
-          });
-        });
 
       function addFunctionToButtons(
         videoButton,
