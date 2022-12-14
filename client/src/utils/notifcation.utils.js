@@ -15,3 +15,15 @@ export function askNotificationPermission() {
     Notification.requestPermission();
   }
 }
+
+/**
+ *
+ * @param sender
+ * @param message
+ * @returns {Notification}
+ */
+export function sendNotification(sender, message) {
+  if (getNotificationStatus() === 'granted') {
+    return new Notification(sender, { body: message });
+  }
+}
