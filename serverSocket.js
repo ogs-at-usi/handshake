@@ -97,7 +97,6 @@ function init(server, onlineUsers) {
 
       socket.on('disconnect', () => {
         socket.emit('user-disconnected', (userId));
-  ``
         socket.leave(roomId)
         socket.broadcast.to(roomId).emit('otherUser-disconnected', userId);
       });
