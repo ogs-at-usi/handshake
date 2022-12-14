@@ -89,21 +89,23 @@ function init(server, onlineUsers) {
 
       const sockets = await io.to(newRoom).fetchSockets();
       console.log("sockets ", sockets);
-      if(sockets.length === 1) {
+      if(sockets.length  === 1) {
         socket.broadcast.to(roomId).emit('calling-me', chatName);
       }
 
       socket.broadcast.to(newRoom).emit('user-connected', userId, roomId);
 
       socket.on('disconnect', () => {
-        socket.emit('user-disconnected', userId);
+        socket.emit('user-disconnected', (userId));
+  ``
+        socket.leave(roomId)
         socket.broadcast.to(roomId).emit('otherUser-disconnected', userId);
       });
 
       socket.on('leave-room', (roomId, userId) => {
         console.log('leave-room', roomId, userId);
         const newroom = 'videocall_' + roomId;
-        socket.emit('user-disconnected', userId);
+        // socket.emit('user-disconnected', userId);
         socket.broadcast.to(newroom).emit('otherUser-disconnected', userId);
         socket.leave(newroom);
       });
