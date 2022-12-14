@@ -52,7 +52,7 @@ router.post('/chats', async function (req, res) {
 
   if (commonChats.length > 0) {
     // Not meant to happen that a chat already exists between the users
-    res.status(400).json({
+    return res.status(400).json({
       message: 'Error, a chat already exists',
       commonChats,
     });
@@ -78,7 +78,7 @@ router.post('/chats', async function (req, res) {
   });
   const chatData = new ChatData({ ...chat._doc, members: membersWithStatus });
   membersWithStatus.forEach((m) => io.to(m._id).emit('chats:create', chatData));
-  res.status(201).json(chat);
+  res.status(201).json(chatData);
 });
 
 /**
@@ -95,13 +95,15 @@ router.post('/chats/:chatId/messages', async function (req, res) {
   const { chatId } = req.params;
   if (!ObjectId.isValid(chatId)) return res.status(400).end();
 
-  const message = new MessageData(req.body.message);
+  const { message } = req.body;
+  if (!message?.content) return res.status(400).send('missing content.').end();
+  const messageObj = new MessageData(req.body.message);
   // verify message validity TODO: add self-check in class as method
   if (
-    message?.type === undefined ||
-    message?.content === undefined ||
-    message.content.length === 0 ||
-    !Object.values(MessageType).includes(message?.type)
+    messageObj?.type === undefined ||
+    messageObj?.content === undefined ||
+    messageObj.content.length === 0 ||
+    !Object.values(MessageType).includes(messageObj?.type)
   ) return res.status(400).end();
 
   // const result = await UserChat.findOne({
@@ -137,8 +139,8 @@ router.post('/chats/:chatId/messages', async function (req, res) {
   const newMessage = await saveMessage(
     chatId,
     req.userId,
-    message.content,
-    message.type
+    messageObj.content,
+    messageObj.type
   );
 
   io.to(req.params.chatId).emit('messages:create', newMessage);
