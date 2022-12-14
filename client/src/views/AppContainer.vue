@@ -86,7 +86,10 @@ export default {
         const sender = chat.members.find((member) => {
           return member._id.toString() === message.sender;
         });
-        sendNotification(sender.name, message.content);
+        sendNotification(sender.name, message.content, (event) => {
+          this.activeChat = chat;
+          event.target.close();
+        });
       }
     });
 
