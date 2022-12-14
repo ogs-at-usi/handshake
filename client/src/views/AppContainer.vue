@@ -25,7 +25,10 @@ import ChatBoard from '@/components/ChatBoard.vue';
 import Chat from '@/classes/chat';
 import { io } from 'socket.io-client';
 import Message from '@/classes/message';
-import { askNotificationPermission } from '@/utils/notification.utils';
+import {
+  askNotificationPermission,
+  sendNotification,
+} from '@/utils/notification.utils';
 
 export default {
   name: 'AppContainer',
