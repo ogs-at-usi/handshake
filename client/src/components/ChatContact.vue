@@ -34,7 +34,7 @@ export default {
   name: 'ChatContact',
   props: {
     chat: {
-      type: [ Chat, Group ],
+      type: [Chat, Group],
       required: true,
     },
   },

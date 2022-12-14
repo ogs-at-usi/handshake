@@ -61,7 +61,7 @@ class ApiClient {
    * @param group {Group} The group to create
    */
   createGroup(group) {
-    console.log("api create group:", group);
+    console.log('api create group:', group);
     if (!group?.isGroup) {
       console.error('group must be an instance of Group');
       return;

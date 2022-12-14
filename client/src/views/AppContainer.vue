@@ -13,10 +13,7 @@
       @createGroup="createGroup($event)" />
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard
-      ref="chatBoard"
-      :chat="activeChat"
-      class="flex-grow-1"/>
+    <ChatBoard ref="chatBoard" :chat="activeChat" class="flex-grow-1" />
   </v-container>
 </template>
 
@@ -43,7 +40,7 @@ export default {
     socket.on('chats:read', (chats) => {
       console.log('EVENT chats:read -', chats);
       // TODO: change is_group to isGroup in Chat schema in db
-      this.chats = chats.map((c) => c.is_group ? new Group(c) : new Chat(c));
+      this.chats = chats.map((c) => (c.is_group ? new Group(c) : new Chat(c)));
     });
 
     socket.on('users:online', (userId) => {

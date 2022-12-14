@@ -18,9 +18,7 @@
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon>
       <v-avatar>
-        <img
-          alt="icon of person you're chatting with"
-          :src="imageId" />
+        <img alt="icon of person you're chatting with" :src="imageId" />
       </v-avatar>
       <v-toolbar-title class="ml-5">
         <span class="text--primary">{{ chatName }}</span>
@@ -99,7 +97,7 @@ export default {
   },
   props: {
     chat: {
-      type: [ Chat, Group ],
+      type: [Chat, Group],
       default: null,
     },
   },
@@ -199,7 +197,7 @@ export default {
       } else {
         return this.otherPrivateUser.name;
       }
-    }
+    },
   },
   watch: {
     messageString(oldValue, newValue) {

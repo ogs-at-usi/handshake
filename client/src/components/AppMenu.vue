@@ -104,17 +104,16 @@
               :key="`item-${i}`"
               :value="user"
               active-class="deep-purple--text text--accent-4">
-
               <template v-slot:default="{ active }">
                 <v-list-item-content>
-                  <v-list-item-title v-text="user.name"/>
+                  <v-list-item-title v-text="user.name" />
                 </v-list-item-content>
 
                 <v-list-item-action>
                   <v-checkbox
                     :input-value="active"
                     @click="clickedUser(user, active)"
-                    color="deep-purple accent-4"/>
+                    color="deep-purple accent-4" />
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -169,7 +168,10 @@ export default {
       console.log('create group', Array.from(this.groupUsers));
       this.groupTitle = this.groupTitle.replace(' ', '');
       if (this.groupTitle === '' || this.groupUsers.size === 0) return;
-      const group = new Group({ title: this.groupTitle, members: Array.from(this.groupUsers) });
+      const group = new Group({
+        title: this.groupTitle,
+        members: Array.from(this.groupUsers),
+      });
       await this.$api.createGroup(group);
       this.defaultGroupData();
     },
@@ -189,13 +191,13 @@ export default {
         if (this.groupUsers.has(user)) this.groupUsers.delete(user);
       }
       console.log('group users', this.groupUsers);
-    }
+    },
   },
   watch: {
     searchedUser() {
       if (this.groupCreation) this.getUsers();
     },
-  }
+  },
 };
 </script>
 

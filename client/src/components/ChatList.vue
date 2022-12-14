@@ -12,7 +12,7 @@ export default {
   props: {
     chats: {
       type: Array, // of Chats
-    }
+    },
   },
   components: { ChatContact },
   computed: {
@@ -24,9 +24,9 @@ export default {
         let chat = null;
         if (value !== undefined) chat = this.chats[value];
         this.$store.commit('setActiveChat', { chat });
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

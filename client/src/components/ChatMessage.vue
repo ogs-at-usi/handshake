@@ -9,7 +9,6 @@
       elevation="2"
       style="height: fit-content"
       color="primary">
-
       <v-card-title
         v-if="!isSelf && chat.isGroup"
         class="font-weight-regular subtitle-1 pa-3 pb-0">
@@ -61,15 +60,14 @@ export default {
   props: {
     message: {
       type: Message,
-      required: true
+      required: true,
     },
     chat: {
       type: Chat,
-      required: true
-    }
+      required: true,
+    },
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     maxChars() {
       return 500;
