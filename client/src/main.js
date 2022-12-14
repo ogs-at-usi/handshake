@@ -13,10 +13,6 @@ import Peer from 'peerjs';
 Vue.use(apiClient, axios);
 Vue.use(VueAxios, axios);
 Vue.use(VuePeerJS, new Peer({
-  host: 'localhost',
-  port: 9000,
-  path: '',
-  secure: false
 }))
 
 Vue.config.productionTip = false;
