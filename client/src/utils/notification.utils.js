@@ -20,10 +20,10 @@ export function askNotificationPermission() {
  *
  * @param sender
  * @param message
- * @returns {Notification}
+ * @param click
  */
-export function sendNotification(sender, message) {
-  if (getNotificationStatus() === 'granted') {
-    return new Notification(sender, { body: message });
-  }
+export function sendNotification(sender, message, click) {
+  if (getNotificationStatus() !== 'granted') return;
+  const notification = new Notification(sender, { body: message });
+  notification.onclick = click;
 }
