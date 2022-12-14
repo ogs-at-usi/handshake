@@ -13,7 +13,12 @@
       @userSelected="userSelected($event)"></AppMenu>
     <!-- content for the right hand side of the app main page -->
     <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard
+
+    <VideoChat v-if="this.$store.getters.calling != null">
+    </VideoChat>
+
+
+    <ChatBoard v-else
       ref="chatBoard"
       :chat="activeChat"
       class="flex-grow-1"></ChatBoard>
@@ -26,6 +31,7 @@ import ChatBoard from '@/components/ChatBoard.vue';
 import Chat from '@/classes/chat';
 import { io } from 'socket.io-client';
 import Message from '@/classes/message';
+import VideoChat from '@/components/VideoChat.vue';
 
 export default {
   name: 'AppContainer',
@@ -93,10 +99,6 @@ export default {
       }
     });
 
-
-
-
-
         socket.on('calling-me', (chatName) => {
           // create a pop up to with confirm of reject button
 
@@ -145,7 +147,7 @@ export default {
       },
     },
   },
-  components: { AppMenu, ChatBoard },
+  components: { AppMenu, ChatBoard, VideoChat },
 };
 </script>
 
