@@ -20,7 +20,7 @@ router.get('/users', async function (req, res) {
   filter = filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   const searchedUsers = await User.find({
-    name: { $regex: `^${filter}` }
+    name: { $regex: `^${filter}` },
   });
   return res.json(searchedUsers);
 });
@@ -37,17 +37,21 @@ router.post('/chats', async function (req, res) {
   if (!ObjectId.isValid(otherId)) return res.status(400).end();
   const otherUser = await User.findById(otherId);
   if (!otherUser) return res.status(400).end();
-  const otherUserChatRelations = await UserChat.find({ user: otherUser._id }).populate('chat').exec();
+  const otherUserChatRelations = await UserChat.find({ user: otherUser._id })
+    .populate('chat')
+    .exec();
   const otherUserChat = otherUserChatRelations.map((ucr) => ucr.chat);
 
   const user = await User.findById(req.userId);
   if (!user) return res.status(406).end();
-  const userChatRelations = await UserChat.find({ user: user._id }).populate('chat').exec();
+  const userChatRelations = await UserChat.find({ user: user._id })
+    .populate('chat')
+    .exec();
   const userChat = userChatRelations.map((ucr) => ucr.chat);
 
   // find the chat between the two users
-  const commonChats = otherUserChat.filter(ouc =>
-      userChat.some(uc => uc._id.toString() === ouc._id.toString())
+  const commonChats = otherUserChat.filter((ouc) =>
+    userChat.some((uc) => uc._id.toString() === ouc._id.toString())
   );
 
   if (commonChats.length > 0) {
@@ -67,10 +71,12 @@ router.post('/chats', async function (req, res) {
   serverSocket.joinRooms([chat._id.toString()], socketsMembers);
 
   // retrieve members objects from ids and return the chat to members with status 201
-  const membersUserChatRelations = await UserChat.find({ chat: chat._id }).populate('user').exec();
-  const members = membersUserChatRelations.map(uc => uc.user);
+  const membersUserChatRelations = await UserChat.find({ chat: chat._id })
+    .populate('user')
+    .exec();
+  const members = membersUserChatRelations.map((uc) => uc.user);
   const onlineUsers = req.app.locals.onlineUsers;
-  const membersWithStatus = members.map(m => {
+  const membersWithStatus = members.map((m) => {
     return {
       ...m._doc,
       online: onlineUsers.has(m._id.toString()),
@@ -88,8 +94,8 @@ router.post('/chats', async function (req, res) {
 router.post('/chats/:chatId/messages', async function (req, res) {
   console.log(
     'Route: /chat/:chatId/messages, ' +
-    `params: ${req.params}, body: ${req.body} - ` +
-    `Chat of the new message chatId in params`
+      `params: ${req.params}, body: ${req.body} - ` +
+      `Chat of the new message chatId in params`
   );
 
   const { chatId } = req.params;
@@ -104,7 +110,8 @@ router.post('/chats/:chatId/messages', async function (req, res) {
     messageObj?.content === undefined ||
     messageObj.content.length === 0 ||
     !Object.values(MessageType).includes(messageObj?.type)
-  ) return res.status(400).end();
+  )
+    return res.status(400).end();
 
   // const result = await UserChat.findOne({
   //   chat: new ObjectId(chatId),

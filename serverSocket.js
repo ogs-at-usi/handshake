@@ -51,11 +51,13 @@ function init(server, onlineUsers) {
         // get possible groups
         // TODO: add chat field isGroup in schema
         const groupMatch = await Group.findOne({ chat: c._id }).exec();
-        const groupFields = groupMatch ? {
-          _idGroup: groupMatch._doc._id,
-          title: groupMatch._doc.title,
-          description: groupMatch._doc.description,
-        } : {};
+        const groupFields = groupMatch
+          ? {
+              _idGroup: groupMatch._doc._id,
+              title: groupMatch._doc.title,
+              description: groupMatch._doc.description,
+            }
+          : {};
 
         // return chat raw object
         return { members, ...groupFields, ...c._doc };
