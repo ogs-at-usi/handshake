@@ -82,6 +82,11 @@ export default {
         this.$nextTick(() => {
           this.$refs.chatBoard.scrollDown();
         });
+      } else {
+        const sender = chat.members.find((member) => {
+          return member._id.toString() === message.sender;
+        });
+        sendNotification(sender.name, message.content);
       }
     });
 
