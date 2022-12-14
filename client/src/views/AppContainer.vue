@@ -43,6 +43,8 @@ export default {
       this.chats = chats.map((chat) => new Chat(chat));
     });
 
+    askNotificationPermission();
+
     socket.on('users:online', (userId) => {
       if (!this.chats) return;
       this.chats.forEach((chat) => {
