@@ -28,6 +28,9 @@
       <ChatMessageFile v-else :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
+        <span class="text--secondary text-caption" v-if="selfClass === 'self'">
+          {{ messageStatus }}
+        </span>
       </v-card-actions>
     </v-card>
   </div>
