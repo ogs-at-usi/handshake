@@ -94,6 +94,12 @@ export default {
       );
       return '';
     },
+    messageStatus() {
+      if (this.$props.message.seen) return 'seen';
+      if (this.$props.message.deliveredAt !== null) return 'delivered';
+      if (this.$props.message.sentAt !== null) return 'sent';
+      return 'pending';
+    },
   },
 };
 </script>
