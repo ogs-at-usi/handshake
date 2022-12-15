@@ -101,6 +101,10 @@ function init(server, onlineUsers) {
         socket.broadcast.to(roomId).emit('otherUser-disconnected', userId);
       });
 
+      socket.on('call', ({data}) => {
+        socket.emit ('call-vue  ', ({data}));
+      });
+
       socket.on('leave-room', (roomId, userId) => {
         console.log('leave-room', roomId, userId);
         const newroom = 'videocall_' + roomId;

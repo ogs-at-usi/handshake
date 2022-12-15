@@ -188,7 +188,24 @@ export default {
       // add class to video
       videoGrid.append(video);
     },
-    async calling() {
+    calling(){
+      const socket = this.$store.getters.socket;
+      const myPeer = this.$peer;
+      const chatId = this.$props.chat._id;
+      const chatName = this.$store.getters.user.name;
+
+
+      socket.emit('join-room', chatId, myPeer.id, chatName );
+      // socket.emit ('call', {chatId: chatId, myPeer: this.$peer.id});
+    // change the variable calling of the vue store
+    //   this.$store.commit('setCalling', "videoChat_" + chatId);
+      const callingState = "videoChat_" + chatId;
+      console.log(callingState);
+      this.$store.commit('setCalling', {roomId: callingState});
+
+    }
+    ,
+    async callingUnoffical() {
       console.log("my peer: ", this.$peer.id);
 
       const videoGrid = this.$refs['video-grid'];

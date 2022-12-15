@@ -24,7 +24,7 @@ export default new Vuex.Store({
     socket: null,
     activeChat: null,
     theme: null,
-    calling: "n",
+    calling: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
@@ -56,7 +56,7 @@ export default new Vuex.Store({
     setTheme(state, { theme }) {
       state.theme = theme;
     },
-    setCalling(state, {roomId}){
+    setCalling(state, { roomId }){
       state.calling = roomId;
     }
   },

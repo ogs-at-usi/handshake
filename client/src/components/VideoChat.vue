@@ -46,7 +46,7 @@
             <v-icon v-if="this.microphone">mdi-microphone</v-icon>
             <v-icon v-else>mdi-microphone-off</v-icon>
           </v-btn>
-          <v-btn color="error" fab>
+          <v-btn color="error" @click="toggleEsc" fab>
             <v-icon>mdi-phone</v-icon>
           </v-btn>
         </v-layout>
@@ -68,16 +68,106 @@ export default {
   },
 
   methods: {
+
+    connectToNewUser(userId, stream) {
+      const myPeer = this.$peer;
+      console.log(this.$peer.id);
+      // call the other user and send the
+      const call = myPeer.call(userId, stream);
+      const video = document.createElement('video');
+      video.setAttribute('id', userId);
+
+      call.on('stream', (userVideoStream) => {
+        this.addVideoStream(video, userVideoStream, false);
+      });
+      call.on('close', () => {
+        video.remove();
+      });
+    },
+    addVideoStream(video, stream, myvideo = false) {
+      const videoGrid = this.$refs['video-grid'];
+      video.srcObject = stream;
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+      });
+      if (!myvideo) {
+        video.classList.add('videoOther');
+      }
+      // add class to video
+      videoGrid.append(video);
+    },
     // function to add the video of the user
-    myVideo() {},
-    otherVideo() {},
-    buttonBar() {},
+    myVideo(chatId) {
+      const myVideo = document.getElementById('you');
+      const socket = this.$store.getters.socket;
+      const myPeer = this.$peer;
+      // const chatId = this.$props.chat._id;
+      myVideo.muted = true;
+
+
+      navigator.mediaDevices
+        .getUserMedia({
+          video: true,
+          audio: true,
+        })
+        .then((stream) => {
+          this.addVideoStream(myVideo, stream, true);
+
+          myPeer.on('call', (call) => {
+            call.answer(stream);
+            const video = document.createElement('video');
+            console.log('ANSWERING CALL');
+            // call the other user and send the
+            call.on('stream', (userVideoStream) => {
+              this.addVideoStream(video, userVideoStream);
+            });
+          });
+
+          socket.on('user-connected', (userId, chatId) => {
+            console.log('USER CONNECTED');
+            this.connectToNewUser(userId, stream);
+          });
+
+          socket.on('user-disconnected', (userId) => {
+            socket.emit('leave-room', chatId, myPeer.id);
+          });
+
+
+          socket.on('otherUser-disconnected', (userId) => {
+            console.log('OTHER USER DISCONNECTED');
+
+            const video = document.getElementById(userId);
+            video.remove();
+          });
+        });
+
+
+    },
+    otherVideo() {
+
+    },
+    buttonBar() {
+
+    },
     toggleCamera() {
       this.camera = !this.camera;
+      this.$refs.you.srcObject.getVideoTracks()[0].enabled = this.camera;
+
     },
     toggleMicrophone() {
       this.microphone = !this.microphone;
+      this.$refs.you.srcObject.getAudioTracks()[0].enabled = this.microphone;
+
     },
+    toggleEsc() {
+      this.dialog = false;
+      this.$store.commit('setCalling', {roomId: null});
+    },
+  },
+  mounted() {
+
+    const socket = this.$store.getters.socket;
+
   },
 };
 </script>
