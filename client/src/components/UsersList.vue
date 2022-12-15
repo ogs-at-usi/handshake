@@ -8,11 +8,12 @@
     </v-list-item-content>
   </v-list-item>
 
-  <v-list-item-group v-else-if="users.length > 0">
+  <v-list-item-group v-else-if="users.length > 0" multiple>
     <UserItem
       v-for="(user, index) in users"
       :key="index"
       :user="user"
+      :checkbox="checkbox"
       class="ps-4 py-3"
       @click.native="$emit('userSelected', user)" />
   </v-list-item-group>
@@ -29,6 +30,10 @@ export default {
     filter: {
       type: String,
       default: '',
+    },
+    checkbox: {
+      type: Boolean,
+      default: false,
     },
   },
   data: function () {
