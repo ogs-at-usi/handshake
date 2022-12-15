@@ -165,9 +165,7 @@ export default {
     },
   },
   mounted() {
-
     const socket = this.$store.getters.socket;
-
   },
 };
 </script>

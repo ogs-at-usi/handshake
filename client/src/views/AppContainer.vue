@@ -5,7 +5,38 @@
     style="max-width: 1450px; position: relative">
     <!-- content for the left hand side of the app main page -->
     <!-- about profile contact and image, search bar and contact chat list -->
-    <div class="popup"></div>
+    <div v-if='this.$store.getters.popup != null' id='popupContainer'>
+      <v-dialog
+        v-model="this.$store.getters.popup"
+        persistent
+        style="position: relative !important"
+        eager
+       >
+      <v-card>
+        <v-card-title class="text-h5">
+          {{this.$store.getters.popup}}
+        </v-card-title>
+        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+          >
+            Disagree
+          </v-btn>
+          <v-btn
+            color="error"
+            text
+          >
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
+    </div>
     <AppMenu
       v-if="!($store.getters.isMobile && activeChat !== null)"
       class="col-12 col-sm-5 col-md-4 col-lg-4"
@@ -37,6 +68,7 @@ export default {
   name: 'AppContainer',
   data() {
     return {
+      dialog: false,
       chats: null,
     };
   },
@@ -101,15 +133,8 @@ export default {
 
         socket.on('calling-me', (chatName) => {
           // create a pop up to with confirm of reject button
-
-          console.log('calling me');
-          const popupDiv = document.querySelector('.popup');
-          popupDiv.innerHTML =`
-              <h5 class="card-title">Incoming call</h5>
-              <p class="card-text">You are being called by ${chatName}</p>
-              <a href="#" class="btn btn-primary">Accept</a>
-              <a href="#" class="btn btn-danger">Reject</a>
-          `;
+          this.$store.commit('setPopup', { chatName: chatName });
+          // popupContainer.appendChild(popup);
 
         });
 
@@ -152,6 +177,10 @@ export default {
 </script>
 
 <style scoped>
+
+>>> .v-dialog {
+  overflow-y: visible;
+}
 
 .popup {
   background-color: #555;

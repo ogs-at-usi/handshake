@@ -196,11 +196,7 @@ export default {
 
 
       socket.emit('join-room', chatId, myPeer.id, chatName );
-      // socket.emit ('call', {chatId: chatId, myPeer: this.$peer.id});
-    // change the variable calling of the vue store
-    //   this.$store.commit('setCalling', "videoChat_" + chatId);
       const callingState = "videoChat_" + chatId;
-      console.log(callingState);
       this.$store.commit('setCalling', {roomId: callingState});
 
     }

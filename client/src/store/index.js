@@ -25,6 +25,7 @@ export default new Vuex.Store({
     activeChat: null,
     theme: null,
     calling: null,
+    popup: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     isMobile: () => window.innerWidth < 600,
     theme: (state) => state.theme,
     calling: (state) => state.calling,
+    popup: (state) => state.popup,
   },
   mutations: {
     login(state, { user }) {
@@ -58,6 +60,9 @@ export default new Vuex.Store({
     },
     setCalling(state, { roomId }){
       state.calling = roomId;
+    },
+    setPopup(state, { chatName }){
+      state.popup = chatName;
     }
   },
   actions: {
