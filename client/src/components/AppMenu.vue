@@ -5,6 +5,10 @@
       class="w-100"
       @setSettings="openSettings = $event"
       :open="openSettings" />
+    <GroupCreation
+      :open="openGroups"
+      class="w-100"
+      @setGroupOpen="openGroups = $event" />
     <v-navigation-drawer clipped color="surface" permanent width="100%">
       <v-list class="pt-0" flat>
         <!-- user image, name, email and settings icon -->
@@ -40,21 +44,9 @@
             single-line
             color="textPrimary" />
 
-          <v-menu offset-y v-if="!groupCreation">
-            <template #activator="{ on }">
-              <v-btn class="ms-2" icon v-on="on">
-                <v-icon>mdi-account-multiple-plus</v-icon>
-              </v-btn>
-            </template>
-
-            <v-list color="secondary" style="cursor: pointer">
-              <v-list-item-group>
-                <v-list-item @click="startGroupCreation">
-                  <v-list-item-title>New group</v-list-item-title>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-menu>
+          <v-btn class="ms-2" icon @click="openGroups = true">
+            <v-icon>mdi-account-multiple-plus</v-icon>
+          </v-btn>
 
           <!-- x cancel button to cancel group creation -->
           <v-btn
@@ -130,10 +122,11 @@ import UsersList from '@/components/UsersList';
 import AppSettings from '@/components/AppSettings';
 import { User } from '@/classes/user';
 import { Group } from '@/classes/group';
+import GroupCreation from '@/components/GroupCreation';
 
 export default {
   name: 'AppMenu',
-  components: { AppSettings, UsersList, ChatList },
+  components: { GroupCreation, AppSettings, UsersList, ChatList },
   data: function () {
     return {
       searchedUser: '',
@@ -142,6 +135,7 @@ export default {
       groupUsers: new Set(),
       groupTitle: '',
       groupUsersSearch: [],
+      openGroups: false,
     };
   },
   props: {
