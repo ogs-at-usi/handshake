@@ -15,6 +15,11 @@
             Create a new group
           </v-list-item-title>
         </v-list-item-content>
+        <v-list-item-action>
+          <v-btn icon @click="createGroup">
+            <v-icon>mdi-check</v-icon>
+          </v-btn>
+        </v-list-item-action>
       </v-list-item>
       <v-list-item class="pa-3">
         <v-text-field
@@ -65,7 +70,7 @@
         checkbox
         class="mt-4"
         style="overflow-y: auto; flex: 1 1 auto !important"
-        :selectedUsers='selectedUsers'
+        :selectedUsers="selectedUsers"
         @userSelected="userSelected($event)" />
     </v-list>
   </v-navigation-drawer>
@@ -73,6 +78,7 @@
 
 <script>
 import UsersList from '@/components/UsersList';
+import { Group } from '@/classes/group';
 
 export default {
   name: 'GroupCreation',
@@ -95,9 +101,26 @@ export default {
   methods: {
     userSelected(user) {
       if (this.selectedUsers.includes(user)) {
-        this.selectedUsers = this.selectedUsers.filter((u) => u._id !== user._id);
+        this.selectedUsers = this.selectedUsers.filter(
+          (u) => u._id !== user._id
+        );
       } else {
         this.selectedUsers.push(user);
+      }
+    },
+    reset() {
+      this.$refs.groupName.reset();
+      this.selectedUsers = [];
+    },
+    async createGroup() {
+      if (this.$refs.groupName.validate()) {
+        const group = new Group({
+          title: this.groupName,
+          members: Array.from(this.selectedUsers),
+        });
+        await this.$api.createGroup(group);
+        this.reset();
+        this.opened = false;
       }
     },
   },
@@ -107,9 +130,8 @@ export default {
         return this.open;
       },
       set(value) {
-        this.groupName = '';
-        this.$refs.groupName.reset();
         this.$emit('setGroupOpen', value);
+        this.reset();
       },
     },
   },
