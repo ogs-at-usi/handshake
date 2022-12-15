@@ -121,6 +121,12 @@ h4 {
 .v-main .v-input * {
   color: var(--v-textPrimary-base) !important;
 }
+
+.v-text-field__slot label {
+  color: var(--v-textPrimary-base) !important;
+  filter: brightness(0.5);
+}
+
 .v-main .v-messages__message,
 .v-application .error--text {
   color: var(--v-error-base) !important;
