@@ -11,27 +11,35 @@
         persistent
         style="position: relative !important"
         eager
+
+
        >
-      <v-card>
-        <v-card-title class="text-h5">
-          {{this.$store.getters.popup}}
+      <v-card
+
+      >
+        <v-card-title
+        class="text-center font-weight-bold primary white--text elevation-7 pa-5  flex-row align-center justify-center d-flex"
+        >{{this.$store.getters.popup}} is calling you
         </v-card-title>
-        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
+
+
+        <v-card-actions class="d-flex flex-row justify-center align-center">
           <v-btn
-            color="green darken-1"
-            text
+            color="success"
+            class="elevation-7"
+            @click="this.$store.commit('setPopup', null)"
+            >Accept</v-btn
           >
-            Disagree
-          </v-btn>
           <v-btn
             color="error"
-            text
+            class="elevation-7"
+            @click="this.$store.commit('setPopup', null)"
+            >Decline</v-btn
           >
-            Agree
-          </v-btn>
         </v-card-actions>
+
+
+
       </v-card>
     </v-dialog>
 
@@ -141,6 +149,13 @@ export default {
 
   },
   methods: {
+    acceptCall() {
+      this.$store.commit('setCalling', { chatName: this.$store.getters.popup });
+      this.$store.commit('setPopup', { chatName: null });
+    },
+    rejectCall() {
+      this.$store.commit('setPopup', { chatName: null });
+    },
     userSelected(otherUser) {
       console.log('EVENT User selected - ', otherUser);
       const chat = this.chats.find((chat) => {
