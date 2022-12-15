@@ -8,38 +8,50 @@
     eager
     fullscreen
     content-class="pa-5">
-    <v-img
-      src="/icons/default_pfp.png"
-      width="100%"
-      max-height="100%"
-      :aspect-ratio="16 / 9"></v-img>
-    <v-img
-      id="you"
-      src="/icons/default_pfp.png"
-      width="300px"
-      class="elevation-7"
-      :aspect-ratio="16 / 9"></v-img>
-    <v-toolbar
-      width="auto"
-      absolute
-      dense
-      floating
-      flat
-      color="transparent"
-      class="floatingbar"
-      style="border-radius: 32px">
-      <v-layout row class="gap-8">
-        <v-btn fab color="primary">
-          <v-icon>mdi-camera</v-icon>
-        </v-btn>
-        <v-btn fab color="primary">
-          <v-icon>mdi-microphone</v-icon>
-        </v-btn>
-        <v-btn fab color="primary">
-          <v-icon>mdi-phone</v-icon>
-        </v-btn>
-      </v-layout>
-    </v-toolbar>
+    <v-layout align-center fill-height justify-center row>
+      <v-img
+        ref="other"
+        :aspect-ratio="16 / 9"
+        max-height="100%"
+        src="/icons/default_pfp.png"
+        width="100%"></v-img>
+      <v-img
+        id="you"
+        ref="you"
+        :aspect-ratio="16 / 9"
+        class="elevation-7"
+        src="/icons/default_pfp.png"
+        width="300px"></v-img>
+      <v-toolbar
+        absolute
+        class="floatingbar"
+        color="transparent"
+        dense
+        flat
+        floating
+        style="border-radius: 32px"
+        width="auto">
+        <v-layout class="gap-8" row>
+          <v-btn
+            :color="this.camera ? 'success' : 'error'"
+            fab
+            @click="toggleCamera">
+            <v-icon v-if="this.camera">mdi-camera</v-icon>
+            <v-icon v-else>mdi-camera-off</v-icon>
+          </v-btn>
+          <v-btn
+            :color="this.microphone ? 'success' : 'error'"
+            fab
+            @click="toggleMicrophone">
+            <v-icon v-if="this.microphone">mdi-microphone</v-icon>
+            <v-icon v-else>mdi-microphone-off</v-icon>
+          </v-btn>
+          <v-btn color="error" fab>
+            <v-icon>mdi-phone</v-icon>
+          </v-btn>
+        </v-layout>
+      </v-toolbar>
+    </v-layout>
   </v-dialog>
 </template>
 
@@ -50,6 +62,8 @@ export default {
   data() {
     return {
       dialog: true,
+      camera: true,
+      microphone: true,
     };
   },
 
@@ -58,6 +72,12 @@ export default {
     myVideo() {},
     otherVideo() {},
     buttonBar() {},
+    toggleCamera() {
+      this.camera = !this.camera;
+    },
+    toggleMicrophone() {
+      this.microphone = !this.microphone;
+    },
   },
 };
 </script>
