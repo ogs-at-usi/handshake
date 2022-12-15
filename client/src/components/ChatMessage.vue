@@ -10,12 +10,15 @@
       style="height: fit-content"
       color="primary">
       <v-card-title
-        v-if="!isSelf && chat.isGroup"
-        class="font-weight-regular subtitle-1 pa-3 pb-0">
+        v-if="isShowingMessageName"
+        class="font-weight-bold subtitle-1 pa-3 pt-2 pb-0">
         {{ senderName }}
       </v-card-title>
 
-      <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
+      <ChatMessageText
+        v-if="message.type === 'TEXT'"
+        :class="isShowingMessageName ? 'pt-0' : ''"
+        :message="message" />
       <ChatMessageImage
         v-else-if="message.type === 'IMAGE'"
         :message="message" />
@@ -69,6 +72,9 @@ export default {
   },
   methods: {},
   computed: {
+    isShowingMessageName() {
+      return this.chat.isGroup && !this.isSelf;
+    },
     maxChars() {
       return 500;
     },
