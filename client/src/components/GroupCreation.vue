@@ -52,13 +52,12 @@
             ref="search"
             v-model="search"
             class="mt-4"
-            color='colorPrimary'
+            color="colorPrimary"
             dense
             filled
             hide-details
             label="Filter users"
-            single-line
-            ></v-text-field>
+            single-line></v-text-field>
         </v-list-item-content>
       </v-list-item>
       <UsersList
@@ -66,7 +65,8 @@
         checkbox
         class="mt-4"
         style="overflow-y: auto; flex: 1 1 auto !important"
-        @usersSelected="selectedUsers = $event" />
+        :selectedUsers='selectedUsers'
+        @userSelected="userSelected($event)" />
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -92,6 +92,15 @@ export default {
       required: true,
     },
   },
+  methods: {
+    userSelected(user) {
+      if (this.selectedUsers.includes(user)) {
+        this.selectedUsers = this.selectedUsers.filter((u) => u._id !== user._id);
+      } else {
+        this.selectedUsers.push(user);
+      }
+    },
+  },
   computed: {
     opened: {
       get() {
@@ -102,11 +111,6 @@ export default {
         this.$refs.groupName.reset();
         this.$emit('setGroupOpen', value);
       },
-    },
-  },
-  watch: {
-    selectedUsers() {
-      console.log(this.selectedUsers);
     },
   },
 };

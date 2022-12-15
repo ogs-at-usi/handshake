@@ -8,10 +8,7 @@
     </v-list-item-content>
   </v-list-item>
 
-  <v-list-item-group
-    v-else-if="users.length > 0"
-    v-model="selectedUsers"
-    multiple>
+  <v-list-item-group v-else-if="users.length > 0" v-model="su" multiple>
     <UserItem
       v-for="(user, index) in users"
       :key="index"
@@ -38,13 +35,27 @@ export default {
       type: Boolean,
       default: false,
     },
+    selectedUsers: {
+      type: Array,
+      default: () => [],
+    },
   },
   data: function () {
     return {
       users: [],
       loading: true,
-      selectedUsersArray: [],
     };
+  },
+  computed: {
+    su: {
+      get() {
+        if (!this.selectedUsers) return [];
+        return this.selectedUsers.map((user) =>
+          this.users.findIndex((u) => u._id === user._id)
+        );
+      },
+      set() {},
+    },
   },
   methods: {
     async getUsers() {
@@ -63,20 +74,6 @@ export default {
   watch: {
     filter() {
       this.getUsers();
-    },
-  },
-  computed: {
-    selectedUsers: {
-      get() {
-        return this.selectedUsersArray;
-      },
-      set(value) {
-        this.selectedUsersArray = value;
-        this.$emit(
-          'usersSelected',
-          this.selectedUsersArray.map((i) => this.users[i])
-        );
-      },
     },
   },
 };
