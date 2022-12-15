@@ -5,7 +5,7 @@
     color="surface"
     style="z-index: 90"
     temporary>
-    <v-list class="pt-0" flat>
+    <v-list class="pt-0 group_list d-flex flex-column h-100" flat>
       <v-list-item class="pt-2 secondary" style="height: 70px">
         <v-btn icon @click="opened = false">
           <v-icon>mdi-arrow-left</v-icon>
@@ -30,7 +30,7 @@
           single-line></v-text-field>
       </v-list-item>
       <v-list-item style="min-height: min-content !important">
-        <v-chip-group active-class="primary--text" center-active>
+        <v-chip-group active-class="primary--text" center-active column>
           <v-chip
             v-for="user in selectedUsers"
             :key="user.id"
@@ -43,18 +43,37 @@
         </v-chip-group>
       </v-list-item>
       <v-divider class="visible"></v-divider>
+      <v-list-item class="pa-3 pb-0">
+        <v-list-item-content class="py-0">
+          <v-list-item-title class="font-weight-bold mt-2">
+            Members
+          </v-list-item-title>
+          <v-text-field
+            ref="search"
+            v-model="search"
+            class="mt-4"
+            color='colorPrimary'
+            dense
+            filled
+            hide-details
+            label="Filter users"
+            single-line
+            ></v-text-field>
+        </v-list-item-content>
+      </v-list-item>
       <UsersList
+        :filter="search"
         checkbox
-        @usersSelected="selectedUsers = $event"
         class="mt-4"
-        filter="w"
-        style="height: 300px; overflow-y: scroll" />
+        style="overflow-y: auto; flex: 1 1 auto !important"
+        @usersSelected="selectedUsers = $event" />
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
 import UsersList from '@/components/UsersList';
+
 export default {
   name: 'GroupCreation',
   components: {
@@ -64,6 +83,7 @@ export default {
     return {
       groupName: '',
       selectedUsers: [],
+      search: '',
     };
   },
   props: {
@@ -92,4 +112,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.group_list > * {
+  flex: 0 0 auto !important;
+}
+</style>
