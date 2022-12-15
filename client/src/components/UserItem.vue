@@ -16,11 +16,8 @@
         </v-list-item-subtitle>
       </v-list-item-content>
 
-      <v-list-item-action v-if='checkbox'>
-        <v-checkbox
-          :input-value="active"
-          color='primary'
-        ></v-checkbox>
+      <v-list-item-action v-if="checkbox">
+        <v-checkbox :input-value="active" color="primary"></v-checkbox>
       </v-list-item-action>
     </template>
   </v-list-item>
@@ -36,10 +33,10 @@ export default {
       type: User,
       required: true,
     },
-    checkbox:{
+    checkbox: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 };
 </script>

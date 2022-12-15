@@ -39,7 +39,7 @@
             single-line
             color="textPrimary" />
 
-          <v-btn class="ms-2" icon @click='openGroups = true'>
+          <v-btn class="ms-2" icon @click="openGroups = true">
             <v-icon>mdi-account-multiple-plus</v-icon>
           </v-btn>
         </v-list-item>
