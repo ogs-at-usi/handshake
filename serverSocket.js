@@ -31,6 +31,8 @@ function init(server, onlineUsers) {
         })
         .exec()
     ).sort((a, b) => {
+      if (a.chat.messages.length === 0) return 1;
+      if (b.chat.messages.length === 0) return -1;
       const aDate = a.chat.messages[a.chat.messages.length - 1].sentAt;
       const bDate = b.chat.messages[b.chat.messages.length - 1].sentAt;
       return bDate - aDate;
