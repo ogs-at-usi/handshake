@@ -21,13 +21,20 @@ function init(server, onlineUsers) {
    */
   async function getChats(userId) {
     // get chat objects and sort them by last message date
-    const userChatRelations = await UserChat.find({ user: ObjectId(userId) })
-      .populate({
-        path: 'chat',
-        populate: { path: 'messages' },
-      })
-      .sort({ 'chat.messages.date': -1 })
-      .exec();
+    const userChatRelations = (
+      await UserChat.find({ user: ObjectId(userId) })
+        .populate({
+          path: 'chat',
+          populate: {
+            path: 'messages',
+          },
+        })
+        .exec()
+    ).sort((a, b) => {
+      const aDate = a.chat.messages[a.chat.messages.length - 1].sentAt;
+      const bDate = b.chat.messages[b.chat.messages.length - 1].sentAt;
+      return bDate - aDate;
+    });
 
     // fire condition - if none, return immediately empty array
     if (!userChatRelations) return [];
