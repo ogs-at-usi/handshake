@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { Message } from '@/classes/message';
 import { Chat } from '@/classes/chat';
 import { formatTime } from '@/utils';
 import ChatMessageText from '@/components/message/ChatMessageText';
@@ -62,7 +61,7 @@ export default {
   },
   props: {
     message: {
-      type: Message,
+      type: Object,
       required: true,
     },
     chat: {
