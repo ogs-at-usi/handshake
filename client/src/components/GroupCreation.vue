@@ -29,9 +29,23 @@
           required
           single-line></v-text-field>
       </v-list-item>
+      <v-list-item style="min-height: min-content !important">
+        <v-chip-group active-class="primary--text" center-active>
+          <v-chip
+            v-for="user in selectedUsers"
+            :key="user.id"
+            :value="user.id"
+            color="textPrimary"
+            outlined
+            style="max-width: 150px">
+            <span class="text-truncate">{{ user.name }}</span>
+          </v-chip>
+        </v-chip-group>
+      </v-list-item>
       <v-divider class="visible"></v-divider>
       <UsersList
         checkbox
+        @usersSelected="selectedUsers = $event"
         class="mt-4"
         filter="w"
         style="height: 300px; overflow-y: scroll" />
@@ -49,6 +63,7 @@ export default {
   data() {
     return {
       groupName: '',
+      selectedUsers: [],
     };
   },
   props: {
@@ -67,6 +82,11 @@ export default {
         this.$refs.groupName.reset();
         this.$emit('setGroupOpen', value);
       },
+    },
+  },
+  watch: {
+    selectedUsers() {
+      console.log(this.selectedUsers);
     },
   },
 };

@@ -8,7 +8,10 @@
     </v-list-item-content>
   </v-list-item>
 
-  <v-list-item-group v-else-if="users.length > 0" multiple>
+  <v-list-item-group
+    v-else-if="users.length > 0"
+    v-model="selectedUsers"
+    multiple>
     <UserItem
       v-for="(user, index) in users"
       :key="index"
@@ -40,6 +43,7 @@ export default {
     return {
       users: [],
       loading: true,
+      selectedUsersArray: [],
     };
   },
   methods: {
@@ -59,6 +63,20 @@ export default {
   watch: {
     filter() {
       this.getUsers();
+    },
+  },
+  computed: {
+    selectedUsers: {
+      get() {
+        return this.selectedUsersArray;
+      },
+      set(value) {
+        this.selectedUsersArray = value;
+        this.$emit(
+          'usersSelected',
+          this.selectedUsersArray.map((i) => this.users[i])
+        );
+      },
     },
   },
 };
