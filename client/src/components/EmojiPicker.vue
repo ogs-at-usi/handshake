@@ -19,7 +19,11 @@
           :key="index"
           class="d-flex justify-center align-center"
           cols="6">
-          <v-btn color="transparent" elevation="0" height="auto">
+          <v-btn
+            color="transparent"
+            elevation="0"
+            height="auto"
+            @click="sendSticker(sticker)">
             <StickerPlayer :sticker="sticker" animate-loop />
           </v-btn>
         </v-col>
@@ -34,11 +38,23 @@ import StickerPlayer from '@/components/StickerPlayer';
 export default {
   name: 'EmojiPicker',
   components: { StickerPlayer },
+  props: {
+    chatId: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
       menu: false,
       stickers: ['happy', 'sad', 'stare', 'tired', 'what'],
     };
+  },
+  methods: {
+    sendSticker(stickerName) {
+      this.menu = false;
+      this.$api.sendSticker(this.$props.chatId, stickerName);
+    },
   },
 };
 </script>
