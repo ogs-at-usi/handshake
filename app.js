@@ -24,6 +24,7 @@ app.set('view engine', 'html');
 // TODO - controllers
 app.use('/auth', require('./routes/auth'));
 app.use('/api', authenticate, require('./routes/chat'));
+app.use('/api', authenticate, require('./routes/group'));
 app.use('/upload', authenticate, require('./routes/upload'));
 
 // serve Vue app if no matching route is found

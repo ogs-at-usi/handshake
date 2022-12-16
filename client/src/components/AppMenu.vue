@@ -1,12 +1,18 @@
 <template>
-  <!-- MENU WITH OWN IMAGE, SEARCH BAR AND CONTACTS LIST -->
   <v-container class="pa-0 w-100 ma-0 h-100" fluid style="position: relative">
     <AppSettings
       class="w-100"
       @setSettings="openSettings = $event"
       :open="openSettings" />
+    <GroupCreation
+      :open="openGroups"
+      class="w-100"
+      @setGroupOpen="openGroups = $event" />
     <v-navigation-drawer clipped color="surface" permanent width="100%">
-      <v-list class="pt-0" flat>
+      <v-list
+        class="pt-0 d-flex flex-column"
+        flat
+        style="height: 100vh !important">
         <v-list-item class="pt-2 secondary">
           <v-list-item-avatar>
             <img alt="pfp" src="/icons/default_pfp.png" />
@@ -34,46 +40,52 @@
             outlined
             prepend-inner-icon="mdi-magnify"
             single-line
-            color="textPrimary"></v-text-field>
-          <v-menu offset-y>
-            <template #activator="{ on }">
-              <v-btn class="ms-2" icon @click="startCreateGroup" v-on="on">
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <v-list color="secondary" style="cursor: pointer">
-              <v-list-item-group>
-                <v-list-item>
-                  <v-list-item-title>New group</v-list-item-title>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </v-menu>
+            color="textPrimary" />
+
+          <v-btn class="ms-2" icon @click="openGroups = true">
+            <v-icon>mdi-account-multiple-plus</v-icon>
+          </v-btn>
         </v-list-item>
-        <v-divider class="visible"></v-divider>
-        <ChatList v-if="searchedUser === ''" :chats="chats"></ChatList>
-        <UsersList
-          v-else
-          :filter="searchedUser"
-          @userSelected="searchedUser = ''"
-          v-on="$listeners"></UsersList>
+        <v-divider class="visible" />
+        <vue-custom-scrollbar>
+          <ChatList
+            v-if="searchedUser === ''"
+            :chats="chats"
+            class="flex-fill overflow-y-auto" />
+          <!-- with groupCreation, it becomes multi selectable -->
+          <UsersList
+            v-else
+            :filter="searchedUser"
+            class="flex-fill overflow-y-auto"
+            @userSelected="searchedUser = ''"
+            v-on="$listeners" />
+        </vue-custom-scrollbar>
       </v-list>
     </v-navigation-drawer>
   </v-container>
 </template>
 
 <script>
-import ChatList from '@/components/ChatList.vue';
+import ChatList from '@/components/ChatList';
 import UsersList from '@/components/UsersList';
-import AppSettings from '@/components/AppSettings.vue';
+import AppSettings from '@/components/AppSettings';
+import GroupCreation from '@/components/GroupCreation';
+import vueCustomScrollbar from 'vue-custom-scrollbar';
 
 export default {
   name: 'AppMenu',
-  components: { AppSettings, UsersList, ChatList },
+  components: {
+    GroupCreation,
+    AppSettings,
+    UsersList,
+    ChatList,
+    vueCustomScrollbar,
+  },
   data: function () {
     return {
       searchedUser: '',
       openSettings: false,
+      openGroups: false,
     };
   },
   props: {
@@ -81,12 +93,18 @@ export default {
       type: Array,
     },
   },
-  methods: {
-    startCreateGroup() {
-      this.$emit('startCreateGroup');
-    },
-  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-list-item {
+  flex: 0 0 auto !important;
+}
+>>> .ps__rail-y {
+  opacity: 0.6 !important;
+}
+
+>>> .ps__rail-y:hover {
+  background-color: transparent !important;
+}
+</style>

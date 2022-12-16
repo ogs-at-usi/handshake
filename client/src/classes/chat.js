@@ -1,5 +1,5 @@
-import User from '@/classes/user';
-import Message from '@/classes/message';
+const { User } = require('./user');
+const { Message } = require('./message');
 
 class Chat {
   _id = null;
@@ -13,19 +13,14 @@ class Chat {
     messages = null,
     isGroup = false,
   }) {
-    this._id = _id;
+    this._id = _id && _id.toString(); // user select from search and no common chat
+    this.isGroup = isGroup;
     this.members =
-      members &&
-      members.map((member) =>
-        member instanceof User ? member : new User(member)
-      );
+      members && members.map((m) => (m instanceof User ? m : new User(m)));
     this.messages =
       messages &&
-      messages.map((message) =>
-        message instanceof Message ? message : new Message(message)
-      );
-    this.isGroup = isGroup;
+      messages.map((m) => (m instanceof Message ? m : new Message(m)));
   }
 }
 
-export default Chat;
+module.exports = { Chat };
