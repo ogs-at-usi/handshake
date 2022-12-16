@@ -9,19 +9,19 @@
     fullscreen
     content-class="pa-5">
     <v-layout align-center fill-height justify-center row>
-      <v-img
+      <video
         ref="other"
         :aspect-ratio="16 / 9"
         max-height="100%"
         src="/icons/default_pfp.png"
-        width="100%"></v-img>
-      <v-img
+        width="100%"></video>
+      <video
         id="you"
         ref="you"
         :aspect-ratio="16 / 9"
         class="elevation-7"
         src="/icons/default_pfp.png"
-        width="300px"></v-img>
+        width="300px"></video>
       <v-toolbar
         absolute
         class="floatingbar"
@@ -97,49 +97,28 @@ export default {
       videoGrid.append(video);
     },
     // function to add the video of the user
-    myVideo(chatId) {
+    myVideo() {
       const myVideo = document.getElementById('you');
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
       // const chatId = this.$props.chat._id;
       myVideo.muted = true;
-
-
-      navigator.mediaDevices
-        .getUserMedia({
-          video: true,
-          audio: true,
-        })
-        .then((stream) => {
-          this.addVideoStream(myVideo, stream, true);
-
-          myPeer.on('call', (call) => {
-            call.answer(stream);
-            const video = document.createElement('video');
-            console.log('ANSWERING CALL');
-            // call the other user and send the
-            call.on('stream', (userVideoStream) => {
-              this.addVideoStream(video, userVideoStream);
-            });
-          });
-
-          socket.on('user-connected', (userId, chatId) => {
-            console.log('USER CONNECTED');
-            this.connectToNewUser(userId, stream);
-          });
-
-          socket.on('user-disconnected', (userId) => {
-            socket.emit('leave-room', chatId, myPeer.id);
-          });
-
-
-          socket.on('otherUser-disconnected', (userId) => {
-            console.log('OTHER USER DISCONNECTED');
-
-            const video = document.getElementById(userId);
-            video.remove();
+      navigator.mediaDevices.getUserMedia({
+        video: this.camera,
+        audio: this.microphone,
+      }).then((stream) => {
+        this.addVideoStream(myVideo, stream, true);
+        myPeer.on('call', (call) => {
+          call.answer(stream);
+          const video = document.createElement('video');
+          call.on('stream', (userVideoStream) => {
+            this.addVideoStream(video, userVideoStream, false);
           });
         });
+        socket.on('user-connected', (userId) => {
+          this.connectToNewUser(userId, stream);
+        });
+      });
 
 
     },
@@ -166,6 +145,7 @@ export default {
   },
   mounted() {
     const socket = this.$store.getters.socket;
+    this.myVideo();
   },
 };
 </script>

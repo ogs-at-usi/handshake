@@ -146,7 +146,6 @@ export default {
       this.$store.commit('setPopup', { chatName: null });
     },
     userSelected(otherUser) {
-      console.log('EVENT User selected - ', otherUser);
       const chat = this.chats.find((chat) => {
         if (chat.members.length === 2) {
           const otherChatUser = chat.members.find(
