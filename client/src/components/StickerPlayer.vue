@@ -30,7 +30,6 @@ export default {
   mounted() {
     this.$refs.sticker.addEventListener('load', () => {
       const actions = [];
-      console.log(this.animateLoop, this.animateOnClick);
       if (this.animateLoop) {
         actions.push({
           state: 'loop',
