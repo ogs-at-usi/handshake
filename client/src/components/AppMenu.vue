@@ -9,7 +9,10 @@
       class="w-100"
       @setGroupOpen="openGroups = $event" />
     <v-navigation-drawer clipped color="surface" permanent width="100%">
-      <v-list class="pt-0" flat>
+      <v-list
+        class="pt-0 d-flex flex-column"
+        flat
+        style="height: 100vh !important">
         <v-list-item class="pt-2 secondary">
           <v-list-item-avatar>
             <img alt="pfp" src="/icons/default_pfp.png" />
@@ -44,12 +47,16 @@
           </v-btn>
         </v-list-item>
         <v-divider class="visible" />
-        <ChatList v-if="searchedUser === ''" :chats="chats" />
+        <ChatList
+          v-if="searchedUser === ''"
+          :chats="chats"
+          class="flex-fill overflow-y-auto" />
         <!-- with groupCreation, it becomes multi selectable -->
         <UsersList
           v-else
           :filter="searchedUser"
           @userSelected="searchedUser = ''"
+          class="flex-fill overflow-y-auto"
           v-on="$listeners" />
       </v-list>
     </v-navigation-drawer>
@@ -80,4 +87,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-list-item {
+  flex: 0 0 auto !important;
+}
+</style>
