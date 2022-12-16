@@ -24,6 +24,7 @@ export default new Vuex.Store({
     socket: null,
     activeChat: null,
     theme: null,
+    playing: null,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
@@ -53,6 +54,9 @@ export default new Vuex.Store({
     },
     setTheme(state, { theme }) {
       state.theme = theme;
+    },
+    setPlaying(state, { component }) {
+      state.playing = component;
     },
   },
   actions: {

@@ -77,13 +77,21 @@ export default {
         (this.audio.duration / 100) * this.percentage
       );
     },
+    checkOtherPlayers() {
+      if (this.$store.state.playing !== null) {
+        this.$store.state.playing.pause();
+      }
+      this.$store.commit('setPlaying', { component: this });
+    },
     play() {
       if (this.playing) return;
+      this.checkOtherPlayers();
       this.audio.play().then((_) => (this.playing = true));
       this.paused = false;
     },
     pause() {
       this.paused = !this.paused;
+      if (!this.paused) this.checkOtherPlayers();
       this.paused ? this.audio.pause() : this.audio.play();
     },
     _handleLoaded: function () {
