@@ -88,7 +88,12 @@ export default {
       chat = chat.isGroup ? new Group(chat) : new Chat(chat);
       this.chats.unshift(chat);
 
-      if (chat.members[0]._id === this.$store.getters.user._id) {
+      if (
+        chat.members[0]._id === this.$store.getters.user._id ||
+        (chat.isGroup &&
+          chat.members[chat.members.length - 1]._id ===
+            this.$store.getters.user._id)
+      ) {
         this.activeChat = chat;
       }
     });
