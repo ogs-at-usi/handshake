@@ -89,6 +89,8 @@ export default new Vuex.Store({
         commit('logout');
       }
     },
+
+
   },
   modules: {},
   plugins: [vuexLocal.plugin],

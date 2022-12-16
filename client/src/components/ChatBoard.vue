@@ -14,7 +14,7 @@
       color="secondary">
       <v-app-bar-nav-icon
         class="me-3 d-block d-sm-none"
-        @click="$store.commit('setActiveChat', { chat: null })">
+        @click="$store.commit('setActiveChat', { chat: this.$props.chat._id })">
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon>
       <v-avatar>
@@ -196,7 +196,7 @@ export default {
 
 
       socket.emit('join-room', chatId, myPeer.id, chatName );
-      const callingState = "videoChat_" + chatId;
+      const callingState = "videocall_" + chatId;
       this.$store.commit('setCalling', {roomId: callingState});
 
     }

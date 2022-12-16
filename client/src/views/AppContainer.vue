@@ -11,8 +11,6 @@
         persistent
         style="position: relative !important"
         eager
-
-
        >
       <v-card
 
@@ -27,13 +25,13 @@
           <v-btn
             color="success"
             class="elevation-7"
-            @click="this.$store.commit('setPopup', null)"
+            @click="acceptCall"
             >Accept</v-btn
           >
           <v-btn
             color="error"
             class="elevation-7"
-            @click="this.$store.commit('setPopup', null)"
+            @click="rejectCall"
             >Decline</v-btn
           >
         </v-card-actions>
@@ -42,21 +40,14 @@
 
       </v-card>
     </v-dialog>
-
-
     </div>
     <AppMenu
       v-if="!($store.getters.isMobile && activeChat !== null)"
       class="col-12 col-sm-5 col-md-4 col-lg-4"
       :chats="chats"
       @userSelected="userSelected($event)"></AppMenu>
-    <!-- content for the right hand side of the app main page -->
-    <!-- chat board containing the chat header, messages and input bar -->
-
     <VideoChat v-if="this.$store.getters.calling != null">
     </VideoChat>
-
-
     <ChatBoard v-else
       ref="chatBoard"
       :chat="activeChat"
@@ -139,19 +130,17 @@ export default {
       }
     });
 
-        socket.on('calling-me', (chatName) => {
-          // create a pop up to with confirm of reject button
-          this.$store.commit('setPopup', { chatName: chatName });
-          // popupContainer.appendChild(popup);
-
-        });
+    socket.on('calling-me', (chatName) => {
+      this.$store.commit('setPopup', { chatName: chatName });
+    });
 
 
   },
   methods: {
     acceptCall() {
-      this.$store.commit('setCalling', { chatName: this.$store.getters.popup });
+      this.$store.commit('setCalling', { roomId: this.$store.getters.popup });
       this.$store.commit('setPopup', { chatName: null });
+
     },
     rejectCall() {
       this.$store.commit('setPopup', { chatName: null });

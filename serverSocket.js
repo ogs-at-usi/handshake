@@ -84,12 +84,9 @@ function init(server, onlineUsers) {
     socket.on('join-room', async (roomId, userId, chatName) => {
 
       const newRoom = 'videocall_' + roomId;
-      console.log('join-room', newRoom, userId);
       socket.join(newRoom);
 
       const sockets = await io.to(newRoom).fetchSockets();
-      console.log("sockets ", sockets.length === 1);
-
       if(sockets.length  === 1) {
         socket.broadcast.to(roomId).emit('calling-me', chatName);
       }
