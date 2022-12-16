@@ -31,9 +31,11 @@ router.post('/group', async function (req, res) {
   const group = await Group.create({ title: titleSanitized, chat: chat._id });
 
   // join members in chat socket room
-  const socketsMembers = await Promise.all(
-    membersIdWithCreator.map(async (id) => await io.to(id).fetchSockets())
-  );
+  const socketsMembers = (
+    await Promise.all(
+      membersIdWithCreator.map(async (id) => await io.to(id).fetchSockets())
+    )
+  ).reduce((acc, val) => acc.concat(val), []);
   joinRooms([chat._id.toString()], socketsMembers);
 
   // retrieve member objects
