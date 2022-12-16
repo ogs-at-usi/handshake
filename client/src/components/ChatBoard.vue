@@ -247,12 +247,12 @@ export default {
               console.log('ANSWERING CALL');
               // call the other user and send the
               call.on('stream', (userVideoStream) => {
-                this.addVideoStream(video, userVideoStream);
+                this.addVideoStream1(video, userVideoStream);
               });
             });
             socket.on('user-connected', (userId, chatId) => {
               console.log('USER CONNECTED');
-              this.connectToNewUser(userId, stream);
+              this.connectToNewUser1(userId, stream);
             });
 
             socket.on('user-disconnected', (userId) => {

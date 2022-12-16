@@ -84,7 +84,7 @@ export default {
         this.addVideoStream(myVideo, stream, true);
         myPeer.on('call', (call) => {
           call.answer(stream);
-          const video = document.createElement('video');
+          const video = document.getElementById('other');
           call.on('stream', (userVideoStream) => {
             this.addVideoStream(video, userVideoStream, false);
           });
@@ -97,17 +97,23 @@ export default {
 
     },
     otherVideo(userId, stream) {
+      console.log('user connectedBBBBBBBB');
       const myPeer = this.$peer;
-      const otherVideo = document.getElementById('other');
       const call = myPeer.call(userId, stream);
+      const video = document.getElementById('other');
+
       call.on('stream', (userVideoStream) => {
-        this.addVideoStream(otherVideo, userVideoStream, false);
+        // this.addVideoStream(video, `userVideoStream`, false);
+        this.addVideoStream(video, userVideoStream, false);
       });
 
+      call.on('close', () => {
+
+      });
     },
 addVideoStream(video, stream, isYou = false) {
-
-      video.srcObject = stream;
+      // video.srcObject = stream;
+  // jef sono qui
       video.addEventListener('loadedmetadata', () => {
         video.play();
       });
@@ -116,7 +122,7 @@ addVideoStream(video, stream, isYou = false) {
       if (isYou) {
         myVideo.srcObject = stream;
       } else {
-        otherVideo.srcObject = stream;
+       otherVideo.srcObject = stream;
       }
     },
     toggleCamera() {
