@@ -3,7 +3,6 @@
     :src="`/stickers/${sticker}.json`"
     background="transparent"
     speed="1"
-    :id="`sticker_${sticker}`"
     ref="sticker"
     style="width: 100px; height: 100px" />
 </template>
@@ -43,7 +42,7 @@ export default {
         });
       }
       create({
-        player: `#sticker_${this.sticker}`,
+        player: this.$refs.sticker,
         mode: this.animateLoop ? 'chain' : 'cursor',
         actions,
       });
