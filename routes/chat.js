@@ -181,4 +181,32 @@ router.post('/chats/:chatId/messages', async function (req, res) {
   res.status(201).json(newMessage);
 });
 
+/*
+ * Responds a created a new sticker and returns the new sticker
+ */
+router.post('/chats/:chatId/sticker', async function (req, res) {
+  const chatId = req.params.chatId;
+  if (!ObjectId.isValid(chatId)) {
+    return res.status(400).end();
+  }
+
+  const sticker = req.body.sticker;
+  // console.log(sticker);
+
+  const newMessage = await saveMessage(
+    chatId,
+    req.userId,
+    sticker,
+    'STICKER'
+  );
+
+  io.to(req.params.chatId).emit('messages:create', newMessage);
+
+  if (!newMessage) {
+    return res.status(404).end();
+  }
+
+  res.status(201).json(newMessage);
+});
+
 module.exports = router;
