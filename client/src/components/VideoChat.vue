@@ -97,27 +97,28 @@ export default {
 
     },
     otherVideo(userId, stream) {
-
-
-
+      const myPeer = this.$peer;
+      const otherVideo = document.getElementById('other');
+      const call = myPeer.call(userId, stream);
+      call.on('stream', (userVideoStream) => {
+        this.addVideoStream(otherVideo, userVideoStream, false);
+      });
 
     },
-    addVideoStream(video, stream, isYou = false) {
+addVideoStream(video, stream, isYou = false) {
+
       video.srcObject = stream;
       video.addEventListener('loadedmetadata', () => {
         video.play();
       });
-
+      const myVideo = document.getElementById('you');
+      const otherVideo = document.getElementById('other');
       if (isYou) {
-        this.$refs.you = video;
+        myVideo.srcObject = stream;
       } else {
-        this.$refs.other = video;
+        otherVideo.srcObject = stream;
       }
-
-
     },
-
-
     toggleCamera() {
       this.camera = !this.camera;
       this.$refs.you.srcObject.getVideoTracks()[0].enabled = this.camera;
@@ -126,7 +127,6 @@ export default {
     toggleMicrophone() {
       this.microphone = !this.microphone;
       this.$refs.you.srcObject.getAudioTracks()[0].enabled = this.microphone;
-
     },
     toggleEsc() {
       this.dialog = false;
@@ -136,6 +136,7 @@ export default {
   mounted() {
     const socket = this.$store.getters.socket;
     this.myVideo();
+
 
   },
 };

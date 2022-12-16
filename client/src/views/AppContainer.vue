@@ -1,4 +1,4 @@
-<template>
+`<template>
   <v-container
     class="overflow-hidden pa-0 d-flex flex-row justify-start h-100 w-100 background"
     fluid
@@ -17,7 +17,7 @@
       >
         <v-card-title
         class="text-center font-weight-bold primary white--text elevation-7 pa-5  flex-row align-center justify-center d-flex"
-        >{{this.$store.getters.popup}} is calling you
+        >{{this.$store.getters.popup.chatName}} is calling you
         </v-card-title>
 
 
@@ -130,16 +130,26 @@ export default {
       }
     });
 
-    socket.on('calling-me', (chatName) => {
-      this.$store.commit('setPopup', { chatName: chatName });
+    socket.on('calling-me', (chatName, roomId) => {
+      console.log('EVENT calling-me -', chatName);
+      console.log ('AAAAAAAAAaroom id is ', roomId);
+      this.$store.commit('setPopup', { chatName: chatName, roomId: roomId });
     });
 
 
   },
   methods: {
     acceptCall() {
-      this.$store.commit('setCalling', { roomId: this.$store.getters.popup });
-      this.$store.commit('setPopup', { chatName: null });
+      const socket = this.$store.getters.socket;
+      const myPeer = this.$peer;
+      const myName = this.$store.getters.user.name;
+      const newRoom = "videocall_" + this.$store.getters.popup.roomId;
+      console.log("new roooooo,: " + newRoom);
+      socket.emit('join-room',  this.$store.getters.popup.roomId, myPeer.id, myName );
+
+      this.$store.commit('setCalling', { roomId: newRoom, myPeer: myPeer });
+      this.$store.commit('setPopup', { chatName: null, roomId: null });
+
 
     },
     rejectCall() {
@@ -199,3 +209,4 @@ export default {
 }
 /* put div as flex */
 </style>
+`

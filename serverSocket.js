@@ -81,16 +81,24 @@ function init(server, onlineUsers) {
       io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
     });
 
+
+    socket.on('accept-call', (roomId, peerId)  => {
+
+      socket.join(roomId);
+      socket.broadcast.to(roomId).emit('user-connected', peerId, roomId);
+
+
+    });
+
     socket.on('join-room', async (roomId, userId, chatName) => {
 
       const newRoom = 'videocall_' + roomId;
+      console.log('user: ' + userId + ' joined room: ' + newRoom);
       socket.join(newRoom);
-
       const sockets = await io.to(newRoom).fetchSockets();
       if(sockets.length  === 1) {
-        socket.broadcast.to(roomId).emit('calling-me', chatName);
+        socket.broadcast.to(roomId).emit('calling-me', chatName, roomId);
       }
-
       socket.broadcast.to(newRoom).emit('user-connected', userId, roomId);
 
       socket.on('disconnect', () => {

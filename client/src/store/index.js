@@ -36,6 +36,9 @@ export default new Vuex.Store({
     theme: (state) => state.theme,
     calling: (state) => state.calling,
     popup: (state) => state.popup,
+
+
+
   },
   mutations: {
     login(state, { user }) {
@@ -61,8 +64,10 @@ export default new Vuex.Store({
     setCalling(state, { roomId }){
       state.calling = roomId;
     },
-    setPopup(state, { chatName }){
-      state.popup = chatName;
+    setPopup(state, { chatName, roomId }){
+      state.popup = { chatName, roomId };
+      if (roomId === null) state.popup = null;
+
     }
   },
   actions: {

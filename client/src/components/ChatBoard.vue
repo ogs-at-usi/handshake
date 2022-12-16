@@ -49,9 +49,6 @@
         :key="index"
         :message="msg"></ChatMessage>
 
-      <div ref="video-grid">
-
-      </div>
     </vue-custom-scrollbar>
 
 
@@ -109,9 +106,6 @@ export default {
     },
   },
   methods: {
-    changeButton() {
-      this.buttonState = true;
-    },
     updateTypingStatus(typing) {
       if (typing) {
         this.$store.getters.socket.emit('user:typing', {
@@ -160,7 +154,6 @@ export default {
     },
 
     connectToNewUser1(userId, stream) {
-      // call the function prova that is declared in AppContainer.vue
 
       const myPeer = this.$peer;
       console.log(this.$peer.id);
@@ -193,10 +186,10 @@ export default {
       const myPeer = this.$peer;
       const chatId = this.$props.chat._id;
       const chatName = this.$store.getters.user.name;
-
+      console.log("dovrebbe "+ chatName)
       socket.emit('join-room', chatId, myPeer.id, chatName );
       const callingState = "videocall_" + chatId;
-      this.$store.commit('setCalling', {roomId: callingState});
+      this.$store.commit('setCalling', {roomId: callingState, myPeer: myPeer});
 
     }
     ,
