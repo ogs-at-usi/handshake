@@ -10,13 +10,12 @@
 </template>
 
 <script>
-import Message from '@/classes/message';
 import { getFilePath } from '@/utils';
 export default {
   name: 'ChatMessageFile',
   props: {
     message: {
-      type: Message,
+      type: Object,
       required: true,
     },
   },
