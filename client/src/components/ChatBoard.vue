@@ -54,7 +54,7 @@
     <v-row
       class="ma-0 px-2 px-md-5 py-3 py-md-5 gap-3 flex-shrink-0 secondary elevation-5 d-flex justify-center align-center flex-nowrap"
       style="z-index: 10">
-      <EmojiPicker />
+      <EmojiPicker :chat-id="chat._id" />
       <FileUploader :chat-id="chat._id"></FileUploader>
       <v-form class="flex-grow-1" @submit.prevent="sendMessage">
         <v-text-field
