@@ -69,7 +69,7 @@ class ApiClient {
   }
 
   /**
-   * Send a sticer in a chat.
+   * Send a sticker in a chat.
    * @param chatId {string} The ID of the chat
    * @param sticker {string} The sticker to send
    * @returns {Promise<AxiosResponse<any>>} The promise with the response
@@ -99,22 +99,6 @@ class ApiClient {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-    });
-  }
-
-  /**
-   * Send a sticker in a chat.
-   * @param chatId {string} The ID of the chat
-   * @param sticker {string} The name of the sticker to send
-   * @returns {Promise<AxiosResponse<any>>} The promise with the response
-   */
-   async sendSticker(chatId, sticker) {
-    // before sending the sticker, it's best to refresh the token
-    // to avoid the token to expire while the sticker is being uploaded
-    await store.dispatch('refreshToken');
-    // console.log(chatId, sticker);
-    return this.axiosInstance.post(`/api/chats/${chatId}/sticker`, {
-      sticker,
     });
   }
 }
