@@ -42,7 +42,6 @@ export default new Vuex.Store({
       state.isLoggedIn = false;
       state.user = null;
       router.push('/login').catch(() => {});
-      console.log('logout');
       if (state.socket) state.socket.disconnect();
     },
     setSocket(state, { socket }) {

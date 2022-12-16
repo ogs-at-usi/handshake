@@ -31,6 +31,40 @@
           <v-list-item-title v-text="title"></v-list-item-title>
         </v-list-item>
       </v-list-group>
+      <v-dialog v-model="logout" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item link v-bind="attrs" v-on="on">
+            <v-list-item-icon class="mx-4">
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </template>
+
+        <v-card color='secondary'>
+          <v-card-title class="text-h5 font-weight-bold"> Logout </v-card-title>
+
+          <v-card-text class='text--primary'> Are you sure you want to logout? </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn color='textPrimary' text @click="logout = false"> Cancel </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="textPrimary"
+              outlined
+              @click="
+                () => {
+                  this.logout = false;
+                  this.$store.commit('logout');
+                }
+              ">
+              Logout
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -47,6 +81,7 @@ export default {
         ['Cool orange', 'orange', themesObject.orange.primary],
         ['Warm pink', 'pink', themesObject.pink.primary],
       ],
+      logout: false,
     };
   },
   props: {
