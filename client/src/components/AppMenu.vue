@@ -105,6 +105,6 @@ export default {
 }
 
 >>> .ps__rail-y:hover {
-  background-color:transparent!important;
+  background-color: transparent !important;
 }
 </style>
