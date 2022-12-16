@@ -47,17 +47,19 @@
           </v-btn>
         </v-list-item>
         <v-divider class="visible" />
-        <ChatList
-          v-if="searchedUser === ''"
-          :chats="chats"
-          class="flex-fill overflow-y-auto" />
-        <!-- with groupCreation, it becomes multi selectable -->
-        <UsersList
-          v-else
-          :filter="searchedUser"
-          @userSelected="searchedUser = ''"
-          class="flex-fill overflow-y-auto"
-          v-on="$listeners" />
+        <vue-custom-scrollbar>
+          <ChatList
+            v-if="searchedUser === ''"
+            :chats="chats"
+            class="flex-fill overflow-y-auto" />
+          <!-- with groupCreation, it becomes multi selectable -->
+          <UsersList
+            v-else
+            :filter="searchedUser"
+            class="flex-fill overflow-y-auto"
+            @userSelected="searchedUser = ''"
+            v-on="$listeners" />
+        </vue-custom-scrollbar>
       </v-list>
     </v-navigation-drawer>
   </v-container>
@@ -68,10 +70,17 @@ import ChatList from '@/components/ChatList';
 import UsersList from '@/components/UsersList';
 import AppSettings from '@/components/AppSettings';
 import GroupCreation from '@/components/GroupCreation';
+import vueCustomScrollbar from 'vue-custom-scrollbar';
 
 export default {
   name: 'AppMenu',
-  components: { GroupCreation, AppSettings, UsersList, ChatList },
+  components: {
+    GroupCreation,
+    AppSettings,
+    UsersList,
+    ChatList,
+    vueCustomScrollbar,
+  },
   data: function () {
     return {
       searchedUser: '',
@@ -90,5 +99,12 @@ export default {
 <style scoped>
 .v-list-item {
   flex: 0 0 auto !important;
+}
+>>> .ps__rail-y {
+  opacity: 0.6 !important;
+}
+
+>>> .ps__rail-y:hover {
+  background-color:transparent!important;
 }
 </style>
