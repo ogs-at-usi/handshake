@@ -184,7 +184,7 @@ router.post('/chats/:chatId/messages', async function (req, res) {
 /*
  * Responds a created a new sticker and returns the new sticker
  */
-router.post('/chats/:chatId/sticker', async function (req, res) {
+router.post('/chats/:chatId/stickers', async function (req, res) {
   const chatId = req.params.chatId;
   if (!ObjectId.isValid(chatId)) {
     return res.status(400).end();
