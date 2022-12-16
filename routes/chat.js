@@ -193,12 +193,7 @@ router.post('/chats/:chatId/stickers', async function (req, res) {
   const sticker = req.body.sticker;
   // console.log(sticker);
 
-  const newMessage = await saveMessage(
-    chatId,
-    req.userId,
-    sticker,
-    'STICKER'
-  );
+  const newMessage = await saveMessage(chatId, req.userId, sticker, 'STICKER');
 
   io.to(req.params.chatId).emit('messages:create', newMessage);
 
