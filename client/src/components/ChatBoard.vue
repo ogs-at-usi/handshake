@@ -159,7 +159,7 @@ export default {
       }
     },
 
-    connectToNewUser(userId, stream) {
+    connectToNewUser1(userId, stream) {
       // call the function prova that is declared in AppContainer.vue
 
       const myPeer = this.$peer;
@@ -176,7 +176,7 @@ export default {
         video.remove();
       });
     },
-    addVideoStream(video, stream, myvideo = false) {
+    addVideoStream1(video, stream, myvideo = false) {
       const videoGrid = this.$refs['video-grid'];
       video.srcObject = stream;
       video.addEventListener('loadedmetadata', () => {
@@ -193,7 +193,6 @@ export default {
       const myPeer = this.$peer;
       const chatId = this.$props.chat._id;
       const chatName = this.$store.getters.user.name;
-
 
       socket.emit('join-room', chatId, myPeer.id, chatName );
       const callingState = "videocall_" + chatId;
@@ -283,12 +282,6 @@ export default {
               myPeer.destroy();
               socket.emit('leave-room', chatId, myPeer.id);
             });
-
-            // //
-            // myPeer.destroy();
-            //
-            // socket.emit('leave-room', chatId, myPeer.id);
-
             socket.on('otherUser-disconnected', (userId) => {
               console.log('OTHER USER DISCONNECTED');
 

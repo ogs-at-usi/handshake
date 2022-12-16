@@ -11,6 +11,7 @@
     <v-layout align-center fill-height justify-center row>
       <video
         ref="other"
+        id = "other"
         :aspect-ratio="16 / 9"
         max-height="100%"
         src="/icons/default_pfp.png"
@@ -69,33 +70,6 @@ export default {
 
   methods: {
 
-    connectToNewUser(userId, stream) {
-      const myPeer = this.$peer;
-      console.log(this.$peer.id);
-      // call the other user and send the
-      const call = myPeer.call(userId, stream);
-      const video = document.createElement('video');
-      video.setAttribute('id', userId);
-
-      call.on('stream', (userVideoStream) => {
-        this.addVideoStream(video, userVideoStream, false);
-      });
-      call.on('close', () => {
-        video.remove();
-      });
-    },
-    addVideoStream(video, stream, myvideo = false) {
-      const videoGrid = this.$refs['video-grid'];
-      video.srcObject = stream;
-      video.addEventListener('loadedmetadata', () => {
-        video.play();
-      });
-      if (!myvideo) {
-        video.classList.add('videoOther');
-      }
-      // add class to video
-      videoGrid.append(video);
-    },
     // function to add the video of the user
     myVideo() {
       const myVideo = document.getElementById('you');
@@ -116,18 +90,34 @@ export default {
           });
         });
         socket.on('user-connected', (userId) => {
-          this.connectToNewUser(userId, stream);
+          this.otherVideo(userId, stream);
         });
       });
 
 
     },
-    otherVideo() {
+    otherVideo(userId, stream) {
+
+
+
 
     },
-    buttonBar() {
+    addVideoStream(video, stream, isYou = false) {
+      video.srcObject = stream;
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+      });
+
+      if (isYou) {
+        this.$refs.you = video;
+      } else {
+        this.$refs.other = video;
+      }
+
 
     },
+
+
     toggleCamera() {
       this.camera = !this.camera;
       this.$refs.you.srcObject.getVideoTracks()[0].enabled = this.camera;
@@ -146,6 +136,7 @@ export default {
   mounted() {
     const socket = this.$store.getters.socket;
     this.myVideo();
+
   },
 };
 </script>
@@ -175,7 +166,6 @@ export default {
 
 .myVideo-grid {
   display: flex;
-
   justify-content: center;
   align-items: center;
   background-color: #fff;
