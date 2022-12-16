@@ -41,7 +41,7 @@ export default {
   computed: {
     otherPrivateUser() {
       const [us1, us2] = this.chat.members;
-      return us1._id !== this.$store.getters.user._id ? us1 : us2;
+      return us1._id !== this.$store.getters.user?._id ? us1 : us2;
     },
     imageId() {
       if (this.chat instanceof Group) {
