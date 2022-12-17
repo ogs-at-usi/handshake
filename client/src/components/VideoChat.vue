@@ -1,58 +1,68 @@
 <template>
   <v-dialog
-    v-model='dialog'
-    content-class='pa-5'
+    v-model="dialog"
+    content-class="pa-5"
     eager
     fullscreen
-    max-width='80%'
+    max-width="80%"
     no-click-animation
     persistent
-    style='position: relative !important'>
-    <v-layout align-center class='ma-0' fill-height justify-center row>
-      {{ lagging }}
+    style="position: relative !important">
+    <v-layout align-center class="ma-0" fill-height justify-center row>
       <video
-        id='other'
-        ref='other'
-        :aspect-ratio='16 / 9'
-        :src-object.prop.camel='otherStream'
-        src='/icons/default_pfp.png'
-        style='object-fit: contain; max-height: 100%; width: 100%'
-        @loadedmetadata='$refs.other.play()'></video>
+        id="other"
+        ref="other"
+        :aspect-ratio="16 / 9"
+        :src-object.prop.camel="otherStream"
+        src="/icons/default_pfp.png"
+        style="object-fit: contain; max-height: 100%; width: 100%"
+        @loadedmetadata="$refs.other.play()"></video>
       <video
-        id='you'
-        ref='you'
-        :aspect-ratio='16 / 9'
-        :src-object.prop.camel='myStream'
-        class='elevation-7'
+        id="you"
+        ref="you"
+        :aspect-ratio="16 / 9"
+        :src-object.prop.camel="myStream"
+        class="elevation-7"
         muted
-        src='/icons/default_pfp.png'
-        width='300px'
-        @loadedmetadata='$refs.you.play()'></video>
+        src="/icons/default_pfp.png"
+        width="300px"
+        @loadedmetadata="$refs.you.play()"></video>
+      <v-snackbar
+        v-model="lagging"
+        :top="true"
+        absolute
+        color="error darken-2"
+        timeout="-1">
+        <v-icon left>mdi-alert-circle</v-icon>
+        <span v-if="lagging"
+          >The connection is bad, you might experience lag.</span
+        >
+      </v-snackbar>
       <v-toolbar
         absolute
-        class='floatingbar'
-        color='transparent'
+        class="floatingbar"
+        color="transparent"
         dense
         flat
         floating
-        style='border-radius: 32px'
-        width='auto'>
-        <v-layout class='gap-8' row>
+        style="border-radius: 32px"
+        width="auto">
+        <v-layout class="gap-8" row>
           <v-btn
             :color="this.camera ? 'success' : 'error'"
             fab
-            @click='toggleCamera'>
-            <v-icon v-if='this.camera'>mdi-camera</v-icon>
+            @click="toggleCamera">
+            <v-icon v-if="this.camera">mdi-camera</v-icon>
             <v-icon v-else>mdi-camera-off</v-icon>
           </v-btn>
           <v-btn
             :color="this.microphone ? 'success' : 'error'"
             fab
-            @click='toggleMicrophone'>
-            <v-icon v-if='this.microphone'>mdi-microphone</v-icon>
+            @click="toggleMicrophone">
+            <v-icon v-if="this.microphone">mdi-microphone</v-icon>
             <v-icon v-else>mdi-microphone-off</v-icon>
           </v-btn>
-          <v-btn color='error' fab @click='quitCall'>
+          <v-btn color="error" fab @click="quitCall">
             <v-icon>mdi-phone</v-icon>
           </v-btn>
         </v-layout>
@@ -62,6 +72,7 @@
 </template>
 
 <script>
+const LAG_THRESHOLD = 20;
 export default {
   name: 'VideoChat',
 
@@ -73,7 +84,7 @@ export default {
       otherStream: null,
       myStream: null,
       calls: [],
-      lagging: false,
+      lagging: true,
     };
   },
 
@@ -90,6 +101,7 @@ export default {
           audio: this.microphone,
         });
         call.answer(this.myStream);
+        this.checkLag(call);
         call.on('stream', (userVideoStream) => {
           console.log('Receiving stream from other');
           this.otherStream = userVideoStream;
@@ -110,18 +122,9 @@ export default {
       const call = myPeer.call(userId, this.myStream);
       console.log('Calling ' + userId);
       call.on('stream', async (userVideoStream) => {
-        setInterval(() => {
-          call.peerConnection.getStats().then((stats) => {
-            stats.forEach((stat) => {
-              if (stat.totalRoundTripTime) {
-                console.log(stat.totalRoundTripTime);
-                this.lagging = stat.totalRoundTripTime > 300 ?? false;
-              }
-            });
-          });
-        }, 1000);
         this.otherStream = userVideoStream;
       });
+      this.checkLag(call);
       this.calls.push(call);
 
       call.on('close', () => {
@@ -150,6 +153,31 @@ export default {
       this.otherStream = null;
       this.dialog = false;
       this.$store.commit('setCalling', { roomId: null });
+    },
+    checkLag(call) {
+      let overTimes = 0;
+      let underTimes = 0;
+      setInterval(() => {
+        call.peerConnection.getStats().then((stats) => {
+          stats.forEach((stat) => {
+            if (
+              stat.totalRoundTripTime &&
+              stat.totalRoundTripTime > LAG_THRESHOLD
+            ) {
+              overTimes += 1;
+              underTimes = 0;
+            } else {
+              underTimes += 1;
+              overTimes = 0;
+            }
+            if (overTimes > 5) {
+              this.lagging = true;
+            } else if (underTimes > 5) {
+              this.lagging = false;
+            }
+          });
+        });
+      }, 1000);
     },
   },
   mounted() {
