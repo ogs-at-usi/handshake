@@ -2,6 +2,7 @@ const Path = require('path');
 const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
+const SharpMulter = require("sharp-multer");
 const router = express.Router();
 const io = require('../serverSocket').io;
 
@@ -21,6 +22,7 @@ const REQUEST_FILE_NAMES = Object.freeze({
   video: 'video',
   audio: 'audio',
   file: 'file',
+  avatar: 'avatar',
 });
 
 const memoryStorage = multer.memoryStorage();
@@ -63,14 +65,28 @@ const multerUploads = Object.freeze({
       limits: { fileSize: MAX_SIZES.file },
     }
   ).single(REQUEST_FILE_NAMES.file),
+
+  avatar: multer(
+    {
+      storage: SharpMulter({
+        destination: (req, file, cb) => cb(null, './media/avatars/'),
+        filename: (req, file, cb) => cb(null, req.userId + '.jpg'),
+        imageOptions: {
+          fileFormat: "jpg",
+          quality: 80,
+          resize: { width: 500, height: 500 },
+        }
+      })
+    },
+  ).single(REQUEST_FILE_NAMES.avatar),
 });
 
 const validateUpload = (req, res, next) => {
-  const { chatId } = req.body;
-  if (!chatId) {
+  const { chatId, type } = req.body;
+  if (!chatId && type !== 'avatar') {
     return res.status(400).send('No chatId provided');
   }
-  if (!ObjectId.isValid(chatId)) {
+  if (!ObjectId.isValid(chatId) && type !== 'avatar') {
     return res.status(400).send('Invalid chatId');
   }
   if (!req.file) {
@@ -188,6 +204,39 @@ router.post(
     io.to(chatId).emit('messages:create', newMessage);
 
     res.status(201);
+  }
+);
+
+// const avupload = multer(
+//   {
+//     storage: SharpMulter({
+//       destination: (req, file, cb) => cb(null, './media/avatars/'),
+//       filename: (req, file, cb) => cb(null, req.userId + '.jpg'),
+//       imageOptions: {
+//         fileFormat: "jpg",
+//         quality: 80,
+//         resize: { width: 500, height: 500 },
+//       }
+//     })
+//   },
+// )
+
+// router.post(
+//   '/avatar',
+//   avupload.single("avatar"),
+//   async function (req, res) {
+//     console.log(req.file);
+//     res.send(req.file).status(201);
+//   }
+// );
+
+router.post(
+  '/avatar',
+  multerUploads.avatar,
+  validateUpload,
+  async function (req, res) {
+    console.log(req.file);
+    res.send(req.file);
   }
 );
 
