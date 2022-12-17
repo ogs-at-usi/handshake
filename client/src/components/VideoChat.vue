@@ -11,7 +11,7 @@
     <v-layout align-center fill-height justify-center row>
       <video
         ref="other"
-        id = "other"
+        id="other"
         :aspect-ratio="16 / 9"
         max-height="100%"
         src="/icons/default_pfp.png"
@@ -69,7 +69,6 @@ export default {
   },
 
   methods: {
-
     // function to add the video of the user
     myVideo() {
       const myVideo = document.getElementById('you');
@@ -77,24 +76,24 @@ export default {
       const myPeer = this.$peer;
       // const chatId = this.$props.chat._id;
       myVideo.muted = true;
-      navigator.mediaDevices.getUserMedia({
-        video: this.camera,
-        audio: this.microphone,
-      }).then((stream) => {
-        this.addVideoStream(myVideo, stream, true);
-        myPeer.on('call', (call) => {
-          call.answer(stream);
-          const video = document.getElementById('other');
-          call.on('stream', (userVideoStream) => {
-            this.addVideoStream(video, userVideoStream, false);
+      navigator.mediaDevices
+        .getUserMedia({
+          video: this.camera,
+          audio: this.microphone,
+        })
+        .then((stream) => {
+          this.addVideoStream(myVideo, stream, true);
+          myPeer.on('call', (call) => {
+            call.answer(stream);
+            const video = document.getElementById('other');
+            call.on('stream', (userVideoStream) => {
+              this.addVideoStream(video, userVideoStream, false);
+            });
+          });
+          socket.on('user-connected', (userId) => {
+            this.otherVideo(userId, stream);
           });
         });
-        socket.on('user-connected', (userId) => {
-          this.otherVideo(userId, stream);
-        });
-      });
-
-
     },
     otherVideo(userId, stream) {
       console.log('user connectedBBBBBBBB');
@@ -107,13 +106,11 @@ export default {
         this.addVideoStream(video, userVideoStream, false);
       });
 
-      call.on('close', () => {
-
-      });
+      call.on('close', () => {});
     },
-addVideoStream(video, stream, isYou = false) {
+    addVideoStream(video, stream, isYou = false) {
       // video.srcObject = stream;
-  // jef sono qui
+      // jef sono qui
       video.addEventListener('loadedmetadata', () => {
         video.play();
       });
@@ -122,13 +119,12 @@ addVideoStream(video, stream, isYou = false) {
       if (isYou) {
         myVideo.srcObject = stream;
       } else {
-       otherVideo.srcObject = stream;
+        otherVideo.srcObject = stream;
       }
     },
     toggleCamera() {
       this.camera = !this.camera;
       this.$refs.you.srcObject.getVideoTracks()[0].enabled = this.camera;
-
     },
     toggleMicrophone() {
       this.microphone = !this.microphone;
@@ -136,14 +132,11 @@ addVideoStream(video, stream, isYou = false) {
     },
     toggleEsc() {
       this.dialog = false;
-      this.$store.commit('setCalling', {roomId: null});
+      this.$store.commit('setCalling', { roomId: null });
     },
   },
   mounted() {
-    const socket = this.$store.getters.socket;
     this.myVideo();
-
-
   },
 };
 </script>
