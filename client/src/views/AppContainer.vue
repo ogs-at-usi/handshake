@@ -29,6 +29,7 @@ import {
   askNotificationPermission,
   sendNotification,
 } from '@/utils/notification.utils';
+import { userSeenMessage } from '@/utils/seen.utils';
 
 export default {
   name: 'AppContainer',
