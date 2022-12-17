@@ -73,7 +73,13 @@ function init(server, onlineUsers) {
         {
           $push: { seen: ObjectId(socket.userId) },
         }
-      );
+      ).exec((error, success) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(success);
+        }
+      });
     });
 
     onlineUsers.add(socket.userId);
