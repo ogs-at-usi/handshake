@@ -34,9 +34,23 @@
         color="error darken-2"
         timeout="-1">
         <v-icon left>mdi-alert-circle</v-icon>
-        <span v-if="lagging"
-          >The connection is bad, you might experience lag.</span
-        >
+        <span>The connection is bad, you might experience lag.</span>
+      </v-snackbar>
+      <v-snackbar v-model="errors.video" absolute color="error darken-2" top>
+        <v-icon left>mdi-alert-circle</v-icon>
+        <span>
+          Could not enable the video, make sure that your camera is working.
+        </span>
+      </v-snackbar>
+      <v-snackbar
+        v-model="errors.microphone"
+        absolute
+        color="error darken-2"
+        top>
+        <v-icon left>mdi-alert-circle</v-icon>
+        <span>
+          Could not enable the audio, make sure that your microphone is working.
+        </span>
       </v-snackbar>
       <v-toolbar
         absolute
@@ -80,11 +94,15 @@ export default {
     return {
       dialog: true,
       camera: true,
-      microphone: false,
+      microphone: true,
       otherStream: null,
       myStream: null,
       calls: [],
       lagging: false,
+      errors: {
+        microphone: false,
+        video: false,
+      },
     };
   },
 
@@ -95,22 +113,13 @@ export default {
       const myPeer = this.$peer;
       myPeer.on('call', async (call) => {
         console.log('Receiving call from other');
-        this.calls.push(call);
-        this.myStream = await navigator.mediaDevices.getUserMedia({
-          video: this.camera,
-          audio: this.microphone,
-        });
         call.answer(this.myStream);
+        this.calls.push(call);
         this.checkLag(call);
         call.on('stream', (userVideoStream) => {
           console.log('Receiving stream from other');
           this.otherStream = userVideoStream;
         });
-      });
-
-      this.myStream = await navigator.mediaDevices.getUserMedia({
-        video: this.camera,
-        audio: this.microphone,
       });
       socket.on('user-connected', (userId) => {
         console.log('Other user connected');
@@ -132,12 +141,20 @@ export default {
       });
     },
     toggleCamera() {
-      this.camera = !this.camera;
-      this.$refs.you.srcObject.getVideoTracks()[0].enabled = this.camera;
+      try {
+        this.$refs.you.srcObject.getVideoTracks()[0].enabled = this.camera;
+        this.camera = !this.camera;
+      } catch (e) {
+        this.errors.video = true;
+      }
     },
     toggleMicrophone() {
-      this.microphone = !this.microphone;
-      this.$refs.you.srcObject.getAudioTracks()[0].enabled = this.microphone;
+      try {
+        this.$refs.you.srcObject.getAudioTracks()[0].enabled = this.microphone;
+        this.microphone = !this.microphone;
+      } catch (e) {
+        this.errors.microphone = true;
+      }
     },
     quitCall() {
       this.$refs.you.srcObject.getTracks().forEach((track) => {
@@ -151,10 +168,12 @@ export default {
       });
       // DISCONECT FROM ROOM HERE PEER
       this.dialog = false;
-      console.log('disconnect from : '+ this.$store.getters.popup);
-      this.$store.getters.socket.emit('user:quit-call', this.$store.getters.popup);
+      console.log('disconnect from : ' + this.$store.getters.popup);
+      this.$store.getters.socket.emit(
+        'user:quit-call',
+        this.$store.getters.popup
+      );
       this.$store.commit('setCalling', { roomId: null });
-
     },
     checkLag(call) {
       let overTimes = 0;
@@ -181,9 +200,32 @@ export default {
         });
       }, 1000);
     },
+    async askMediaPermission() {
+      this.myStream = await navigator.mediaDevices.getUserMedia({
+        video: this.camera,
+        audio: this.microphone,
+      });
+    },
+    async checkAvailableMedia() {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(
+        (device) => device.kind === 'videoinput'
+      );
+      const audioDevices = devices.filter(
+        (device) => device.kind === 'audioinput'
+      );
+      if (videoDevices.length === 0) {
+        this.camera = false;
+      }
+      if (audioDevices.length === 0) {
+        this.microphone = false;
+      }
+    },
   },
-  mounted() {
-    this.initCall();
+  async mounted() {
+    await this.checkAvailableMedia();
+    await this.askMediaPermission();
+    await this.initCall();
   },
 };
 </script>
