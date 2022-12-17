@@ -1,5 +1,5 @@
 export function userSeenMessage(socket, chatId, lastMessageTime) {
-  socket.emit('message:update:read', {
+  socket.emit('messages:update:read', {
     chatId,
     lastMessageTime,
   });
