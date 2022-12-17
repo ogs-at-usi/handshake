@@ -103,7 +103,8 @@ export default {
       }
     });
 
-    socket.on('message:update:read', ({ chatId, lastMessageTime, userId }) => {
+    socket.on('messages:update:read', ({ chatId, lastMessageTime, userId }) => {
+      console.log('jfjkdfjkjgiojeiofjknvnfjkfnknfj');
       const chat = this.chats.find((chat) => chat._id === chatId);
       chat.messages = chat.messages.map((message) => {
         if (message.deliveredAt <= lastMessageTime) {
