@@ -74,7 +74,8 @@ export default {
       console.log('EVENT messages:create -', message);
       const chatId = message.chat;
       const chat = this.chats.find((chat) => chat._id === chatId);
-      chat.messages.push(new Message(message));
+      const newMessage = new Message(message);
+      chat.messages.push(newMessage);
       // move the chat to the top of the list
       this.chats = this.chats.filter((chat) => chat._id !== chatId);
       this.chats.unshift(chat);
