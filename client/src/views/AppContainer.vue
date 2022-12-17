@@ -99,8 +99,6 @@ export default {
     });
 
     socket.on('calling-me', (chatName, roomId) => {
-      console.log('EVENT calling-me -', chatName);
-      console.log('AAAAAAAAAaroom id is ', roomId);
       this.$store.commit('setPopup', { chatName: chatName, roomId: roomId });
     });
   },
