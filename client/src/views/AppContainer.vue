@@ -98,6 +98,16 @@ export default {
       }
     });
 
+    socket.on('message:update:read', ({ chatId, lastMessageTime, userId }) => {
+      const chat = this.chats.find((chat) => chat._id === chatId);
+      chat.messages = chat.messages.map((message) => {
+        if (message.deliveredAt <= lastMessageTime) {
+          message.seen.push(userId);
+        }
+        return message;
+      });
+    });
+
     /**
      * Get newly created chat.
      */
