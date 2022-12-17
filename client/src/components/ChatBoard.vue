@@ -31,7 +31,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn class="me-2"  @click = "calling()" icon>
+      <v-btn class="me-2" icon @click="call()">
         <v-icon>mdi-video</v-icon>
       </v-btn>
       <v-btn icon>
@@ -48,9 +48,7 @@
         ref="message"
         :key="index"
         :message="msg"></ChatMessage>
-
     </vue-custom-scrollbar>
-
 
     <!-- lower input bar for new message sending -->
     <v-row
@@ -96,7 +94,6 @@ export default {
       showPopup: false,
       buttonState: true,
       typingTimeout: null,
-
     };
   },
   props: {
@@ -152,180 +149,8 @@ export default {
         console.error(err);
       }
     },
-
-    connectToNewUser1(userId, stream) {
-
-      const myPeer = this.$peer;
-      console.log(this.$peer.id);
-      // call the other user and send the
-      const call = myPeer.call(userId, stream);
-      const video = document.createElement('video');
-      video.setAttribute('id', userId);
-
-      call.on('stream', (userVideoStream) => {
-        this.addVideoStream(video, userVideoStream, false);
-      });
-      call.on('close', () => {
-        video.remove();
-      });
-    },
-    addVideoStream1(video, stream, myvideo = false) {
-      const videoGrid = this.$refs['video-grid'];
-      video.srcObject = stream;
-      video.addEventListener('loadedmetadata', () => {
-        video.play();
-      });
-      if (!myvideo) {
-        video.classList.add('videoOther');
-      }
-      // add class to video
-      videoGrid.append(video);
-    },
-    calling(){
-      const socket = this.$store.getters.socket;
-      const myPeer = this.$peer;
-      const chatId = this.$props.chat._id;
-      const chatName = this.$store.getters.user.name;
-      console.log("dovrebbe "+ chatName)
-      socket.emit('join-room', chatId, myPeer.id, chatName );
-      const callingState = "videocall_" + chatId;
-      this.$store.commit('setCalling', {roomId: callingState, myPeer: myPeer});
-
-    }
-    ,
-    async callingUnoffical() {
-      console.log("my peer: ", this.$peer.id);
-
-      const videoGrid = this.$refs['video-grid'];
-      const socket = this.$store.getters.socket;
-      const myPeer = this.$peer;
-      const chatId = this.$props.chat._id;
-      const myVideo = document.createElement('video');
-      // create a bar to show the video buttons
-      const videoBar = document.createElement('div');
-      // put inside 3 buttons
-      const videoButton = document.createElement('button');
-      const audioButton = document.createElement('button');
-      const endCallButton = document.createElement('button');
-      // add class to the buttons
-      videoButton.classList.add('videoButton');
-      audioButton.classList.add('audioButton');
-      endCallButton.classList.add('endCallButton');
-      // add text to the buttons
-      videoButton.innerHTML = 'Video';
-      audioButton.innerHTML = 'Audio';
-      endCallButton.innerHTML = 'End Call';
-      // add the buttons to the bar
-      videoBar.appendChild(videoButton);
-      videoBar.appendChild(audioButton);
-      videoBar.appendChild(endCallButton);
-      // add class to the bar
-      videoBar.classList.add('videoBar');
-      videoGrid.appendChild(videoBar);
-
-      addFunctionToButtons(videoButton, audioButton, endCallButton, myVideo);
-      // add class yo myvideo
-      myVideo.classList.add('myVideo');
-      const chatName = this.$store.getters.user.name;
-      socket.emit('join-room', chatId, myPeer.id, chatName );
-      // set the chatId in the store of the state calling
-      this.$store.commit('setCalling', chatId);
-
-
-
-      myVideo.muted = true;
-      navigator.mediaDevices
-          .getUserMedia({
-            video: true,
-            audio: true,
-          })
-          .then((stream) => {
-            this.addVideoStream(myVideo, stream, true);
-            myPeer.on('call', (call) => {
-              call.answer(stream);
-              const video = document.createElement('video');
-              console.log('ANSWERING CALL');
-              // call the other user and send the
-              call.on('stream', (userVideoStream) => {
-                this.addVideoStream1(video, userVideoStream);
-              });
-            });
-            socket.on('user-connected', (userId, chatId) => {
-              console.log('USER CONNECTED');
-              this.connectToNewUser1(userId, stream);
-            });
-
-            socket.on('user-disconnected', (userId) => {
-              console.log('USER DISCONNECTED');
-              // if (peers[userId]) peers[userId].close();
-              const videoTracks = stream.getVideoTracks();
-              videoTracks.forEach(function(track) {
-                track.stop();
-              });
-
-              const audioTracks = stream.getAudioTracks();
-              audioTracks.forEach(function(track) {
-                track.stop();
-              });
-              myVideo.remove();
-              videoBar.remove();
-              const video = document.querySelector('video');
-              video.remove();
-
-              myPeer.destroy();
-              socket.emit('leave-room', chatId, myPeer.id);
-            });
-            socket.on('otherUser-disconnected', (userId) => {
-              console.log('OTHER USER DISCONNECTED');
-
-              const video = document.getElementById(userId);
-              video.remove();
-            });
-          });
-
-
-      function addFunctionToButtons(
-        videoButton,
-        audioButton,
-        endCallButton,
-        myVideo
-      ) {
-        videoButton.addEventListener('click', () => {
-          if (myVideo.srcObject.getVideoTracks()[0].enabled) {
-            myVideo.srcObject.getVideoTracks()[0].enabled = false;
-            videoButton.innerHTML = 'Video Off';
-          } else {
-            myVideo.srcObject.getVideoTracks()[0].enabled = true;
-            videoButton.innerHTML = 'Video';
-          }
-        });
-
-        audioButton.addEventListener('click', () => {
-          if (myVideo.srcObject.getAudioTracks()[0].enabled) {
-            myVideo.srcObject.getAudioTracks()[0].enabled = false;
-            audioButton.innerHTML = 'Audio Off';
-          } else {
-            myVideo.srcObject.getAudioTracks()[0].enabled = true;
-            audioButton.innerHTML = 'Audio';
-          }
-        });
-
-        endCallButton.addEventListener('click', () => {
-          myVideo.srcObject.getVideoTracks()[0].enabled = false;
-          myVideo.srcObject.getAudioTracks()[0].enabled = false;
-          videoButton.innerHTML = 'Video Off';
-          audioButton.innerHTML = 'Audio Off';
-          myVideo.remove();
-          // remove the bar
-          videoBar.remove();
-
-          // leave the room peer
-          myPeer.destroy();
-
-          socket.emit('leave-room', chatId, myPeer.id);
-          // disable the permission for video and audio from navigator
-        });
-      }
+    call() {
+      this.$store.dispatch('call', this.$props.chat._id);
     },
   },
   created() {
@@ -390,10 +215,7 @@ export default {
       });
     },
   },
-  mounted() {
-
-
-  },
+  mounted() {},
 };
 </script>
 
@@ -401,27 +223,4 @@ export default {
 #chat-board {
   height: 100%;
 }
-
-#video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 300px);
-  grid-auto-rows: 300px;
-}
-
-.myVideo {
-  width: 150px;
-  height: 150px;
-  border-radius: 10px;
-  object-fit: cover;
-  margin: 10px;
-}
-
-.otherVideo {
-  width: 300px;
-  height: 300px;
-  border-radius: 10px;
-  object-fit: cover;
-  margin: 10px;
-}
-
 </style>
