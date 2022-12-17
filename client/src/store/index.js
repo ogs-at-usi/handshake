@@ -36,9 +36,6 @@ export default new Vuex.Store({
     theme: (state) => state.theme,
     calling: (state) => state.calling,
     popup: (state) => state.popup,
-
-
-
   },
   mutations: {
     login(state, { user }) {
@@ -61,14 +58,13 @@ export default new Vuex.Store({
     setTheme(state, { theme }) {
       state.theme = theme;
     },
-    setCalling(state, { roomId }){
+    setCalling(state, { roomId }) {
       state.calling = roomId;
     },
-    setPopup(state, { chatName, roomId }){
+    setPopup(state, { chatName, roomId }) {
       state.popup = { chatName, roomId };
       if (roomId === null) state.popup = null;
-
-    }
+    },
   },
   actions: {
     login({ commit }, { username, password }) {
@@ -94,8 +90,15 @@ export default new Vuex.Store({
         commit('logout');
       }
     },
+    call({ commit, getters }, roomId) {
+      const socket = getters.socket;
+      const myPeer = this._vm.$peer;
+      const myName = getters.user.name;
+      const newRoom = 'videocall_' + roomId;
+      socket.emit('join-room', roomId, myPeer.id, myName);
 
-
+      commit('setCalling', { roomId: newRoom, myPeer: myPeer });
+    },
   },
   modules: {},
   plugins: [vuexLocal.plugin],
