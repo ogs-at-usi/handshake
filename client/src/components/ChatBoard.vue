@@ -84,6 +84,7 @@ import Chat from '@/classes/chat';
 import Message from '@/classes/message';
 import 'vue-custom-scrollbar/dist/vueScrollbar.css';
 import FileUploader from '@/components/FileUploader';
+import { userSeenMessage } from '@/utils/seen.utils';
 
 export default {
   name: 'ChatBoard',
