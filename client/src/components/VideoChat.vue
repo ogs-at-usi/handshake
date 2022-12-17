@@ -8,22 +8,22 @@
     eager
     fullscreen
     content-class="pa-5">
-    <v-layout align-center fill-height justify-center row>
+    <v-layout align-center class="ma-0" fill-height justify-center row>
       <video
         :src-object.prop.camel="otherStream"
         ref="other"
         id="other"
         @loadedmetadata="$refs.other.play()"
         :aspect-ratio="16 / 9"
-        max-height="100%"
         src="/icons/default_pfp.png"
-        width="100%"></video>
+        style="object-fit: contain; max-height: 100%; width: 100%"></video>
       <video
         :src-object.prop.camel="myStream"
         id="you"
         ref="you"
         @loadedmetadata="$refs.you.play()"
         :aspect-ratio="16 / 9"
+        muted
         class="elevation-7"
         src="/icons/default_pfp.png"
         width="300px"></video>
@@ -78,7 +78,6 @@ export default {
   methods: {
     // function to add the video of the user
     async initCall() {
-      const myVideo = this.$refs.you;
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
       myPeer.on('call', async (call) => {
@@ -103,8 +102,6 @@ export default {
         console.log('Other user connected');
         this.otherConnected(userId);
       });
-
-      myVideo.muted = true;
     },
     otherConnected(userId) {
       const myPeer = this.$peer;
@@ -132,10 +129,10 @@ export default {
       this.calls.forEach((call) => {
         call.close();
       });
-      this.$refs.you.srcObject.getTracks().forEach((track) => {
+      this.$refs.you.srcObject?.getTracks()?.forEach((track) => {
         track.stop();
       });
-      this.$refs.other.srcObject.getTracks().forEach((track) => {
+      this.$refs.other.srcObject?.getTracks()?.forEach((track) => {
         track.stop();
       });
       this.myStream = null;
