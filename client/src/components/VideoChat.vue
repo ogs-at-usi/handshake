@@ -12,6 +12,7 @@
       <video
         ref="other"
         id="other"
+        @loadedmetadata="$refs.other.play()"
         :aspect-ratio="16 / 9"
         max-height="100%"
         src="/icons/default_pfp.png"
@@ -19,6 +20,7 @@
       <video
         id="you"
         ref="you"
+        @loadedmetadata="$refs.you.play()"
         :aspect-ratio="16 / 9"
         class="elevation-7"
         src="/icons/default_pfp.png"
@@ -71,7 +73,7 @@ export default {
   methods: {
     // function to add the video of the user
     myVideo() {
-      const myVideo = document.getElementById('you');
+      const myVideo = this.$refs.you;
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
       // const chatId = this.$props.chat._id;
@@ -85,9 +87,8 @@ export default {
           this.addVideoStream(myVideo, stream, true);
           myPeer.on('call', (call) => {
             call.answer(stream);
-            const video = document.getElementById('other');
             call.on('stream', (userVideoStream) => {
-              this.addVideoStream(video, userVideoStream, false);
+              this.addVideoStream(myVideo, userVideoStream, false);
             });
           });
           socket.on('user-connected', (userId) => {
@@ -102,6 +103,7 @@ export default {
       const video = document.getElementById('other');
 
       call.on('stream', (userVideoStream) => {
+        console.log('Receiving stream lol');
         // this.addVideoStream(video, `userVideoStream`, false);
         this.addVideoStream(video, userVideoStream, false);
       });
@@ -109,18 +111,8 @@ export default {
       call.on('close', () => {});
     },
     addVideoStream(video, stream, isYou = false) {
-      // video.srcObject = stream;
-      // jef sono qui
-      video.addEventListener('loadedmetadata', () => {
-        video.play();
-      });
-      const myVideo = document.getElementById('you');
-      const otherVideo = document.getElementById('other');
-      if (isYou) {
-        myVideo.srcObject = stream;
-      } else {
-        otherVideo.srcObject = stream;
-      }
+      const videoObj = isYou ? this.$refs.you : this.$refs.other;
+      videoObj.srcObject = stream;
     },
     toggleCamera() {
       this.camera = !this.camera;
