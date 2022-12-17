@@ -4,7 +4,10 @@
     class="overflow-hidden pa-0 d-flex flex-row justify-start h-100 w-100 background"
     fluid
     style="max-width: 1450px; position: relative">
-    <VideocallPopup v-if="this.$store.getters.popup != null" />
+    <VideocallPopup
+      v-if="this.$store.getters.popup != null"
+      id="videocallPopup" />
+
     <AppMenu
       v-if="!($store.getters.isMobile && activeChat !== null)"
       class="col-12 col-sm-5 col-md-4 col-lg-4"
@@ -140,6 +143,11 @@ export default {
 >>> .v-dialog {
   overflow-y: visible;
 }
-/* put div as flex */
+#videocallPopup {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  z-index: 100;
+}
 </style>
 `
