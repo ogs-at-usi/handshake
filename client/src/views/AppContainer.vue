@@ -1,54 +1,18 @@
-`<template>
+`
+<template>
   <v-container
     class="overflow-hidden pa-0 d-flex flex-row justify-start h-100 w-100 background"
     fluid
     style="max-width: 1450px; position: relative">
-    <!-- content for the left hand side of the app main page -->
-    <!-- about profile contact and image, search bar and contact chat list -->
-    <div v-if='this.$store.getters.popup != null' id='popupContainer'>
-      <v-dialog
-        v-model="this.$store.getters.popup"
-        persistent
-        style="position: relative !important"
-        eager
-       >
-      <v-card
-
-      >
-        <v-card-title
-        class="text-center font-weight-bold primary white--text elevation-7 pa-5  flex-row align-center justify-center d-flex"
-        >{{this.$store.getters.popup.chatName}} is calling you
-        </v-card-title>
-
-
-        <v-card-actions class="d-flex flex-row justify-center align-center">
-          <v-btn
-            color="success"
-            class="elevation-7"
-            @click="acceptCall"
-            >Accept</v-btn
-          >
-          <v-btn
-            color="error"
-            class="elevation-7"
-            @click="rejectCall"
-            >Decline</v-btn
-          >
-        </v-card-actions>
-
-
-
-      </v-card>
-    </v-dialog>
-    </div>
+    <VideocallPopup v-if="this.$store.getters.popup != null" />
     <AppMenu
       v-if="!($store.getters.isMobile && activeChat !== null)"
       class="col-12 col-sm-5 col-md-4 col-lg-4"
       :chats="chats"
       @userSelected="userSelected($event)"></AppMenu>
-    <VideoChat v-if="this.$store.getters.calling != null">
-    </VideoChat>
-    <ChatBoard v-else
+    <VideoChat v-if="this.$store.getters.calling != null"> </VideoChat>
+    <ChatBoard
+      v-else
       ref="chatBoard"
       :chat="activeChat"
       class="flex-grow-1"></ChatBoard>
@@ -62,6 +26,7 @@ import Chat from '@/classes/chat';
 import { io } from 'socket.io-client';
 import Message from '@/classes/message';
 import VideoChat from '@/components/VideoChat.vue';
+import VideocallPopup from '@/components/VideocallPopup';
 
 export default {
   name: 'AppContainer',
@@ -132,29 +97,11 @@ export default {
 
     socket.on('calling-me', (chatName, roomId) => {
       console.log('EVENT calling-me -', chatName);
-      console.log ('AAAAAAAAAaroom id is ', roomId);
+      console.log('AAAAAAAAAaroom id is ', roomId);
       this.$store.commit('setPopup', { chatName: chatName, roomId: roomId });
     });
-
-
   },
   methods: {
-    acceptCall() {
-      const socket = this.$store.getters.socket;
-      const myPeer = this.$peer;
-      const myName = this.$store.getters.user.name;
-      const newRoom = "videocall_" + this.$store.getters.popup.roomId;
-      console.log("new roooooo,: " + newRoom);
-      socket.emit('join-room',  this.$store.getters.popup.roomId, myPeer.id, myName );
-
-      this.$store.commit('setCalling', { roomId: newRoom, myPeer: myPeer });
-      this.$store.commit('setPopup', { chatName: null, roomId: null });
-
-
-    },
-    rejectCall() {
-      this.$store.commit('setPopup', { chatName: null });
-    },
     userSelected(otherUser) {
       const chat = this.chats.find((chat) => {
         if (chat.members.length === 2) {
@@ -185,27 +132,13 @@ export default {
       },
     },
   },
-  components: { AppMenu, ChatBoard, VideoChat },
+  components: { VideocallPopup, AppMenu, ChatBoard, VideoChat },
 };
 </script>
 
 <style scoped>
-
 >>> .v-dialog {
   overflow-y: visible;
-}
-
-.popup {
-  background-color: #555;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 280px;
 }
 /* put div as flex */
 </style>
