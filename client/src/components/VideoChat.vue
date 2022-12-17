@@ -10,6 +10,7 @@
     content-class="pa-5">
     <v-layout align-center fill-height justify-center row>
       <video
+        :src-object.prop.camel="otherStream"
         ref="other"
         id="other"
         @loadedmetadata="$refs.other.play()"
@@ -18,6 +19,7 @@
         src="/icons/default_pfp.png"
         width="100%"></video>
       <video
+        :src-object.prop.camel="myStream"
         id="you"
         ref="you"
         @loadedmetadata="$refs.you.play()"
@@ -67,52 +69,56 @@ export default {
       dialog: true,
       camera: true,
       microphone: true,
+      otherStream: null,
+      myStream: null,
     };
   },
 
   methods: {
     // function to add the video of the user
-    myVideo() {
+    async myVideo() {
       const myVideo = this.$refs.you;
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
-      // const chatId = this.$props.chat._id;
+      console.log(myPeer.id);
       myVideo.muted = true;
-      navigator.mediaDevices
-        .getUserMedia({
-          video: this.camera,
-          audio: this.microphone,
-        })
-        .then((stream) => {
-          this.addVideoStream(myVideo, stream, true);
-          myPeer.on('call', (call) => {
-            call.answer(stream);
-            call.on('stream', (userVideoStream) => {
-              this.addVideoStream(myVideo, userVideoStream, false);
-            });
-          });
-          socket.on('user-connected', (userId) => {
-            this.otherVideo(userId, stream);
-          });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: this.camera,
+        audio: this.microphone,
+      });
+      this.setVideoStream(true, stream);
+      myPeer.on('call', (call) => {
+        console.log('Receiving call from other');
+        call.answer(stream);
+        call.on('stream', (userVideoStream) => {
+          console.log('Receiving stream from other');
+          this.setVideoStream(false, userVideoStream);
         });
+      });
+      socket.on('user-connected', (userId) => {
+        console.log('Other user connected');
+        this.otherConnected(userId, stream);
+      });
     },
-    otherVideo(userId, stream) {
-      console.log('user connectedBBBBBBBB');
+    otherConnected(userId, stream) {
       const myPeer = this.$peer;
       const call = myPeer.call(userId, stream);
-      const video = document.getElementById('other');
-
+      console.log('Calling ' + userId);
       call.on('stream', (userVideoStream) => {
-        console.log('Receiving stream lol');
-        // this.addVideoStream(video, `userVideoStream`, false);
-        this.addVideoStream(video, userVideoStream, false);
+        console.log('Other streaming');
+        this.setVideoStream(false, userVideoStream);
       });
 
-      call.on('close', () => {});
+      call.on('close', () => {
+        console.log('Closing call');
+      });
     },
-    addVideoStream(video, stream, isYou = false) {
-      const videoObj = isYou ? this.$refs.you : this.$refs.other;
-      videoObj.srcObject = stream;
+    setVideoStream(isYou = false, stream) {
+      if (isYou) {
+        this.myStream = stream;
+      } else {
+        this.otherStream = stream;
+      }
     },
     toggleCamera() {
       this.camera = !this.camera;
