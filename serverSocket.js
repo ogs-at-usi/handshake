@@ -2,6 +2,7 @@ const io = require('socket.io')();
 const { UserChat } = require('./models/userChat');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
+const { Message } = require('./models/message');
 
 // Initialize the socket.io server
 // Passing the onlineUsers set to make it accessible to the socket.io server
