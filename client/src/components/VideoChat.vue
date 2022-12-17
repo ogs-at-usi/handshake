@@ -140,19 +140,21 @@ export default {
       this.$refs.you.srcObject.getAudioTracks()[0].enabled = this.microphone;
     },
     quitCall() {
+      this.$refs.you.srcObject.getTracks().forEach((track) => {
+        track.stop();
+      });
+      this.$refs.other.srcObject.getTracks().forEach((track) => {
+        track.stop();
+      });
       this.calls.forEach((call) => {
         call.close();
       });
-      this.$refs.you.srcObject?.getTracks()?.forEach((track) => {
-        track.stop();
-      });
-      this.$refs.other.srcObject?.getTracks()?.forEach((track) => {
-        track.stop();
-      });
-      this.myStream = null;
-      this.otherStream = null;
+      // DISCONECT FROM ROOM HERE PEER
       this.dialog = false;
+      console.log('disconnect from : '+ this.$store.getters.popup);
+      this.$store.getters.socket.emit('user:quit-call', this.$store.getters.popup);
       this.$store.commit('setCalling', { roomId: null });
+
     },
     checkLag(call) {
       let overTimes = 0;

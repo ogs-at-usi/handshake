@@ -30,6 +30,7 @@ export default {
     },
     rejectCall() {
       this.$store.commit('setPopup', { chatName: null });
+
     },
   },
 };

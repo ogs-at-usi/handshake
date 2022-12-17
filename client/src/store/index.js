@@ -63,7 +63,12 @@ export default new Vuex.Store({
     },
     setPopup(state, { chatName, roomId }) {
       state.popup = { chatName, roomId };
-      if (roomId === null) state.popup = null;
+      if (roomId === null){
+        state.socket.emit('user:stopCalling', roomId);
+        state.popup = null;
+        // console.log('popup is null', state.socket);
+
+      }
     },
   },
   actions: {
