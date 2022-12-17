@@ -81,11 +81,6 @@ export default {
       this.chats = this.chats.filter((chat) => chat._id !== chatId);
       this.chats.unshift(chat);
       if (this.activeChat && this.activeChat._id === chatId) {
-        // socket.emit('messages:update:read', {
-        //   chatId,
-        //   lastMessageTime: newMessage.deliveredAt,
-        // });
-
         const lastMessageTime = newMessage.deliveredAt;
         userSeenMessage(socket, chatId, lastMessageTime);
 
