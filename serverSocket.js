@@ -101,13 +101,17 @@ function init(server, onlineUsers) {
         socket.broadcast.to(roomId).emit('otherUser-disconnected', userId);
       });
 
-      socket.on('leave-room', (roomId, userId) => {
-        console.log('leave-room', roomId, userId);
-        const newroom = 'videocall_' + roomId;
+      socket.on('user:quit-call', () => {
+        // console.log('leave-room', roomId, userId);
+        // newRoom = 'videocall_' + roomId;
         // socket.emit('user-disconnected', userId);
-        socket.broadcast.to(newroom).emit('otherUser-disconnected', userId);
-        socket.leave(newroom);
+        // print all the sockets in the room
+        console.log(io.sockets.adapter.rooms.get(newRoom));
+        console.log('leave-room: ', newRoom);
+        socket.broadcast.to(newRoom).emit('otherUser-disconnected', userId);
+        socket.leave(newRoom);
       });
+
     });
   });
 }
