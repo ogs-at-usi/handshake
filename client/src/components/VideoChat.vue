@@ -51,7 +51,7 @@
             <v-icon v-if="this.microphone">mdi-microphone</v-icon>
             <v-icon v-else>mdi-microphone-off</v-icon>
           </v-btn>
-          <v-btn color="error" @click="toggleEsc" fab>
+          <v-btn color="error" fab @click="quitCall">
             <v-icon>mdi-phone</v-icon>
           </v-btn>
         </v-layout>
@@ -71,6 +71,7 @@ export default {
       microphone: true,
       otherStream: null,
       myStream: null,
+      calls: [],
     };
   },
 
@@ -82,6 +83,7 @@ export default {
       const myPeer = this.$peer;
       myPeer.on('call', async (call) => {
         console.log('Receiving call from other');
+        this.calls.push(call);
         this.myStream = await navigator.mediaDevices.getUserMedia({
           video: this.camera,
           audio: this.microphone,
@@ -112,6 +114,7 @@ export default {
         console.log('Other streaming');
         this.otherStream = userVideoStream;
       });
+      this.calls.push(call);
 
       call.on('close', () => {
         console.log('Closing call');
@@ -125,7 +128,18 @@ export default {
       this.microphone = !this.microphone;
       this.$refs.you.srcObject.getAudioTracks()[0].enabled = this.microphone;
     },
-    toggleEsc() {
+    quitCall() {
+      this.calls.forEach((call) => {
+        call.close();
+      });
+      this.$refs.you.srcObject.getTracks().forEach((track) => {
+        track.stop();
+      });
+      this.$refs.other.srcObject.getTracks().forEach((track) => {
+        track.stop();
+      });
+      this.myStream = null;
+      this.otherStream = null;
       this.dialog = false;
       this.$store.commit('setCalling', { roomId: null });
     },
