@@ -84,7 +84,7 @@ export default {
       otherStream: null,
       myStream: null,
       calls: [],
-      lagging: true,
+      lagging: false,
     };
   },
 
