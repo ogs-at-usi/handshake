@@ -62,6 +62,20 @@ function init(server, onlineUsers) {
     );
     socket.emit('chats:read', userChats);
 
+    socket.on('messages:update:read', ({ chatId, lastMessageTime }) => {
+      console.log(chatId, lastMessageTime);
+      Message.updateMany(
+        {
+          seen: { $ne: ObjectId(socket.userId) },
+          deliveredAt: { $lte: new Date(lastMessageTime) },
+          chat: { $eq: ObjectId(chatId) },
+        },
+        {
+          $push: { seen: ObjectId(socket.userId) },
+        }
+      );
+    });
+
     onlineUsers.add(socket.userId);
     io.emit('users:online', socket.userId);
 
