@@ -76,49 +76,46 @@ export default {
 
   methods: {
     // function to add the video of the user
-    async myVideo() {
+    async initCall() {
       const myVideo = this.$refs.you;
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
-      console.log(myPeer.id);
-      myVideo.muted = true;
-      const stream = await navigator.mediaDevices.getUserMedia({
+      myPeer.on('call', async (call) => {
+        console.log('Receiving call from other');
+        this.myStream = await navigator.mediaDevices.getUserMedia({
+          video: this.camera,
+          audio: this.microphone,
+        });
+        call.answer(this.myStream);
+        call.on('stream', (userVideoStream) => {
+          console.log('Receiving stream from other');
+          this.otherStream = userVideoStream;
+        });
+      });
+
+      this.myStream = await navigator.mediaDevices.getUserMedia({
         video: this.camera,
         audio: this.microphone,
       });
-      this.setVideoStream(true, stream);
-      myPeer.on('call', (call) => {
-        console.log('Receiving call from other');
-        call.answer(stream);
-        call.on('stream', (userVideoStream) => {
-          console.log('Receiving stream from other');
-          this.setVideoStream(false, userVideoStream);
-        });
-      });
       socket.on('user-connected', (userId) => {
         console.log('Other user connected');
-        this.otherConnected(userId, stream);
+        this.otherConnected(userId);
       });
+
+      myVideo.muted = true;
     },
-    otherConnected(userId, stream) {
+    otherConnected(userId) {
       const myPeer = this.$peer;
-      const call = myPeer.call(userId, stream);
+      const call = myPeer.call(userId, this.myStream);
       console.log('Calling ' + userId);
       call.on('stream', (userVideoStream) => {
         console.log('Other streaming');
-        this.setVideoStream(false, userVideoStream);
+        this.otherStream = userVideoStream;
       });
 
       call.on('close', () => {
         console.log('Closing call');
       });
-    },
-    setVideoStream(isYou = false, stream) {
-      if (isYou) {
-        this.myStream = stream;
-      } else {
-        this.otherStream = stream;
-      }
     },
     toggleCamera() {
       this.camera = !this.camera;
@@ -134,7 +131,7 @@ export default {
     },
   },
   mounted() {
-    this.myVideo();
+    this.initCall();
   },
 };
 </script>
