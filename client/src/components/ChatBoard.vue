@@ -206,7 +206,6 @@ export default {
       if (this.chat === null) return;
 
       // updates when you click on a new chat
-
       userSeenMessage(
         this.$store.getters.socket,
         this.$props.chat._id,
