@@ -206,11 +206,6 @@ export default {
       if (this.chat === null) return;
 
       // updates when you click on a new chat
-      // this.$store.getters.socket.emit('messages:update:read', {
-      //   chatId: this.$props.chat._id,
-      //   lastMessageTime:
-      //     this.chat.messages[this.chat.messages.length - 1].deliveredAt,
-      // });
 
       userSeenMessage(
         this.$store.getters.socket,
