@@ -107,11 +107,15 @@ export default {
       console.log('jfjkdfjkjgiojeiofjknvnfjkfnknfj');
       const chat = this.chats.find((chat) => chat._id === chatId);
       chat.messages = chat.messages.map((message) => {
-        if (message.deliveredAt <= lastMessageTime) {
+        if (
+          new Date(message.deliveredAt) <= new Date(lastMessageTime) &&
+          message.seen.indexOf(userId) === -1
+        ) {
           message.seen.push(userId);
         }
         return message;
       });
+      console.log(lastMessageTime);
     });
 
     /**
