@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { formatTime } from '@/utils';
+import { formatTime } from '@/utils/message.utils';
 import { Chat } from '@/classes/chat';
 import { Group } from '@/classes/group';
 
