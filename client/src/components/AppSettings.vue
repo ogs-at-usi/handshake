@@ -84,6 +84,10 @@ export default {
         ['Vibe green', 'green', themesObject.green.primary],
         ['Cool orange', 'orange', themesObject.orange.primary],
         ['Warm pink', 'pink', themesObject.pink.primary],
+        ['Icy blue', 'ice', themesObject.ice.primary],
+        ['Fresh mint', 'mint', themesObject.mint.primary],
+        ['Soft peach', 'peach', themesObject.peach.primary],
+        ['Blooming rose', 'rose', themesObject.rose.primary],
       ],
       logout: false,
     };
