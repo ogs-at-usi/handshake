@@ -164,6 +164,13 @@ export default {
       }
     },
     quitCall() {
+      this.$store.getters.socket.off('user-connected');
+      this.$store.getters.socket.off('otherUser-disconnected');
+
+      const roomId = this.$store.getters.calling.roomId;
+      this.$store.getters.socket.emit('user:quit-call', roomId);
+      this.$store.commit('setCalling', null);
+
       clearInterval(this.lagInterval);
       this.otherStream?.getTracks()?.forEach((track) => {
         track?.stop();
@@ -174,12 +181,6 @@ export default {
       this.calls.forEach((call) => {
         call.close();
       });
-      // DISCONECT FROM ROOM HERE PEER
-      this.$store.getters.socket.emit(
-        'user:quit-call',
-        this.$store.getters.calling.roomId
-      );
-      this.$store.commit('setCalling', null);
     },
     checkLag(call) {
       let overTimes = 0;
