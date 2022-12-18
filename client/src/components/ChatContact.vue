@@ -12,6 +12,9 @@
         {{ name }}
       </v-list-item-title>
       <v-list-item-subtitle class="text--secondary">
+        {{ numberOfUnseen }}
+      </v-list-item-subtitle>
+      <v-list-item-subtitle class="text--secondary">
         {{ lastMessage }}
       </v-list-item-subtitle>
     </v-list-item-content>
