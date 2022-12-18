@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import localforage from 'localforage';
 import router from '../router';
+import { askNotificationPermission } from '@/utils/notification.utils';
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
