@@ -98,10 +98,10 @@ export default {
           message.seen.indexOf(this.$store.getters.user._id) === -1 &&
           message.sender._id !== this.$store.getters.user._id
       );
-      if (this.$store.getters.activeChat?._id !== this.chat?._id) {
-        return unseenMessages.length;
+      if (unseenMessages.length === 0) {
+        return null;
       }
-      return null;
+      return unseenMessages.length;
     },
   },
 };
