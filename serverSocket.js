@@ -100,7 +100,7 @@ function init(server, onlineUsers) {
         // newRoom = 'videocall_' + roomId;
         // socket.emit('user-disconnected', userId);
         // print all the sockets in the room
-        socket.broadcast.to(newRoom).emit('videochat:left', userId);
+        socket.broadcast.to(newRoom).emit('videochat:left');
         socket.leave(newRoom);
       });
     });

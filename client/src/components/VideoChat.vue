@@ -131,6 +131,12 @@ export default {
         this.calls.push(call);
         this.checkLag(call);
         call.on('stream', (userStream) => (this.otherStream = userStream));
+        call.on('close', () => {
+
+          this.quitCall();
+
+        });
+
       });
 
       socket.on('videochat:joined', (userId) => {
@@ -155,7 +161,9 @@ export default {
       this.checkLag(call);
       this.calls.push(call);
 
-      call.on('close', () => console.log('Closing call'));
+      call.on('close', () => {
+        this.quitCall();
+      });
     },
     /**
      * function to toggle the webcam
@@ -184,8 +192,7 @@ export default {
       this.$store.getters.socket.off('videochat:joined');
       this.$store.getters.socket.off('videochat:left');
 
-      const roomId = this.$store.getters.calling.roomId;
-      this.$store.getters.socket.emit('videochat:quit', roomId);
+      this.$store.getters.socket.emit('videochat:quit');
       this.$store.commit('setCalling', null);
 
       clearInterval(this.lagInterval);
