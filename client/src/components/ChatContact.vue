@@ -5,7 +5,7 @@
     <v-badge
       :content="numberOfUnseen"
       :value="numberOfUnseen"
-      color="green"
+      color="primary"
       overlap>
       <v-list-item-avatar class="ma-0">
         <img :src="imageId" class="pfp" alt="pfp" />
@@ -26,11 +26,6 @@
     <!-- notification badge -->
     <v-list-item-action-text
       class="pb-3 align-self-end justify-center d-flex flex-column align-center gap-1">
-      <p
-        class="badge primary lighten-1 text--primary rounded-xl align-center justify-center text-center px-2"
-        style="width: fit-content">
-        {{ numberOfUnseen }}
-      </p>
       <p class="notification badge rounded-pill text-bg-light">
         {{ lastMessageTimestamp }}
       </p>
