@@ -2,12 +2,18 @@
   <!-- UI: CONTACT -->
   <v-list-item :ripple="false" active-class="secondary" class="py-2 gap-3">
     <!-- image of the other user or group chat -->
-    <v-list-item-avatar class="mr-0">
-      <img :src="imageId" class="pfp" alt="pfp" />
-    </v-list-item-avatar>
+    <v-badge
+      :content="numberOfUnseen"
+      :value="numberOfUnseen"
+      color="green"
+      overlap>
+      <v-list-item-avatar class="ma-0">
+        <img :src="imageId" class="pfp" alt="pfp" />
+      </v-list-item-avatar>
+    </v-badge>
 
     <!-- name of the other user or group chat -->
-    <v-list-item-content>
+    <v-list-item-content class="ml-1">
       <v-list-item-title class="text--primary font-weight-bold">
         {{ name }}
       </v-list-item-title>
