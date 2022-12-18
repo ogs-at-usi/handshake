@@ -83,7 +83,9 @@ router.post('/chats', async function (req, res) {
     };
   });
   const chatData = new ChatData({ ...chat._doc, members: membersWithStatus });
-  membersWithStatus.forEach((m) => io.to(m._id).emit('chats:create', chatData));
+  membersWithStatus.forEach((m) =>
+    io.to(m._id.toString()).emit('chats:create', chatData)
+  );
   res.status(201).json(chatData);
 });
 
