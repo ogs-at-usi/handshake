@@ -47,6 +47,10 @@ export default {
     background: '#271809',
     textPrimary: '#ffebd6',
     textAccent: '#000000',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107',
   },
   pink: {
     primary: '#7e2b44',
@@ -55,5 +59,9 @@ export default {
     background: '#3a0e1b',
     textPrimary: '#ffe6ee',
     textAccent: '#000000',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107',
   },
 };

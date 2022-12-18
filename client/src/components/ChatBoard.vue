@@ -18,12 +18,10 @@
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon>
       <v-avatar>
-        <img
-          alt="icon of person you're chatting with"
-          src="/icons/default_pfp.png" />
+        <img alt="icon of person you're chatting with" :src="imageId" />
       </v-avatar>
       <v-toolbar-title class="ml-5">
-        <span class="text--primary">{{ otherPrivateUser.name }}</span>
+        <span class="text--primary">{{ chatName }}</span>
         <span
           class="text--secondary subtitle-2 d-block"
           style="line-height: 1.1">
@@ -47,7 +45,9 @@
         v-for="(msg, index) in chat.messages"
         ref="message"
         :key="index"
-        :message="msg"></ChatMessage>
+        :message="msg"
+        :chat="chat">
+      </ChatMessage>
     </vue-custom-scrollbar>
 
     <!-- lower input bar for new message sending -->
@@ -80,10 +80,11 @@
 <script>
 import vueCustomScrollbar from 'vue-custom-scrollbar';
 import ChatMessage from '@/components/ChatMessage';
-import Chat from '@/classes/chat';
-import Message from '@/classes/message';
 import 'vue-custom-scrollbar/dist/vueScrollbar.css';
 import FileUploader from '@/components/FileUploader';
+import { Chat } from '@/classes/chat';
+import { Group } from '@/classes/group';
+import { Message } from '@/classes/message';
 import { userSeenMessage } from '@/utils/seen.utils';
 
 export default {
@@ -97,7 +98,7 @@ export default {
   },
   props: {
     chat: {
-      type: Chat,
+      type: [Chat, Group],
       default: null,
     },
   },
@@ -121,10 +122,7 @@ export default {
       return /^\s*$/.test(str);
     },
     async sendMessage() {
-      if (this.onlySpaces(this.messageString)) {
-        return;
-      }
-
+      if (this.onlySpaces(this.messageString)) return;
       let chatId = this.$props.chat._id;
       // if the chat does not exist we create a new one and get the save the id
       if (chatId === null) {
@@ -178,18 +176,28 @@ export default {
       const [us1, us2] = this.chat.members;
       return us1._id !== this.$store.getters.user._id ? us1 : us2;
     },
-    chatName() {
-      if (this.$props.chat.isGroup) {
-        return this.$props.chat.title;
-      } else {
-        return this.otherPrivateUser.name;
-      }
-    },
     status() {
       // priority: typing > online > offline
+      if (this.chat.isGroup) return;
       if (this.otherPrivateUser.typing) return 'Typing...';
       if (this.otherPrivateUser.online) return 'Online';
       return 'Offline';
+    },
+    imageId() {
+      if (this.chat instanceof Group) {
+        return 'icons/default_gc_pfp.png';
+      } else {
+        // TODO: check if the user has an image with a axios HTTP request
+        // then if exist, return this.otherPrivateUser._id;
+        return 'icons/default_pfp.png';
+      }
+    },
+    chatName() {
+      if (this.chat.isGroup) {
+        return this.chat.title;
+      } else {
+        return this.otherPrivateUser.name;
+      }
     },
   },
   watch: {

@@ -14,9 +14,9 @@ The field `_id` is leaved with the preceding underscore to internally emphasize 
   "users": [
     { 
       "_id": "123abc098",
-      "name": "userstr",
+      "name": "userstr"
     }
-  ],
+  ]
 }
 ```
 
@@ -24,7 +24,7 @@ The field `_id` is leaved with the preceding underscore to internally emphasize 
 
 ### /chat
 
-Create a chat if it doesn't already exist within its members:
+Create a private chat if it doesn't already exist within its 2 members:
 
 Server creates the chat document from the Mongoose model and saves it to db.
 
@@ -33,13 +33,25 @@ Server creates the chat document from the Mongoose model and saves it to db.
 Server sends back an object containing the new chat id to the client who issued the request.
 ```json
 {
-  "_id": "123abc098",
+  "_id": "123abc098"
 }
 ```
 
 Triggered when:
 
 - a user wants to chat with another one when they have still not a chat together.
+
+### /group
+
+Create a chat group.
+
+Server creates the chat group in the database with the title and membersId given in the request body.:
+```json
+{
+  "title": "group title",
+    "membersId": ["123abc098", "123abc098"]
+}
+```
 
 ### /chat/:chatId/messages
 
@@ -48,7 +60,7 @@ Message from the client wanting to add a new message to the corresponding *chatI
 {
   "message": {
     "type": "text",
-    "content": "mystringcontent",
+    "content": "mystringcontent"
   }
 }
 ```
