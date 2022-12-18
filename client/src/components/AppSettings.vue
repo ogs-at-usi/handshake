@@ -77,6 +77,9 @@ export default {
       this.$store.commit('setTheme', { theme });
     },
   },
+  async created() {
+    await this.$store.restored;
+  },
 };
 </script>
 
