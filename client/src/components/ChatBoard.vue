@@ -121,12 +121,6 @@ export default {
     },
     async sendMessage() {
       if (this.onlySpaces(this.messageString)) return;
-      let chatId = this.$props.chat._id;
-      // if the chat does not exist we create a new one and get the save the id
-      if (chatId === null) {
-        const { data } = await this.$api.createChat(this.chat.members[0]._id);
-        chatId = data._id; // way to unpack data apparently
-      }
 
       // send the message using the chat id
       try {
@@ -135,6 +129,11 @@ export default {
           content: this.messageString,
           sentAt: new Date(), // TODO: add sentAt implementation server side, field actually ignored
         });
+
+        const chatId = await this.$api.createChatIfNotExist(
+          this.$props.chat._id,
+          this.chat.members[0]._id
+        );
 
         await this.$api.sendMessage(chatId, msg);
         // after sending it we reset the message box and scroll down

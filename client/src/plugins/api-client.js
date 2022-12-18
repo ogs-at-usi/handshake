@@ -57,6 +57,21 @@ class ApiClient {
   }
 
   /**
+   * Create chat if it does not exist.
+   * @param chatId {string | null} The ID of the current chat
+   * @param otherId {string} The ID of the other user
+   * @returns {Promise<string>} The promise with the response
+   */
+  async createChatIfNotExist(chatId, otherId) {
+    if (chatId) {
+      return chatId;
+    }
+
+    const response = await this.createChat(otherId);
+    return response.data._id;
+  }
+
+  /**
    * create a group with the logged user and the select user ids list given a title.
    * @param group {Group} The group to create
    */
