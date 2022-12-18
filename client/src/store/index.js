@@ -56,6 +56,11 @@ export default new Vuex.Store({
     setTheme(state, { theme }) {
       state.theme = theme;
     },
+    setNotifications(state, allow) {
+      console.log(allow);
+      state.allowNotifications = allow || false;
+      console.log(state.allowNotifications);
+    },
   },
   actions: {
     login({ commit }, { username, password }) {
