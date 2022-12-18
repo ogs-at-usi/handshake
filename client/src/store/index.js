@@ -38,10 +38,11 @@ export default new Vuex.Store({
       state.isLoggedIn = true;
       state.user = user;
     },
-    logout(state) {
+    async logout(state) {
+      await router.push('/login').catch(() => {});
       state.isLoggedIn = false;
-      router.push('/login').catch(() => {});
       state.user = null;
+      state.activeChat = null;
       if (state.socket) state.socket.disconnect();
     },
     setSocket(state, { socket }) {
