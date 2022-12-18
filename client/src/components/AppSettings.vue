@@ -86,7 +86,7 @@ export default {
         ['Warm pink', 'pink', themesObject.pink.primary],
         ['Icy blue', 'ice', themesObject.ice.primary],
         ['Fresh mint', 'mint', themesObject.mint.primary],
-        ['Ancient amber', 'amber', themesObject.amber.primary],
+        ['Soft peach', 'peach', themesObject.peach.primary],
         ['Blooming rose', 'rose', themesObject.rose.primary],
       
       ],
