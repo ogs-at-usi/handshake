@@ -11,6 +11,7 @@ const vuexLocal = new VuexPersistence({
     isLoggedIn: state.isLoggedIn,
     user: state.user,
     theme: state.theme,
+    allowNotifications: state.allowNotifications,
   }),
   asyncStorage: true,
 });
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     socket: null,
     activeChat: null,
     theme: null,
+    allowNotifications: true,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
