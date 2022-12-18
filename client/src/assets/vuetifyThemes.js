@@ -88,6 +88,18 @@ export default {
     success: '#4CAF50',
     warning: '#FFC107', 
   },
+  peach: {
+    primary: '#FFCA95',
+    secondary: '#EC9B4A',
+    surface: '#F3BC84',
+    background: '#FFEDDA',
+    textPrimary: '#60350B',
+    textAccent: '#000000',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107',    
+  },
   rose: { 
     primary: '#FFB2CA',
     secondary: '#FD7BA2',
