@@ -22,13 +22,13 @@ export function askNotificationPermission() {
 }
 
 /**
- *
  * @param sender
  * @param message
  * @param click
  */
 export function sendNotification(sender, message, click) {
-  if (getNotificationStatus() !== 'granted') return;
+  if (getNotificationStatus() !== 'granted' || !store.state.allowNotifications)
+    return;
   const notification = new Notification(sender, { body: message });
   notification.onclick = click;
 }
