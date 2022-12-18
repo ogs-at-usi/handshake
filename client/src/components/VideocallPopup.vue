@@ -4,7 +4,7 @@
   <div>
     <v-card class="rounded-lg" elevation="10">
       <v-card-title
-        class="text-center font-weight-bold primary text--primary pa-3 d-flex flex-row align-center justify-center "
+        class="text-center font-weight-bold primary text--primary pa-3 d-flex flex-row align-center justify-center"
         >{{ this.$store.getters.popup.chatName }} is calling you
       </v-card-title>
 
@@ -26,11 +26,10 @@ export default {
   methods: {
     acceptCall() {
       this.$store.dispatch('call', this.$store.getters.popup.roomId);
-      this.$store.commit('setPopup', { chatName: null, roomId: null });
+      this.$store.commit('setPopup', null);
     },
     rejectCall() {
-      this.$store.commit('setPopup', { chatName: null });
-
+      this.$store.commit('setPopup', null);
     },
   },
 };
