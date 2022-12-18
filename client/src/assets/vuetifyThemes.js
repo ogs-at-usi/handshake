@@ -64,6 +64,20 @@ export default {
     success: '#4CAF50',
     warning: '#FFC107',
   },
+  
+  mint: {
+    primary: '#8BDFD4',
+    secondary: '#13BFA4',
+    surface: '#87E3D5',
+    background: '#BDFFF7',
+    textPrimary: '#0F1D1D',
+    textAccent: '#000000',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107', 
+  },
+  
   rose: { 
     primary: '#FFB2CA',
     secondary: '#FD7BA2',
