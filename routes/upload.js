@@ -1,8 +1,9 @@
+const fs = require('fs');
 const Path = require('path');
 const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
-const SharpMulter = require("sharp-multer");
+const SharpMulter = require('sharp-multer');
 const router = express.Router();
 const io = require('../serverSocket').io;
 
@@ -66,19 +67,17 @@ const multerUploads = Object.freeze({
     }
   ).single(REQUEST_FILE_NAMES.file),
 
-  avatar: multer(
-    {
-      storage: SharpMulter({
-        destination: (req, file, cb) => cb(null, './media/avatars/'),
-        filename: (req, file, cb) => cb(null, req.userId + '.jpg'),
-        imageOptions: {
-          fileFormat: "jpg",
-          quality: 80,
-          resize: { width: 500, height: 500 },
-        }
-      })
-    },
-  ).single(REQUEST_FILE_NAMES.avatar),
+  avatar: multer({
+    storage: SharpMulter({
+      destination: (req, file, cb) => cb(null, './media/avatars/'),
+      filename: (req, file, cb) => cb(null, req.userId + '.jpg'),
+      imageOptions: {
+        fileFormat: 'jpg',
+        quality: 80,
+        resize: { width: 500, height: 500 },
+      },
+    }),
+  }).single(REQUEST_FILE_NAMES.avatar),
 });
 
 const validateUpload = (req, res, next) => {
@@ -239,5 +238,15 @@ router.post(
     res.send(req.file);
   }
 );
+
+router.get('/avatar/:id', async function (req, res) {
+  const id = req.params.id;
+  const path = './media/avatars/' + id + '.jpg';
+  if (fs.existsSync(path)) {
+    res.sendFile(path);
+  } else {
+    res.sendFile('./public/icons/default_pfp.png');
+  }
+});
 
 module.exports = router;
