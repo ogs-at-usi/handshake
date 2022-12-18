@@ -99,6 +99,7 @@ export default {
     });
 
     socket.on('calling-me', (chatName, roomId) => {
+      console.log('popup!');
       this.$store.commit('setPopup', { chatName: chatName, roomId: roomId });
     });
   },

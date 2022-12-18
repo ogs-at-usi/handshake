@@ -99,6 +99,7 @@ export default {
       myStream: null,
       calls: [],
       lagging: false,
+      lagInterval: null,
       errors: {
         microphone: false,
         video: false,
@@ -111,6 +112,8 @@ export default {
     async initCall() {
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
+      const storeCall = this.$store.getters.calling;
+      socket.emit('join-room', ...storeCall.eventData);
       myPeer.on('call', async (call) => {
         console.log('Receiving call from other');
         call.answer(this.myStream);
@@ -157,6 +160,7 @@ export default {
       }
     },
     quitCall() {
+      clearInterval(this.lagInterval);
       this.$refs.you.srcObject.getTracks().forEach((track) => {
         track.stop();
       });
@@ -178,7 +182,7 @@ export default {
     checkLag(call) {
       let overTimes = 0;
       let underTimes = 0;
-      setInterval(() => {
+      this.lagInterval = setInterval(() => {
         call.peerConnection.getStats().then((stats) => {
           stats.forEach((stat) => {
             if (

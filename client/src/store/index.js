@@ -58,16 +58,15 @@ export default new Vuex.Store({
     setTheme(state, { theme }) {
       state.theme = theme;
     },
-    setCalling(state, { roomId }) {
-      state.calling = roomId;
+    setCalling(state, data) {
+      state.calling = data;
     },
     setPopup(state, { chatName, roomId }) {
       state.popup = { chatName, roomId };
-      if (roomId === null){
+      if (roomId === null) {
         state.socket.emit('user:stopCalling', roomId);
         state.popup = null;
         // console.log('popup is null', state.socket);
-
       }
     },
   },
@@ -96,13 +95,14 @@ export default new Vuex.Store({
       }
     },
     call({ commit, getters }, roomId) {
-      const socket = getters.socket;
       const myPeer = this._vm.$peer;
       const myName = getters.user.name;
       const newRoom = 'videocall_' + roomId;
-      socket.emit('join-room', roomId, myPeer.id, myName);
-
-      commit('setCalling', { roomId: newRoom, myPeer: myPeer });
+      commit('setCalling', {
+        roomId: newRoom,
+        myName,
+        eventData: [roomId, myPeer.id, myName],
+      });
     },
   },
   modules: {},
