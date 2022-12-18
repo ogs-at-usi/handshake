@@ -60,6 +60,7 @@ export default new Vuex.Store({
     setNotifications(state, allow) {
       console.log(allow);
       state.allowNotifications = allow || false;
+      askNotificationPermission();
       console.log(state.allowNotifications);
     },
   },
