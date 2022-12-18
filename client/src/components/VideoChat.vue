@@ -149,17 +149,21 @@ export default {
       });
     },
     toggleCamera() {
-      try {
-        this.$refs.you.srcObject.getVideoTracks()[0].enabled = this.camera;
+      try{
+        this.myStream.getVideoTracks()[0].enabled = !this.camera;
         this.camera = !this.camera;
-      } catch (e) {
+
+      }
+      catch(e){
         this.errors.video = true;
       }
     },
     toggleMicrophone() {
       try {
-        this.$refs.you.srcObject.getAudioTracks()[0].enabled = this.microphone;
+
+        this.myStream.getAudioTracks()[0].enabled = !this.microphone;
         this.microphone = !this.microphone;
+
       } catch (e) {
         this.errors.microphone = true;
       }
