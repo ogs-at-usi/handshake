@@ -97,8 +97,8 @@ function init(server, onlineUsers) {
 
       socket.on('disconnect', () => {
         socket.emit('user-disconnected', userId);
-        socket.leave(roomId);
-        socket.broadcast.to(roomId).emit('otherUser-disconnected', userId);
+        socket.leave(newRoom);
+        socket.broadcast.to(newRoom).emit('otherUser-disconnected', userId);
       });
 
       socket.on('user:quit-call', () => {
@@ -111,7 +111,6 @@ function init(server, onlineUsers) {
         socket.broadcast.to(newRoom).emit('otherUser-disconnected', userId);
         socket.leave(newRoom);
       });
-
     });
   });
 }

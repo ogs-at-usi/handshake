@@ -115,12 +115,13 @@ export default {
       const storeCall = this.$store.getters.calling;
       socket.emit('join-room', ...storeCall.eventData);
       myPeer.on('call', async (call) => {
-        console.log('Receiving call from other');
+        this.myStream = await this.askMediaPermission();
+
         call.answer(this.myStream);
         this.calls.push(call);
         this.checkLag(call);
+
         call.on('stream', (userVideoStream) => {
-          console.log('Receiving stream from other');
           this.otherStream = userVideoStream;
         });
       });
@@ -207,8 +208,8 @@ export default {
         });
       }, 1000);
     },
-    async askMediaPermission() {
-      this.myStream = await navigator.mediaDevices.getUserMedia({
+    askMediaPermission() {
+      return navigator.mediaDevices.getUserMedia({
         video: this.camera,
         audio: this.microphone,
       });
@@ -230,8 +231,6 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.$store.getters.popup);
-    console.log(this.$store.getters.calling);
     if (
       this.$store.getters.popup &&
       this.$store.getters.popup.roomId === this.$store.getters.calling.roomId
@@ -239,7 +238,7 @@ export default {
       this.$store.commit('setPopup', null);
     }
     await this.checkAvailableMedia();
-    await this.askMediaPermission();
+    this.myStream = await this.askMediaPermission();
     await this.initCall();
   },
 };
