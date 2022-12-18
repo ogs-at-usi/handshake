@@ -89,6 +89,20 @@ export default {
     isActive() {
       return this.$store.getters.activeChat?._id === this.chat?._id;
     },
+    numberOfUnseen() {
+      console.log('hi');
+      const lastMessage = this.chat.messages[this.chat.messages.length - 1];
+      console.log(lastMessage);
+      const unseenMessages = this.chat.messages.filter(
+        (message) =>
+          message.seen.indexOf(this.$store.getters.user._id) === -1 &&
+          message.sender._id !== this.$store.getters.user._id
+      );
+      if (this.$store.getters.activeChat?._id !== this.chat?._id) {
+        return unseenMessages.length;
+      }
+      return null;
+    },
   },
 };
 </script>
