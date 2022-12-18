@@ -170,9 +170,6 @@ export default {
         this.errors.video = true;
       }
     },
-    /**
-     * function to toggle the microphone
-     */
     toggleMicrophone() {
       try {
 
