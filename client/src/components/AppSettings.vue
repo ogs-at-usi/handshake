@@ -88,7 +88,6 @@ export default {
         ['Fresh mint', 'mint', themesObject.mint.primary],
         ['Soft peach', 'peach', themesObject.peach.primary],
         ['Blooming rose', 'rose', themesObject.rose.primary],
-      
       ],
       logout: false,
     };

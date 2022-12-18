@@ -74,7 +74,7 @@ export default {
     error: '#FF5252',
     info: '#2196F3',
     success: '#4CAF50',
-    warning: '#FFC107', 
+    warning: '#FFC107',
   },
   mint: {
     primary: '#8BDFD4',
@@ -86,7 +86,7 @@ export default {
     error: '#FF5252',
     info: '#2196F3',
     success: '#4CAF50',
-    warning: '#FFC107', 
+    warning: '#FFC107',
   },
   peach: {
     primary: '#FFCA95',
@@ -98,9 +98,9 @@ export default {
     error: '#FF5252',
     info: '#2196F3',
     success: '#4CAF50',
-    warning: '#FFC107',    
+    warning: '#FFC107',
   },
-  rose: { 
+  rose: {
     primary: '#FFB2CA',
     secondary: '#FD7BA2',
     surface: '#F3C3D1',
@@ -110,6 +110,6 @@ export default {
     error: '#FF5252',
     info: '#2196F3',
     success: '#4CAF50',
-    warning: '#FFC107',    
-  }
+    warning: '#FFC107',
+  },
 };
