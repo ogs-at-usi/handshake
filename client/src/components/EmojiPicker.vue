@@ -51,9 +51,15 @@ export default {
     };
   },
   methods: {
-    sendSticker(stickerName) {
+    async sendSticker(stickerName) {
       this.menu = false;
-      this.$api.sendSticker(this.$props.chatId, stickerName);
+      const newChatId =
+        this.chatId ||
+        (await this.$api.createChatIfNotExist(
+          this.chatId,
+          this.$store.getters.activeChat.members[0]._id
+        ));
+      await this.$api.sendSticker(newChatId, stickerName);
     },
   },
 };
