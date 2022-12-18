@@ -9,6 +9,7 @@
     persistent
     style="position: relative !important">
     <v-layout align-center class="ma-0" fill-height justify-center row>
+      <!-- other user video incoming chat in page -->
       <video
         id="other"
         ref="other"
@@ -17,6 +18,8 @@
         src="/icons/default_pfp.png"
         style="object-fit: contain; max-height: 100%; width: 100%"
         @loadedmetadata="$refs.other.play()"></video>
+
+      <!-- user video outgoing chat in bottom right corner -->
       <video
         id="you"
         ref="you"
@@ -26,7 +29,7 @@
         muted
         src="/icons/default_pfp.png"
         width="300px"
-        @loadedmetadata="$refs.you.play()"></video>
+        @loadedmetadata="$refs.you.play()" />
       <v-snackbar
         v-model="lagging"
         :top="true"
@@ -62,6 +65,7 @@
         style="border-radius: 32px"
         width="auto">
         <v-layout class="gap-8" row>
+          <!-- enable/disable webcam -->
           <v-btn
             :color="this.camera ? 'success' : 'error'"
             fab
@@ -69,6 +73,8 @@
             <v-icon v-if="this.camera">mdi-camera</v-icon>
             <v-icon v-else>mdi-camera-off</v-icon>
           </v-btn>
+
+          <!-- enable/disable microphone -->
           <v-btn
             :color="this.microphone ? 'success' : 'error'"
             fab
@@ -76,6 +82,8 @@
             <v-icon v-if="this.microphone">mdi-microphone</v-icon>
             <v-icon v-else>mdi-microphone-off</v-icon>
           </v-btn>
+
+          <!-- exit from video call -->
           <v-btn color="error" fab @click="quitCall">
             <v-icon>mdi-phone</v-icon>
           </v-btn>
@@ -92,7 +100,7 @@ export default {
 
   data() {
     return {
-      dialog: true,
+      dialog: true, // show the popup dialog of video chat
       camera: true,
       microphone: true,
       otherStream: null,
@@ -108,46 +116,50 @@ export default {
   },
 
   methods: {
-    // function to add the video of the user
+    /**
+     *  function to add the video of the user
+     */
     async initCall() {
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
       const storeCall = this.$store.getters.calling;
+
       socket.emit('videochat:join', ...storeCall.eventData);
       myPeer.on('call', async (call) => {
         this.myStream = await this.askMediaPermission();
-
         call.answer(this.myStream);
         this.calls.push(call);
         this.checkLag(call);
-
-        call.on('stream', (userVideoStream) => {
-          this.otherStream = userVideoStream;
-        });
+        call.on('stream', (userStream) => (this.otherStream = userStream));
       });
+
       socket.on('videochat:joined', (userId) => {
         console.log('Other user connected');
         this.otherConnected(userId);
       });
+
       socket.on('videochat:left', () => {
         console.log('Other user disconnected');
         this.quitCall();
       });
     },
+    /**
+     * function to add the video of the other user
+     * @param userId
+     */
     otherConnected(userId) {
       const myPeer = this.$peer;
       const call = myPeer.call(userId, this.myStream);
       console.log('Calling ' + userId);
-      call.on('stream', async (userVideoStream) => {
-        this.otherStream = userVideoStream;
-      });
+      call.on('stream', async (userStream) => (this.otherStream = userStream));
       this.checkLag(call);
       this.calls.push(call);
 
-      call.on('close', () => {
-        console.log('Closing call');
-      });
+      call.on('close', () => console.log('Closing call'));
     },
+    /**
+     * function to toggle the webcam
+     */
     toggleCamera() {
       try{
         this.myStream.getVideoTracks()[0].enabled = !this.camera;
@@ -158,6 +170,9 @@ export default {
         this.errors.video = true;
       }
     },
+    /**
+     * function to toggle the microphone
+     */
     toggleMicrophone() {
       try {
 
@@ -226,12 +241,9 @@ export default {
       const audioDevices = devices.filter(
         (device) => device.kind === 'audioinput'
       );
-      if (videoDevices.length === 0) {
-        this.camera = false;
-      }
-      if (audioDevices.length === 0) {
-        this.microphone = false;
-      }
+
+      if (videoDevices.length === 0) this.camera = false;
+      if (audioDevices.length === 0) this.microphone = false;
     },
   },
   async mounted() {
@@ -241,6 +253,7 @@ export default {
     ) {
       this.$store.commit('setPopup', null);
     }
+
     await this.checkAvailableMedia();
     this.myStream = await this.askMediaPermission();
     await this.initCall();
