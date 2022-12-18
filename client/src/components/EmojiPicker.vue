@@ -24,7 +24,7 @@
             elevation="0"
             height="auto"
             @click="sendSticker(sticker)">
-            <StickerPlayer :sticker="sticker" animate-loop />
+            <StickerPlayer :sticker="sticker" animate-loop icon />
           </v-btn>
         </v-col>
       </v-row>

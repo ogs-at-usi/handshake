@@ -4,7 +4,7 @@
     background="transparent"
     speed="1"
     ref="sticker"
-    style="width: 100px; height: 100px" />
+    :style="{ width: size, height: size }" />
 </template>
 
 <script>
@@ -22,6 +22,10 @@ export default {
       default: false,
     },
     animateOnClick: {
+      type: Boolean,
+      default: false,
+    },
+    icon: {
       type: Boolean,
       default: false,
     },
@@ -47,6 +51,11 @@ export default {
         actions,
       });
     });
+  },
+  computed: {
+    size() {
+      return this.icon ? '100px' : '200px';
+    },
   },
 };
 </script>
