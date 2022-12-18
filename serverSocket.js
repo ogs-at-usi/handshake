@@ -80,7 +80,7 @@ function init(server, onlineUsers) {
           console.log(success);
         }
       });
-      socket.broadcast.to(chatId).emit('messages:update:read', {
+      io.to(chatId).emit('messages:update:read', {
         chatId,
         lastMessageTime,
         userId: socket.userId,
