@@ -65,7 +65,7 @@ export default {
     warning: '#FFC107',
   },
   ice: {
-    primary: '#2FA9FF',
+    primary: '#5CBCFF',
     secondary: '#1B82CC',
     surface: '#65AEE2',
     background: '#BEE1FA',
@@ -81,22 +81,19 @@ export default {
     secondary: '#13BFA4',
     surface: '#87E3D5',
     background: '#BDFFF7',
-    textPrimary: '#0F1D1D',
+    textPrimary: '#0F2D2D',
     textAccent: '#000000',
     error: '#FF5252',
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FFC107', 
   },
-  amber: {
-
-  },
   rose: { 
     primary: '#FFB2CA',
     secondary: '#FD7BA2',
     surface: '#F3C3D1',
     background: '#FFE6EE',
-    textPrimary: '#3A0E1B',
+    textPrimary: '#6D0A28',
     textAccent: '#000000',
     error: '#FF5252',
     info: '#2196F3',
