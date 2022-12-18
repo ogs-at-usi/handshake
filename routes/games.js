@@ -95,3 +95,5 @@ async function tictactoe(gameState) {
 
     return gameState + '|0';
 }
+
+module.exports = router;
