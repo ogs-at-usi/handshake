@@ -15,9 +15,9 @@ const readline = require('readline').createInterface({
 });
 
 // ask for confirmation
-await readline.question(
+readline.question(
   'Are you sure you want to drop the database? (y/n) ',
-  async answer => {
+  async (answer) => {
     if (answer !== 'y') {
       console.log('Aborting');
       process.exit(0);
@@ -27,7 +27,7 @@ await readline.question(
     try {
       await mongoose.connect(URL, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
       });
     } catch (err) {
       console.error('Error connecting to database: ' + err);
