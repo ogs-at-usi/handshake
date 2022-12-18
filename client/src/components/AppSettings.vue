@@ -16,6 +16,11 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      <v-switch
+        class="ms-6"
+        :input-value="$store.state.allowNotifications"
+        @change="$store.commit('setNotifications', $event)"
+        label="Notifications"></v-switch>
       <v-list-group :value="false" no-action sub-group>
         <template #activator>
           <v-list-item-title>Themes</v-list-item-title>
