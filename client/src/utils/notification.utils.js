@@ -1,3 +1,5 @@
+import store from '@/store';
+
 /**
  *
  * @returns {NotificationPermission}
