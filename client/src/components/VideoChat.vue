@@ -113,7 +113,7 @@ export default {
       const socket = this.$store.getters.socket;
       const myPeer = this.$peer;
       const storeCall = this.$store.getters.calling;
-      socket.emit('join-room', ...storeCall.eventData);
+      socket.emit('videochat:join', ...storeCall.eventData);
       myPeer.on('call', async (call) => {
         this.myStream = await this.askMediaPermission();
 
@@ -125,11 +125,11 @@ export default {
           this.otherStream = userVideoStream;
         });
       });
-      socket.on('user-connected', (userId) => {
+      socket.on('videochat:joined', (userId) => {
         console.log('Other user connected');
         this.otherConnected(userId);
       });
-      socket.on('otherUser-disconnected', () => {
+      socket.on('videochat:left', () => {
         console.log('Other user disconnected');
         this.quitCall();
       });
@@ -165,11 +165,11 @@ export default {
       }
     },
     quitCall() {
-      this.$store.getters.socket.off('user-connected');
-      this.$store.getters.socket.off('otherUser-disconnected');
+      this.$store.getters.socket.off('videochat:joined');
+      this.$store.getters.socket.off('videochat:left');
 
       const roomId = this.$store.getters.calling.roomId;
-      this.$store.getters.socket.emit('user:quit-call', roomId);
+      this.$store.getters.socket.emit('videochat:quit', roomId);
       this.$store.commit('setCalling', null);
 
       clearInterval(this.lagInterval);

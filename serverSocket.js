@@ -81,34 +81,26 @@ function init(server, onlineUsers) {
       io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
     });
 
-    socket.on('accept-call', (roomId, peerId) => {
-      socket.join(roomId);
-      socket.broadcast.to(roomId).emit('user-connected', peerId, roomId);
-    });
-
-    socket.on('join-room', async (roomId, userId, chatName) => {
+    socket.on('videochat:join', async (roomId, userId, chatName) => {
       const newRoom = 'videocall_' + roomId;
       socket.join(newRoom);
       const sockets = await io.to(newRoom).fetchSockets();
       if (sockets.length === 1) {
-        socket.broadcast.to(roomId).emit('calling-me', chatName, roomId);
+        socket.broadcast.to(roomId).emit('videochat:notify', chatName, roomId);
       }
-      socket.broadcast.to(newRoom).emit('user-connected', userId, roomId);
+      socket.broadcast.to(newRoom).emit('videochat:joined', userId, roomId);
 
       socket.on('disconnect', () => {
-        socket.emit('user-disconnected', userId);
         socket.leave(newRoom);
-        socket.broadcast.to(newRoom).emit('otherUser-disconnected', userId);
+        socket.broadcast.to(newRoom).emit('videochat:left', userId);
       });
 
-      socket.on('user:quit-call', () => {
+      socket.on('videochat:quit', () => {
         // console.log('leave-room', roomId, userId);
         // newRoom = 'videocall_' + roomId;
         // socket.emit('user-disconnected', userId);
         // print all the sockets in the room
-        console.log(io.sockets.adapter.rooms.get(newRoom));
-        console.log('leave-room: ', newRoom);
-        socket.broadcast.to(newRoom).emit('otherUser-disconnected', userId);
+        socket.broadcast.to(newRoom).emit('videochat:left', userId);
         socket.leave(newRoom);
       });
     });
