@@ -84,7 +84,9 @@ export default {
         ['Vibe green', 'green', themesObject.green.primary],
         ['Cool orange', 'orange', themesObject.orange.primary],
         ['Warm pink', 'pink', themesObject.pink.primary],
-        ['Fresh rose', 'rose', themesObject.rose.primary],
+        ['Fresh mint', 'mint', themesObject.mint.primary],
+        ['Blooming rose', 'rose', themesObject.rose.primary],
+      
       ],
       logout: false,
     };
