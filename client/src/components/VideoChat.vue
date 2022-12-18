@@ -128,6 +128,10 @@ export default {
         console.log('Other user connected');
         this.otherConnected(userId);
       });
+      socket.on('otherUser-disconnected', () => {
+        console.log('Other user disconnected');
+        this.quitCall();
+      });
     },
     otherConnected(userId) {
       const myPeer = this.$peer;
@@ -161,23 +165,21 @@ export default {
     },
     quitCall() {
       clearInterval(this.lagInterval);
-      this.$refs.you.srcObject.getTracks().forEach((track) => {
-        track.stop();
+      this.otherStream?.getTracks()?.forEach((track) => {
+        track?.stop();
       });
-      this.$refs.other.srcObject.getTracks().forEach((track) => {
-        track.stop();
+      this.myStream?.getTracks()?.forEach((track) => {
+        track?.stop();
       });
       this.calls.forEach((call) => {
         call.close();
       });
       // DISCONECT FROM ROOM HERE PEER
-      this.dialog = false;
-      console.log('disconnect from : ' + this.$store.getters.popup);
       this.$store.getters.socket.emit(
         'user:quit-call',
-        this.$store.getters.popup
+        this.$store.getters.calling.roomId
       );
-      this.$store.commit('setCalling', { roomId: null });
+      this.$store.commit('setCalling', null);
     },
     checkLag(call) {
       let overTimes = 0;
@@ -227,6 +229,14 @@ export default {
     },
   },
   async mounted() {
+    console.log(this.$store.getters.popup);
+    console.log(this.$store.getters.calling);
+    if (
+      this.$store.getters.popup &&
+      this.$store.getters.popup.roomId === this.$store.getters.calling.roomId
+    ) {
+      this.$store.commit('setPopup', null);
+    }
     await this.checkAvailableMedia();
     await this.askMediaPermission();
     await this.initCall();

@@ -61,13 +61,8 @@ export default new Vuex.Store({
     setCalling(state, data) {
       state.calling = data;
     },
-    setPopup(state, { chatName, roomId }) {
-      state.popup = { chatName, roomId };
-      if (roomId === null) {
-        state.socket.emit('user:stopCalling', roomId);
-        state.popup = null;
-        // console.log('popup is null', state.socket);
-      }
+    setPopup(state, data) {
+      state.popup = data;
     },
   },
   actions: {
@@ -99,7 +94,8 @@ export default new Vuex.Store({
       const myName = getters.user.name;
       const newRoom = 'videocall_' + roomId;
       commit('setCalling', {
-        roomId: newRoom,
+        roomId: roomId,
+        newRoom: newRoom,
         myName,
         eventData: [roomId, myPeer.id, myName],
       });
