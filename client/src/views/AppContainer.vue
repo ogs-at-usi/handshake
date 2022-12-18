@@ -75,6 +75,7 @@ export default {
       message = new Message(message);
       const chatId = message.chat;
       const chat = this.chats.find((c) => c._id === chatId);
+      if (!chat) return;
       chat.messages.push(message);
       // move the chat to the top of the list
       this.chats = this.chats.filter((c) => c._id !== chatId);
