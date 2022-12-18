@@ -54,9 +54,7 @@
     <v-row
       class="ma-0 px-2 px-md-5 py-3 py-md-5 gap-3 flex-shrink-0 secondary elevation-5 d-flex justify-center align-center flex-nowrap"
       style="z-index: 10">
-      <v-btn icon>
-        <v-icon>mdi-emoticon</v-icon>
-      </v-btn>
+      <EmojiPicker :chat-id="chat._id" />
       <FileUploader :chat-id="chat._id"></FileUploader>
       <v-form class="flex-grow-1" @submit.prevent="sendMessage">
         <v-text-field
@@ -82,13 +80,14 @@ import vueCustomScrollbar from 'vue-custom-scrollbar';
 import ChatMessage from '@/components/ChatMessage';
 import 'vue-custom-scrollbar/dist/vueScrollbar.css';
 import FileUploader from '@/components/FileUploader';
+import EmojiPicker from '@/components/EmojiPicker';
 import { Chat } from '@/classes/chat';
 import { Group } from '@/classes/group';
 import { Message } from '@/classes/message';
 
 export default {
   name: 'ChatBoard',
-  components: { FileUploader, ChatMessage, vueCustomScrollbar },
+  components: { EmojiPicker, FileUploader, ChatMessage, vueCustomScrollbar },
   data() {
     return {
       messageString: '',

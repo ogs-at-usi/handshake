@@ -101,6 +101,18 @@ class ApiClient {
   }
 
   /**
+   * Send a sticker in a chat.
+   * @param chatId {string} The ID of the chat
+   * @param sticker {string} The sticker to send
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  sendSticker(chatId, sticker) {
+    return this.axiosInstance.post(`/api/chats/${chatId}/stickers`, {
+      sticker,
+    });
+  }
+
+  /**
    * Send a file in a chat.
    * @param chatId {string} The ID of the chat
    * @param file {File} The file to send

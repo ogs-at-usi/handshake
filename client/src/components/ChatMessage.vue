@@ -28,7 +28,11 @@
       <ChatMessageAudio
         v-else-if="message.type === 'AUDIO'"
         :message="message" />
-      <ChatMessageFile v-else :message="message" />
+      <ChatMessageFile v-else-if="message.type === 'FILE'" :message="message" />
+      <StickerPlayer
+        v-else-if="message.type === 'STICKER'"
+        :sticker="message?.content"
+        animate-on-click />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -44,6 +48,7 @@ import ChatMessageImage from '@/components/message/ChatMessageImage';
 import ChatMessageVideo from '@/components/message/ChatMessageVideo';
 import ChatMessageAudio from '@/components/message/ChatMessageAudio';
 import ChatMessageFile from '@/components/message/ChatMessageFile';
+import StickerPlayer from '@/components/StickerPlayer';
 
 export default {
   name: 'ChatMessage',
@@ -53,6 +58,7 @@ export default {
     ChatMessageText,
     ChatMessageAudio,
     ChatMessageFile,
+    StickerPlayer,
   },
   data() {
     return {

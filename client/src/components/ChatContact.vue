@@ -70,6 +70,12 @@ export default {
             return '🎵 Audio';
           case 'DOCUMENT':
             return '📁 File';
+          case 'STICKER':
+            return '🤡 Sticker';
+          case 'LOCATION':
+            return '📍 Location';
+          case 'GAME':
+            return '🎮 Game';
           default:
             return '';
         }
