@@ -64,4 +64,16 @@ export default {
     success: '#4CAF50',
     warning: '#FFC107',
   },
+  rose: { 
+    primary: '#FFB2CA',
+    secondary: '#FD7BA2',
+    surface: '#F3C3D1',
+    background: '#FFE6EE',
+    textPrimary: '#3A0E1B',
+    textAccent: '#000000',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107',    
+  }
 };
