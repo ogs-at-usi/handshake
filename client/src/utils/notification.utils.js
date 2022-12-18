@@ -13,7 +13,10 @@ export function getNotificationStatus() {
 export function askNotificationPermission() {
   if (!('Notification' in window)) {
     console.log('This browser does not support notifications!');
-  } else if (getNotificationStatus() === 'default') {
+  } else if (
+    getNotificationStatus() === 'default' ||
+    store.state.allowNotifications
+  ) {
     Notification.requestPermission();
   }
 }
