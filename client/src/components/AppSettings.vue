@@ -46,6 +46,7 @@ export default {
   name: 'AppSettings',
   data() {
     return {
+      switch1: false,
       themes: [
         ['Dark blue', 'blue', themesObject.blue.primary],
         ['Vibe green', 'green', themesObject.green.primary],
