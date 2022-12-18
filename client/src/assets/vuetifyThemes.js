@@ -64,7 +64,18 @@ export default {
     success: '#4CAF50',
     warning: '#FFC107',
   },
-  
+  ice: {
+    primary: '#2FA9FF',
+    secondary: '#1B82CC',
+    surface: '#65AEE2',
+    background: '#BEE1FA',
+    textPrimary: '#0F3855',
+    textAccent: '#000000',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FFC107', 
+  },
   mint: {
     primary: '#8BDFD4',
     secondary: '#13BFA4',
@@ -77,7 +88,9 @@ export default {
     success: '#4CAF50',
     warning: '#FFC107', 
   },
-  
+  amber: {
+
+  },
   rose: { 
     primary: '#FFB2CA',
     secondary: '#FD7BA2',
