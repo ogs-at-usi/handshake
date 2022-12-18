@@ -214,11 +214,13 @@ export default {
       if (this.chat === null) return;
 
       // updates when you click on a new chat
-      userSeenMessage(
-        this.$store.getters.socket,
-        this.$props.chat._id,
-        this.chat.messages[this.chat.messages.length - 1].deliveredAt
-      );
+      if (this.chat.messages.length > 0) {
+        userSeenMessage(
+          this.$store.getters.socket,
+          this.$props.chat._id,
+          this.chat.messages[this.chat.messages.length - 1].deliveredAt
+        );
+      }
 
       this.$nextTick(() => {
         this.scrollDown();
