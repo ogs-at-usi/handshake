@@ -124,6 +124,9 @@ export default {
       }
     },
   },
+  mounted() {
+
+  },
   computed: {
     activeChat: {
       get() {

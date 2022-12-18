@@ -105,7 +105,7 @@ export default {
       microphone: true,
       otherStream: null,
       myStream: null,
-      calls: [],
+      call: null,
       lagging: false,
       lagInterval: null,
       errors: {
@@ -128,14 +128,17 @@ export default {
       myPeer.on('call', async (call) => {
         this.myStream = await this.askMediaPermission();
         call.answer(this.myStream);
-        this.calls.push(call);
+        this.call = call;
         this.checkLag(call);
         call.on('stream', (userStream) => (this.otherStream = userStream));
         call.on('close', () => {
 
           this.quitCall();
+          console.log('call closed with ' + call.peer);
 
         });
+
+        console.log('call', call);
 
       });
 
@@ -159,10 +162,12 @@ export default {
       console.log('Calling ' + userId);
       call.on('stream', async (userStream) => (this.otherStream = userStream));
       this.checkLag(call);
-      this.calls.push(call);
+      this.call = call;
 
       call.on('close', () => {
         this.quitCall();
+        console.log('call closed with ' + call.peer);
+
       });
     },
     /**
@@ -189,11 +194,13 @@ export default {
       }
     },
     quitCall() {
+
       this.$store.getters.socket.off('videochat:joined');
       this.$store.getters.socket.off('videochat:left');
 
       this.$store.getters.socket.emit('videochat:quit');
       this.$store.commit('setCalling', null);
+
 
       clearInterval(this.lagInterval);
       this.otherStream?.getTracks()?.forEach((track) => {
@@ -202,9 +209,11 @@ export default {
       this.myStream?.getTracks()?.forEach((track) => {
         track?.stop();
       });
-      this.calls.forEach((call) => {
-        call.close();
-      });
+      // this.call?.close()/;
+
+      this.call.close();
+      this.call = null;
+
     },
     checkLag(call) {
       let overTimes = 0;

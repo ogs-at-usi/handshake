@@ -59,10 +59,14 @@ export default new Vuex.Store({
       state.theme = theme;
     },
     setCalling(state, data) {
+
       state.calling = data;
+      console.log('setCalling', data);
     },
     setPopup(state, data) {
+
       state.popup = data;
+
     },
   },
   actions: {

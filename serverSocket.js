@@ -96,12 +96,12 @@ function init(server, onlineUsers) {
       });
 
       socket.on('videochat:quit', () => {
-        // console.log('leave-room', roomId, userId);
-        // newRoom = 'videocall_' + roomId;
-        // socket.emit('user-disconnected', userId);
-        // print all the sockets in the room
-        socket.broadcast.to(newRoom).emit('videochat:left');
+        // socket.broadcast.to(newRoom).emit('videochat:left');
         socket.leave(newRoom);
+        // print all the sockets in the room
+        console.log(io.sockets.adapter.rooms.get(newRoom));
+        console.log('leave-room: ', newRoom);
+        console.log(io.sockets.adapter.sids.get(socket.id));
       });
     });
   });
