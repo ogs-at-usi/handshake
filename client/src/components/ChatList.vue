@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ChatContact from '@/components/ChatContact.vue';
+import ChatContact from '@/components/ChatContact';
 
 export default {
   name: 'ChatList',
