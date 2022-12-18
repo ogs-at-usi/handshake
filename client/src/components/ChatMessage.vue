@@ -32,7 +32,19 @@
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
         <span class="text--secondary text-caption" v-if="selfClass === 'self'">
-          {{ messageStatus }}
+          <v-icon
+            v-if="messageStatus === 'seen'"
+            class="ml-1"
+            small
+            color="success"
+            >mdi-check-all
+          </v-icon>
+          <v-icon v-if="messageStatus === 'delivered'" class="ml-1" small
+            >mdi-check-all</v-icon
+          >
+          <v-icon v-if="messageStatus === 'sent'" class="ml-1" small
+            >mdi-check</v-icon
+          >
         </span>
       </v-card-actions>
     </v-card>
