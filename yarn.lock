@@ -4027,14 +4027,7 @@ setprototypeof@1.2.0:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.2.0.tgz#66c9a24a73f9fc28cbe66b09fed3d33dcaf1b424"
   integrity sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==
 
-sharp-multer@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/sharp-multer/-/sharp-multer-0.2.5.tgz#90d2469e97d0eaa93b04ace0e95264c7c0641158"
-  integrity sha512-oKLUe9WRCY2uu2FllrWy6wBwVkIi3pFCD4+Sidpao73lQC/ldS++MUwWZyPmPM+Jycz/PObaP9X8IVNzXbNceg==
-  dependencies:
-    sharp "^0.30.5"
-
-sharp@^0.30.0, sharp@^0.30.5:
+sharp@^0.30.0:
   version "0.30.7"
   resolved "https://registry.yarnpkg.com/sharp/-/sharp-0.30.7.tgz#7862bda98804fdd1f0d5659c85e3324b90d94c7c"
   integrity sha512-G+MY2YW33jgflKPTXXptVO28HvNOo9G3j0MybYAHeEmby+QuD2U98dT6ueht9cv/XDqZspSpIhoSW+BAKJ7Hig==

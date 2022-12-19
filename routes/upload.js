@@ -3,7 +3,6 @@ const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
-const SharpMulter = require('sharp-multer');
 const router = express.Router();
 const io = require('../serverSocket').io;
 
