@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import localforage from 'localforage';
 import router from '../router';
+import { askNotificationPermission } from '@/utils/notification.utils';
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
@@ -11,6 +12,7 @@ const vuexLocal = new VuexPersistence({
     isLoggedIn: state.isLoggedIn,
     user: state.user,
     theme: state.theme,
+    allowNotifications: state.allowNotifications,
   }),
   asyncStorage: true,
 });
@@ -24,6 +26,9 @@ export default new Vuex.Store({
     socket: null,
     activeChat: null,
     theme: null,
+    calling: null,
+    popup: null,
+    allowNotifications: true,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
@@ -32,17 +37,19 @@ export default new Vuex.Store({
     activeChat: (state) => state.activeChat,
     isMobile: () => window.innerWidth < 600,
     theme: (state) => state.theme,
+    calling: (state) => state.calling,
+    popup: (state) => state.popup,
   },
   mutations: {
     login(state, { user }) {
       state.isLoggedIn = true;
       state.user = user;
     },
-    logout(state) {
+    async logout(state) {
+      await router.push('/login').catch(() => {});
       state.isLoggedIn = false;
       state.user = null;
-      router.push('/login').catch(() => {});
-      console.log('logout');
+      state.activeChat = null;
       if (state.socket) state.socket.disconnect();
     },
     setSocket(state, { socket }) {
@@ -53,6 +60,19 @@ export default new Vuex.Store({
     },
     setTheme(state, { theme }) {
       state.theme = theme;
+    },
+    setCalling(state, data) {
+      state.calling = data;
+      console.log('setCalling', data);
+    },
+    setPopup(state, data) {
+      state.popup = data;
+    },
+    setNotifications(state, allow) {
+      console.log(allow);
+      state.allowNotifications = allow || false;
+      askNotificationPermission();
+      console.log(state.allowNotifications);
     },
   },
   actions: {
@@ -78,6 +98,18 @@ export default new Vuex.Store({
       } catch (error) {
         commit('logout');
       }
+    },
+    call({ commit, getters }, roomId) {
+      const myPeer = this._vm.$peer;
+      const myName = getters.user.name;
+      const newRoom = 'videocall_' + roomId;
+      commit('setCalling', {
+        roomId: roomId,
+        newRoom: newRoom,
+        myName,
+        eventData: [roomId, myPeer.id, myName],
+      });
+      console.log('setCalling: ', roomId, myPeer.id, myName);
     },
   },
   modules: {},

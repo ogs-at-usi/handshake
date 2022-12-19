@@ -9,6 +9,8 @@ const MessageType = Object.freeze({
   document: 'DOCUMENT',
   location: 'LOCATION',
   game: 'GAME',
+  sticker: 'STICKER',
+  position: 'POSITION',
 });
 
 const Message = mongoose.model(

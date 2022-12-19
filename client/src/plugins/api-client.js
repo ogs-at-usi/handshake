@@ -57,6 +57,38 @@ class ApiClient {
   }
 
   /**
+   * Create chat if it does not exist.
+   * @param chatId {string | null} The ID of the current chat
+   * @param otherId {string} The ID of the other user
+   * @returns {Promise<string>} The promise with the response
+   */
+  async createChatIfNotExist(chatId, otherId) {
+    if (chatId) {
+      return chatId;
+    }
+
+    const response = await this.createChat(otherId);
+    return response.data._id;
+  }
+
+  /**
+   * create a group with the logged user and the select user ids list given a title.
+   * @param group {Group} The group to create
+   */
+  createGroup(group) {
+    if (!group?.isGroup) {
+      console.error('group must be an instance of Group');
+      return;
+    }
+
+    const body = {
+      title: group.title,
+      membersId: group.members.map((m) => m._id),
+    };
+    return this.axiosInstance.post('/api/group', body);
+  }
+
+  /**
    * Create a message in a chat.
    * @param chatId {string} The ID of the chat
    * @param message {Message} The message to create
@@ -65,6 +97,18 @@ class ApiClient {
   sendMessage(chatId, message) {
     return this.axiosInstance.post(`/api/chats/${chatId}/messages`, {
       message,
+    });
+  }
+
+  /**
+   * Send a sticker in a chat.
+   * @param chatId {string} The ID of the chat
+   * @param sticker {string} The sticker to send
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  sendSticker(chatId, sticker) {
+    return this.axiosInstance.post(`/api/chats/${chatId}/stickers`, {
+      sticker,
     });
   }
 
@@ -87,6 +131,39 @@ class ApiClient {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+    });
+  }
+
+  /**
+   * Upload the profile picture of the logged user.
+   * @param file {File} The file to upload
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  async uploadProfilePicture(file) {
+    // before sending the file, it's best to refresh the token
+    // to avoid the token to expire while the file is being uploaded
+    await store.dispatch('refreshToken');
+    const formData = new FormData();
+    formData.append('avatar', file);
+    formData.append('type', 'avatar');
+    return this.axiosInstance.post('/upload/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
+
+  /**
+   * Send a position message in a chat
+   * @param chatId {string} the ID of the chat
+   * @param latitude {number} the latitude of the position
+   * @param longitude {number} the longitude of the position
+   * @returns {Promise<AxiosResponse<any>>} the response from the server
+   */
+  async sendPosition(chatId, latitude, longitude) {
+    return this.axiosInstance.post(`/api/chats/${chatId}/position`, {
+      latitude,
+      longitude,
     });
   }
 }

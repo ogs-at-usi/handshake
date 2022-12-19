@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getFilePath } from '@/utils';
+import { getFilePath } from '@/utils/message.utils';
 
 export default {
   name: 'ChatMessageImage.vue',

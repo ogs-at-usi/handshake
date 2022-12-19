@@ -1,1 +1,1 @@
-module.exports = require('../../public/js/classes/message');
+module.exports = require('../../client/src/classes/message');

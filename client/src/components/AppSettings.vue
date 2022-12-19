@@ -16,6 +16,11 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      <v-switch
+        class="ms-6"
+        :input-value="$store.state.allowNotifications"
+        @change="$store.commit('setNotifications', $event)"
+        label="Notifications"></v-switch>
       <v-list-group :value="false" no-action sub-group>
         <template #activator>
           <v-list-item-title>Themes</v-list-item-title>
@@ -31,6 +36,44 @@
           <v-list-item-title v-text="title"></v-list-item-title>
         </v-list-item>
       </v-list-group>
+      <v-dialog v-model="logout" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-list-item link v-bind="attrs" v-on="on">
+            <v-list-item-icon class="mx-4">
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item>
+        </template>
+
+        <v-card color="secondary">
+          <v-card-title class="text-h5 font-weight-bold"> Logout </v-card-title>
+
+          <v-card-text class="text--primary">
+            Are you sure you want to logout?
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn color="textPrimary" text @click="logout = false">
+              Cancel
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="textPrimary"
+              outlined
+              @click="
+                () => {
+                  this.logout = false;
+                  this.$store.commit('logout');
+                }
+              ">
+              Logout
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -41,12 +84,18 @@ export default {
   name: 'AppSettings',
   data() {
     return {
+      switch1: false,
       themes: [
         ['Dark blue', 'blue', themesObject.blue.primary],
         ['Vibe green', 'green', themesObject.green.primary],
         ['Cool orange', 'orange', themesObject.orange.primary],
         ['Warm pink', 'pink', themesObject.pink.primary],
+        ['Icy blue', 'ice', themesObject.ice.primary],
+        ['Fresh mint', 'mint', themesObject.mint.primary],
+        ['Soft peach', 'peach', themesObject.peach.primary],
+        ['Blooming rose', 'rose', themesObject.rose.primary],
       ],
+      logout: false,
     };
   },
   props: {
@@ -70,6 +119,9 @@ export default {
       this.$vuetify.theme.themes.light = themesObject[theme];
       this.$store.commit('setTheme', { theme });
     },
+  },
+  async created() {
+    await this.$store.restored;
   },
 };
 </script>
