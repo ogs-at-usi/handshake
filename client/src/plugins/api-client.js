@@ -152,6 +152,20 @@ class ApiClient {
       },
     });
   }
+
+  /**
+   * Send a position message in a chat
+   * @param chatId {string} the ID of the chat
+   * @param latitude {number} the latitude of the position
+   * @param longitude {number} the longitude of the position
+   * @returns {Promise<AxiosResponse<any>>} the response from the server
+   */
+  async sendPosition(chatId, latitude, longitude) {
+    return this.axiosInstance.post(`/api/chats/${chatId}/position`, {
+      latitude,
+      longitude,
+    });
+  }
 }
 
 export default {

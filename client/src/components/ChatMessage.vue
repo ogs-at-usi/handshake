@@ -33,6 +33,9 @@
         v-else-if="message.type === 'STICKER'"
         :sticker="message?.content"
         animate-on-click />
+      <ChatMessagePosition
+        v-else-if="message.type === 'POSITION'"
+        :message="message" />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
         <span class="text--secondary text-caption" v-if="selfClass === 'self'">
@@ -64,10 +67,12 @@ import ChatMessageVideo from '@/components/message/ChatMessageVideo';
 import ChatMessageAudio from '@/components/message/ChatMessageAudio';
 import ChatMessageFile from '@/components/message/ChatMessageFile';
 import StickerPlayer from '@/components/StickerPlayer';
+import ChatMessagePosition from '@/components/message/ChatMessagePosition';
 
 export default {
   name: 'ChatMessage',
   components: {
+    ChatMessagePosition,
     ChatMessageVideo,
     ChatMessageImage,
     ChatMessageText,

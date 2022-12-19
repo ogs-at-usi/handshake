@@ -79,7 +79,7 @@
 import vueCustomScrollbar from 'vue-custom-scrollbar';
 import ChatMessage from '@/components/ChatMessage';
 import 'vue-custom-scrollbar/dist/vueScrollbar.css';
-import FileUploader from '@/components/FileUploader';
+import FileUploader from '@/components/MessageAttach';
 import EmojiPicker from '@/components/EmojiPicker';
 import { Chat } from '@/classes/chat';
 import { Group } from '@/classes/group';

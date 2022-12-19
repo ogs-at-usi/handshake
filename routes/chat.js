@@ -184,4 +184,31 @@ router.post('/chats/:chatId/stickers', async function (req, res) {
   res.status(201).json(newMessage);
 });
 
+router.post('/chats/:chatId/position', async (req, res) => {
+  const chatId = req.params.chatId;
+  if (!ObjectId.isValid(chatId)) {
+    return res.status(400).end();
+  }
+
+  const { latitude, longitude } = req.body;
+  if (!latitude || !longitude) {
+    return res.status(400).end();
+  }
+
+  const newMessage = await saveMessage(
+    chatId,
+    req.userId,
+    `${latitude},${longitude}`,
+    'POSITION'
+  );
+
+  io.to(req.params.chatId).emit('messages:create', newMessage);
+
+  if (!newMessage) {
+    return res.status(404).end();
+  }
+
+  res.status(201).json(newMessage);
+});
+
 module.exports = router;
