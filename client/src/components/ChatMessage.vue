@@ -28,7 +28,9 @@
       <ChatMessageAudio
         v-else-if="message.type === 'AUDIO'"
         :message="message" />
-      <ChatMessageFile v-else-if="message.type === 'FILE'" :message="message" />
+      <ChatMessageFile
+        v-else-if="message.type === 'DOCUMENT'"
+        :message="message" />
       <StickerPlayer
         v-else-if="message.type === 'STICKER'"
         :sticker="message?.content"
