@@ -38,7 +38,7 @@ export default {
     };
   },
   created() {
-    const socket = io(':8888');
+    const socket = io();
     console.log('Trying to connect');
     this.$store.commit('setSocket', { socket });
 
