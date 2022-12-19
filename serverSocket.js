@@ -10,13 +10,13 @@ function init(server, onlineUsers) {
 
   async function getChats(userId) {
     let userChats = await UserChat.find({ user: ObjectId(userId) })
-      .populate({
-        path: 'chat',
-        populate: {
-          path: 'messages',
-        },
-      })
-      .exec();
+        .populate({
+          path: 'chat',
+          populate: {
+            path: 'messages',
+          },
+        })
+        .exec();
     if (!userChats) {
       return [];
     }
@@ -30,20 +30,20 @@ function init(server, onlineUsers) {
     let chats = userChats;
     // find all the users in each chat ad add it as a property 'members'
     chats = await Promise.all(
-      chats.map(async (chat) => {
-        const members = await UserChat.find({ chat: chat._id })
-          .populate('user')
-          .exec();
-        return {
-          ...chat._doc,
-          members: members.map((member) => {
-            return {
-              ...member.user._doc,
-              online: onlineUsers.has(member.user._id.toString()),
-            };
-          }),
-        };
-      })
+        chats.map(async (chat) => {
+          const members = await UserChat.find({ chat: chat._id })
+              .populate('user')
+              .exec();
+          return {
+            ...chat._doc,
+            members: members.map((member) => {
+              return {
+                ...member.user._doc,
+                online: onlineUsers.has(member.user._id.toString()),
+              };
+            }),
+          };
+        })
     );
 
     return chats;
@@ -56,8 +56,8 @@ function init(server, onlineUsers) {
     socket.join(socket.userId);
     const userChats = await getChats(socket.userId);
     joinRooms(
-      userChats.map((chat) => chat._id.toString()),
-      socket
+        userChats.map((chat) => chat._id.toString()),
+        socket
     );
     socket.emit('chats:read', userChats);
 

@@ -42,8 +42,8 @@
       <v-snackbar v-model="errors.video" absolute color="error darken-2" top>
         <v-icon left>mdi-alert-circle</v-icon>
         <span>
-          Could not enable the video, make sure that your camera is working.
-        </span>
+         Could not enable the video, make sure that your camera is working.
+       </span>
       </v-snackbar>
       <v-snackbar
         v-model="errors.microphone"
@@ -52,8 +52,8 @@
         top>
         <v-icon left>mdi-alert-circle</v-icon>
         <span>
-          Could not enable the audio, make sure that your microphone is working.
-        </span>
+         Could not enable the audio, make sure that your microphone is working.
+       </span>
       </v-snackbar>
       <v-toolbar
         absolute
@@ -126,8 +126,10 @@ export default {
 
       socket.emit('videochat:join', ...storeCall.eventData);
       myPeer.on('call', async (call) => {
-        this.myStream = await this.askMediaPermission();
+        // this.myStream = await this.askMediaPermission();
+
         call.answer(this.myStream);
+        call.answer();
         this.call = call;
         this.checkLag(call);
         call.on('stream', (userStream) => (this.otherStream = userStream));
@@ -215,6 +217,9 @@ export default {
       this.myStream?.getTracks()?.forEach((track) => {
         track?.stop();
       });
+      this.otherStream = null;
+      this.myStream = null;
+
 
     },
     checkLag(call) {
@@ -299,8 +304,8 @@ export default {
   grid-template-columns: 1fr 1fr;
   /*grid-template-rows: 1fr 1fr;*/
   grid-template-areas:
-    'myVideo-grid other-grid'
-    'button-bar button-bar';
+   'myVideo-grid other-grid'
+   'button-bar button-bar';
   height: 100vh;
   width: 100vw;
   background-color: #000;
