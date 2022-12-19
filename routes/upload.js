@@ -1,4 +1,5 @@
-const Path = require('path');
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
@@ -21,6 +22,7 @@ const REQUEST_FILE_NAMES = Object.freeze({
   video: 'video',
   audio: 'audio',
   file: 'file',
+  avatar: 'avatar',
 });
 
 const memoryStorage = multer.memoryStorage();
@@ -46,7 +48,7 @@ const multerUploads = Object.freeze({
   video: multer({
     storage: diskStorage(
       'videos',
-      (file) => Date.now() + Path.extname(file.originalname)
+      (file) => Date.now() + path.extname(file.originalname)
     ),
   }).single(REQUEST_FILE_NAMES.video),
 
@@ -63,14 +65,19 @@ const multerUploads = Object.freeze({
       limits: { fileSize: MAX_SIZES.file },
     }
   ).single(REQUEST_FILE_NAMES.file),
+
+  avatar: multer(
+    { storage: memoryStorage },
+    { limits: { fileSize: MAX_SIZES.image } }
+  ).single(REQUEST_FILE_NAMES.avatar),
 });
 
 const validateUpload = (req, res, next) => {
-  const { chatId } = req.body;
-  if (!chatId) {
+  const { chatId, type } = req.body;
+  if (type !== 'avatar' && !chatId) {
     return res.status(400).send('No chatId provided');
   }
-  if (!ObjectId.isValid(chatId)) {
+  if (!ObjectId.isValid(chatId) && type !== 'avatar') {
     return res.status(400).send('Invalid chatId');
   }
   if (!req.file) {
@@ -190,5 +197,56 @@ router.post(
     res.status(201);
   }
 );
+
+// const avupload = multer(
+//   {
+//     storage: SharpMulter({
+//       destination: (req, file, cb) => cb(null, './media/avatars/'),
+//       filename: (req, file, cb) => cb(null, req.userId + '.jpg'),
+//       imageOptions: {
+//         fileFormat: "jpg",
+//         quality: 80,
+//         resize: { width: 500, height: 500 },
+//       }
+//     })
+//   },
+// )
+
+// router.post(
+//   '/avatar',
+//   avupload.single("avatar"),
+//   async function (req, res) {
+//     console.log(req.file);
+//     res.send(req.file).status(201);
+//   }
+// );
+
+router.post(
+  '/avatar',
+  multerUploads.avatar,
+  validateUpload,
+  async function (req, res) {
+    try {
+      await sharp(req.file.buffer)
+        .flatten({ background: '#ffffff' })
+        .jpeg({ quality: 60 })
+        .toFile(`./media/avatars/${req.userId}.jpg`);
+    } catch (e) {
+      return res.status(500).end();
+    }
+    res.send(req.file);
+  }
+);
+
+router.get('/avatar/:id', async function (req, res) {
+  const id = req.params.id;
+  const avatarPath = './media/avatars/' + id + '.jpg';
+  const serverDir = path.join(__dirname, '../');
+  if (fs.existsSync(avatarPath)) {
+    res.sendFile(avatarPath, { root: serverDir });
+  } else {
+    res.sendFile('./public/icons/default_pfp.png', { root: serverDir });
+  }
+});
 
 module.exports = router;

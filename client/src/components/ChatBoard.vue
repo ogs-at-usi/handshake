@@ -84,6 +84,7 @@ import EmojiPicker from '@/components/EmojiPicker';
 import { Chat } from '@/classes/chat';
 import { Group } from '@/classes/group';
 import { Message } from '@/classes/message';
+import { userSeenMessage } from '@/utils/seen.utils';
 
 export default {
   name: 'ChatBoard',
@@ -189,9 +190,7 @@ export default {
       if (this.chat instanceof Group) {
         return 'icons/default_gc_pfp.png';
       } else {
-        // TODO: check if the user has an image with a axios HTTP request
-        // then if exist, return this.otherPrivateUser._id;
-        return 'icons/default_pfp.png';
+        return 'upload/avatar/' + this.otherPrivateUser._id;
       }
     },
     chatName() {
@@ -214,7 +213,16 @@ export default {
     },
     chat() {
       if (this.chat === null) return;
+
       // updates when you click on a new chat
+      if (this.chat.messages.length > 0) {
+        userSeenMessage(
+          this.$store.getters.socket,
+          this.$props.chat._id,
+          this.chat.messages[this.chat.messages.length - 1].deliveredAt
+        );
+      }
+
       this.$nextTick(() => {
         this.scrollDown();
         this.$refs.messagesInput.focus();

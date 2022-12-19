@@ -15,7 +15,7 @@
         style="height: 100vh !important">
         <v-list-item class="pt-2 secondary">
           <v-list-item-avatar>
-            <img alt="pfp" src="/icons/default_pfp.png" />
+            <ImageUploader />
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title class="font-weight-bold">{{
@@ -71,6 +71,7 @@ import UsersList from '@/components/UsersList';
 import AppSettings from '@/components/AppSettings';
 import GroupCreation from '@/components/GroupCreation';
 import vueCustomScrollbar from 'vue-custom-scrollbar';
+import ImageUploader from '@/components/ImageUploader';
 
 export default {
   name: 'AppMenu',
@@ -80,6 +81,7 @@ export default {
     UsersList,
     ChatList,
     vueCustomScrollbar,
+    ImageUploader,
   },
   data: function () {
     return {

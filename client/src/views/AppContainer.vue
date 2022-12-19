@@ -27,16 +27,20 @@ import AppMenu from '@/components/AppMenu';
 import ChatBoard from '@/components/ChatBoard';
 import { Chat } from '@/classes/chat';
 import { Group } from '@/classes/group';
+import { Message } from '@/classes/message';
 import { io } from 'socket.io-client';
-import Message from '@/classes/message';
 import VideoChat from '@/components/VideoChat.vue';
-import VideocallPopup from '@/components/VideocallPopup';
+import VideocallPopup from '@/components/Videocal';
+import {
+  askNotificationPermission,
+  sendNotification,
+} from '@/utils/notification.utils';
+import { userSeenMessage } from '@/utils/seen.utils';
 
 export default {
   name: 'AppContainer',
   data() {
     return {
-      dialog: false,
       chats: null,
     };
   },
@@ -50,6 +54,8 @@ export default {
       // TODO: change is_group to isGroup in Chat schema in db
       this.chats = chats.map((c) => (c.is_group ? new Group(c) : new Chat(c)));
     });
+
+    askNotificationPermission();
 
     socket.on('users:online', (userId) => {
       //  have no chats, no one online user we have a chat with
@@ -76,16 +82,41 @@ export default {
       message = new Message(message);
       const chatId = message.chat;
       const chat = this.chats.find((c) => c._id === chatId);
+      if (!chat) return;
       chat.messages.push(message);
       // move the chat to the top of the list
       this.chats = this.chats.filter((c) => c._id !== chatId);
       this.chats.unshift(chat);
 
       if (this.activeChat && this.activeChat._id === chatId) {
+        const lastMessageTime = message.deliveredAt;
+        userSeenMessage(socket, chatId, lastMessageTime);
+
         this.$nextTick(() => {
           this.$refs.chatBoard.scrollDown();
         });
+      } else {
+        const sender = chat.members.find((member) => {
+          return member._id.toString() === message.sender;
+        });
+        sendNotification(sender.name, message.content, (event) => {
+          this.activeChat = chat;
+          event.target.close();
+        });
       }
+    });
+
+    socket.on('messages:update:read', ({ chatId, lastMessageTime, userId }) => {
+      const chat = this.chats.find((chat) => chat._id === chatId);
+      chat.messages = chat.messages.map((message) => {
+        if (
+          new Date(message.deliveredAt) <= new Date(lastMessageTime) &&
+          message.seen.indexOf(userId) === -1
+        ) {
+          message.seen.push(userId);
+        }
+        return message;
+      });
     });
 
     /**
@@ -124,6 +155,7 @@ export default {
         }
         return false;
       });
+
       if (chat) {
         this.activeChat = chat;
       } else {

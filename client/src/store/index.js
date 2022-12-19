@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import localforage from 'localforage';
 import router from '../router';
+import { askNotificationPermission } from '@/utils/notification.utils';
 
 const vuexLocal = new VuexPersistence({
   storage: localforage,
@@ -11,6 +12,7 @@ const vuexLocal = new VuexPersistence({
     isLoggedIn: state.isLoggedIn,
     user: state.user,
     theme: state.theme,
+    allowNotifications: state.allowNotifications,
   }),
   asyncStorage: true,
 });
@@ -26,6 +28,7 @@ export default new Vuex.Store({
     theme: null,
     calling: null,
     popup: null,
+    allowNotifications: true,
   },
   getters: {
     isLoggedIn: (state) => state.isLoggedIn,
@@ -42,10 +45,11 @@ export default new Vuex.Store({
       state.isLoggedIn = true;
       state.user = user;
     },
-    logout(state) {
+    async logout(state) {
+      await router.push('/login').catch(() => {});
       state.isLoggedIn = false;
-      router.push('/login').catch(() => {});
       state.user = null;
+      state.activeChat = null;
       if (state.socket) state.socket.disconnect();
     },
     setSocket(state, { socket }) {
@@ -66,6 +70,12 @@ export default new Vuex.Store({
 
       state.popup = data;
 
+    },
+    setNotifications(state, allow) {
+      console.log(allow);
+      state.allowNotifications = allow || false;
+      askNotificationPermission();
+      console.log(state.allowNotifications);
     },
   },
   actions: {

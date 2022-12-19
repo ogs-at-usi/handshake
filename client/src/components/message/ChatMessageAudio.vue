@@ -4,7 +4,7 @@
 
 <script>
 import AudioPlayer from '@/components/AudioPlayer';
-import { getFilePath } from '@/utils';
+import { getFilePath } from '@/utils/message.utils';
 export default {
   name: 'ChatMessageAudio',
   components: { AudioPlayer },

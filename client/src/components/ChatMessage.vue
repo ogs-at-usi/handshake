@@ -35,6 +35,21 @@
         animate-on-click />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
+        <span class="text--secondary text-caption" v-if="selfClass === 'self'">
+          <v-icon
+            v-if="messageStatus === 'seen'"
+            class="ml-1"
+            small
+            color="success"
+            >mdi-check-all
+          </v-icon>
+          <v-icon v-if="messageStatus === 'delivered'" class="ml-1" small
+            >mdi-check-all</v-icon
+          >
+          <v-icon v-if="messageStatus === 'sent'" class="ml-1" small
+            >mdi-check</v-icon
+          >
+        </span>
       </v-card-actions>
     </v-card>
   </div>
@@ -42,7 +57,7 @@
 
 <script>
 import { Chat } from '@/classes/chat';
-import { formatTime } from '@/utils';
+import { formatTime } from '@/utils/message.utils';
 import ChatMessageText from '@/components/message/ChatMessageText';
 import ChatMessageImage from '@/components/message/ChatMessageImage';
 import ChatMessageVideo from '@/components/message/ChatMessageVideo';
@@ -108,6 +123,12 @@ export default {
         this.$props.message
       );
       return '';
+    },
+    messageStatus() {
+      if (this.$props.message.seen?.length > 1) return 'seen';
+      if (this.$props.message.deliveredAt !== null) return 'delivered';
+      if (this.$props.message.sentAt !== null) return 'sent';
+      return 'pending';
     },
   },
 };

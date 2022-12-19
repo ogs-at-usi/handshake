@@ -3,6 +3,7 @@ const { UserChat } = require('./models/userChat');
 const { Group } = require('./models/group');
 const { authMiddleware } = require('./middlewares/socket.middleware');
 const { ObjectId } = require('mongodb');
+const { Message } = require('./models/message');
 
 /**
  * Initialize the socket.io server
@@ -83,6 +84,31 @@ function init(server, onlineUsers) {
       socket
     );
     socket.emit('chats:read', userChats);
+
+    socket.on('messages:update:read', ({ chatId, lastMessageTime }) => {
+      console.log(chatId, lastMessageTime);
+      Message.updateMany(
+        {
+          seen: { $ne: ObjectId(socket.userId) },
+          deliveredAt: { $lte: new Date(lastMessageTime) },
+          chat: { $eq: ObjectId(chatId) },
+        },
+        {
+          $push: { seen: ObjectId(socket.userId) },
+        }
+      ).exec((error, success) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(success);
+        }
+      });
+      io.to(chatId).emit('messages:update:read', {
+        chatId,
+        lastMessageTime,
+        userId: socket.userId,
+      });
+    });
 
     onlineUsers.add(socket.userId);
     io.emit('users:online', socket.userId);
