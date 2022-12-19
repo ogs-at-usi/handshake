@@ -9,11 +9,9 @@ import vuetify from './plugins/vuetify';
 import VuePeerJS from 'vue-peerjs';
 import Peer from 'peerjs';
 
-
 Vue.use(apiClient, axios);
 Vue.use(VueAxios, axios);
-Vue.use(VuePeerJS, new Peer({
-}))
+Vue.use(VuePeerJS, new Peer({}));
 
 Vue.config.productionTip = false;
 

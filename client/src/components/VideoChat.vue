@@ -42,8 +42,8 @@
       <v-snackbar v-model="errors.video" absolute color="error darken-2" top>
         <v-icon left>mdi-alert-circle</v-icon>
         <span>
-         Could not enable the video, make sure that your camera is working.
-       </span>
+          Could not enable the video, make sure that your camera is working.
+        </span>
       </v-snackbar>
       <v-snackbar
         v-model="errors.microphone"
@@ -52,8 +52,8 @@
         top>
         <v-icon left>mdi-alert-circle</v-icon>
         <span>
-         Could not enable the audio, make sure that your microphone is working.
-       </span>
+          Could not enable the audio, make sure that your microphone is working.
+        </span>
       </v-snackbar>
       <v-toolbar
         absolute
@@ -134,14 +134,11 @@ export default {
         this.checkLag(call);
         call.on('stream', (userStream) => (this.otherStream = userStream));
         call.on('close', () => {
-
           this.quitCall();
           console.log('call closed with ' + call.peer);
-
         });
 
         console.log('call', call);
-
       });
 
       socket.on('videochat:joined', (userId) => {
@@ -169,34 +166,28 @@ export default {
       call.on('close', () => {
         this.quitCall();
         console.log('call closed with ' + call.peer);
-
       });
     },
     /**
      * function to toggle the webcam
      */
     toggleCamera() {
-      try{
+      try {
         this.myStream.getVideoTracks()[0].enabled = !this.camera;
         this.camera = !this.camera;
-
-      }
-      catch(e){
+      } catch (e) {
         this.errors.video = true;
       }
     },
     toggleMicrophone() {
       try {
-
         this.myStream.getAudioTracks()[0].enabled = !this.microphone;
         this.microphone = !this.microphone;
-
       } catch (e) {
         this.errors.microphone = true;
       }
     },
     quitCall() {
-
       this.dialog = false;
 
       this.$store.getters.socket.off('videochat:joined');
@@ -204,7 +195,6 @@ export default {
 
       this.$store.getters.socket.emit('videochat:quit');
       this.$store.commit('setCalling', null);
-
 
       if (this.call) {
         this.call.close();
@@ -219,8 +209,6 @@ export default {
       });
       this.otherStream = null;
       this.myStream = null;
-
-
     },
     checkLag(call) {
       let overTimes = 0;
@@ -275,13 +263,15 @@ export default {
     }
 
     await this.checkAvailableMedia();
-    this.myStream = await this.askMediaPermission().then (async (stream) => {
-      await this.initCall();
-      return stream;
-    }).catch((e) => {
-      console.log(e);
-      this.quitCall();
-    });
+    this.myStream = await this.askMediaPermission()
+      .then(async (stream) => {
+        await this.initCall();
+        return stream;
+      })
+      .catch((e) => {
+        console.log(e);
+        this.quitCall();
+      });
   },
 };
 </script>
@@ -304,8 +294,8 @@ export default {
   grid-template-columns: 1fr 1fr;
   /*grid-template-rows: 1fr 1fr;*/
   grid-template-areas:
-   'myVideo-grid other-grid'
-   'button-bar button-bar';
+    'myVideo-grid other-grid'
+    'button-bar button-bar';
   height: 100vh;
   width: 100vw;
   background-color: #000;

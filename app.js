@@ -28,7 +28,6 @@ app.use('/api', authenticate, require('./routes/chat'));
 app.use('/api', authenticate, require('./routes/group'));
 app.use('/upload', authenticate, require('./routes/upload'));
 
-
 // serve Vue app if no matching route is found
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));

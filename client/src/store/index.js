@@ -62,14 +62,11 @@ export default new Vuex.Store({
       state.theme = theme;
     },
     setCalling(state, data) {
-
       state.calling = data;
       console.log('setCalling', data);
     },
     setPopup(state, data) {
-
       state.popup = data;
-
     },
     setNotifications(state, allow) {
       console.log(allow);
@@ -112,7 +109,7 @@ export default new Vuex.Store({
         myName,
         eventData: [roomId, myPeer.id, myName],
       });
-      console.log("setCalling: ", roomId, myPeer.id, myName);
+      console.log('setCalling: ', roomId, myPeer.id, myName);
     },
   },
   modules: {},
