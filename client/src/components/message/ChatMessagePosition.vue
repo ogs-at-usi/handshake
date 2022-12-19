@@ -1,14 +1,12 @@
 <template>
-  <v-card color="primary" flat>
+  <v-card flat @click="openMaps">
     <v-img :src="mapSource">
-      <v-card-title class="background--text"> Position </v-card-title>
+      <v-card-title class="background--text">
+        Position
+        <v-spacer />
+        <v-icon color="background">mdi-open-in-new</v-icon>
+      </v-card-title>
     </v-img>
-    <v-card-actions>
-      <v-btn color="textPrimary" text @click="openMaps">
-        <v-icon color="textPrimary" left>mdi-map</v-icon>
-        Open in Maps
-      </v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 
