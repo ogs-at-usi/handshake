@@ -99,7 +99,11 @@ export default {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => resolve(position),
-            (positionError) => reject(positionError)
+            (positionError) => reject(positionError),
+            {
+              enableHighAccuracy: true,
+              timeout: 5000,
+            }
           );
         } else {
           alert('Your browser does not support geolocation');
