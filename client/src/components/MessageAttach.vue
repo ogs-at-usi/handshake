@@ -51,6 +51,9 @@
             type="file"
             @change="onFileChange($event, 'file')" />
         </v-list-item>
+        <v-list-item @click="sendPosition">
+          <v-list-item-title>Send position</v-list-item-title>
+        </v-list-item>
       </v-list-item-group>
     </v-list>
   </v-menu>
@@ -70,6 +73,15 @@ export default {
     };
   },
   methods: {
+    async getChatId() {
+      return (
+        this.chatId ??
+        (await this.$api.createChatIfNotExist(
+          this.chatId,
+          this.$store.getters.activeChat.members[0]._id
+        ))
+      );
+    },
     sendImage() {
       this.$refs.fileImage.click();
     },
@@ -82,15 +94,37 @@ export default {
     sendFile() {
       this.$refs.fileFile.click();
     },
+    getPosition() {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => resolve(position),
+            (positionError) => reject(positionError)
+          );
+        } else {
+          alert('Your browser does not support geolocation');
+          reject(new Error('support'));
+        }
+      });
+    },
+    async sendPosition() {
+      const chatId = await this.getChatId();
+      try {
+        const position = await this.getPosition();
+        console.log(position);
+        await this.$api.sendPosition(
+          chatId,
+          position.coords.latitude,
+          position.coords.longitude
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async onFileChange(e, type) {
       const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
-      const chatId =
-        this.chatId ??
-        (await this.$api.createChatIfNotExist(
-          this.chatId,
-          this.$store.getters.activeChat.members[0]._id
-        ));
+      const chatId = await this.getChatId();
       await this.$api.sendFile(chatId, files[0], type);
     },
   },
