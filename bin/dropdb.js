@@ -16,7 +16,7 @@ const readline = require('readline').createInterface({
 
 // ask for confirmation
 readline.question(
-  'Are you sure you want to drop the database? (y/n) ',
+  'Are you sure you want to drop the database? (y/N) ',
   async (answer) => {
     if (answer !== 'y') {
       console.log('Aborting');
