@@ -1,7 +1,7 @@
 <template>
   <v-card color="primary" flat>
     <v-img :src="mapSource">
-      <v-card-title class='background--text'> Position </v-card-title>
+      <v-card-title class="background--text"> Position </v-card-title>
     </v-img>
     <v-card-actions>
       <v-btn color="textPrimary" text @click="openMaps">
