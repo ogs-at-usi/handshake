@@ -18,6 +18,7 @@ async function saveMessage(chatId, userId, content, type) {
     chat: ObjectId(chatId),
     type,
     content,
+    seen: [ObjectId(userId)],
     sentAt: new Date(),
     deliveredAt: new Date(),
   });

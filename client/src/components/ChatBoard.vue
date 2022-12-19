@@ -84,6 +84,7 @@ import EmojiPicker from '@/components/EmojiPicker';
 import { Chat } from '@/classes/chat';
 import { Group } from '@/classes/group';
 import { Message } from '@/classes/message';
+import { userSeenMessage } from '@/utils/seen.utils';
 
 export default {
   name: 'ChatBoard',
@@ -209,7 +210,16 @@ export default {
     },
     chat() {
       if (this.chat === null) return;
+
       // updates when you click on a new chat
+      if (this.chat.messages.length > 0) {
+        userSeenMessage(
+          this.$store.getters.socket,
+          this.$props.chat._id,
+          this.chat.messages[this.chat.messages.length - 1].deliveredAt
+        );
+      }
+
       this.$nextTick(() => {
         this.scrollDown();
         this.$refs.messagesInput.focus();

@@ -16,6 +16,11 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      <v-switch
+        class="ms-6"
+        :input-value="$store.state.allowNotifications"
+        @change="$store.commit('setNotifications', $event)"
+        label="Notifications"></v-switch>
       <v-list-group :value="false" no-action sub-group>
         <template #activator>
           <v-list-item-title>Themes</v-list-item-title>
@@ -79,6 +84,7 @@ export default {
   name: 'AppSettings',
   data() {
     return {
+      switch1: false,
       themes: [
         ['Dark blue', 'blue', themesObject.blue.primary],
         ['Vibe green', 'green', themesObject.green.primary],
@@ -113,6 +119,9 @@ export default {
       this.$vuetify.theme.themes.light = themesObject[theme];
       this.$store.commit('setTheme', { theme });
     },
+  },
+  async created() {
+    await this.$store.restored;
   },
 };
 </script>
