@@ -135,6 +135,25 @@ class ApiClient {
   }
 
   /**
+   * Upload the profile picture of the logged user.
+   * @param file {File} The file to upload
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  async uploadProfilePicture(file) {
+    // before sending the file, it's best to refresh the token
+    // to avoid the token to expire while the file is being uploaded
+    await store.dispatch('refreshToken');
+    const formData = new FormData();
+    formData.append('avatar', file);
+    formData.append('type', 'avatar');
+    return this.axiosInstance.post('/upload/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
+
+  /**
    * Send a position message in a chat
    * @param chatId {string} the ID of the chat
    * @param latitude {number} the latitude of the position
