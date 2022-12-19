@@ -4,6 +4,7 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const { authenticate } = require('./middlewares/authentication.middleware');
+// const multer = require('multer');
 
 require('dotenv').config();
 
@@ -13,6 +14,7 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false })); // parse application/x-www.js-form-urlencoded
 app.use(express.json({ limit: '4MB' })); // parse application/json
 app.use(cookieParser());
+// app.use(multer().none());
 
 app.use(
   express.static(path.join(__dirname, 'public'), { index: 'index.html' })
@@ -23,6 +25,7 @@ app.set('view engine', 'html');
 // TODO - controllers
 app.use('/auth', require('./routes/auth'));
 app.use('/api', authenticate, require('./routes/chat'));
+app.use('/api', authenticate, require('./routes/group'));
 app.use('/upload', authenticate, require('./routes/upload'));
 
 

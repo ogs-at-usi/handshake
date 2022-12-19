@@ -82,10 +82,16 @@ export default {
     sendFile() {
       this.$refs.fileFile.click();
     },
-    onFileChange(e, type) {
+    async onFileChange(e, type) {
       const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
-      this.$api.sendFile(this.chatId, files[0], type);
+      const chatId =
+        this.chatId ??
+        (await this.$api.createChatIfNotExist(
+          this.chatId,
+          this.$store.getters.activeChat.members[0]._id
+        ));
+      await this.$api.sendFile(chatId, files[0], type);
     },
   },
 };

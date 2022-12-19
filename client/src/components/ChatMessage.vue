@@ -10,12 +10,15 @@
       style="height: fit-content"
       color="primary">
       <v-card-title
-        v-if="!isSelf && isGroup"
-        class="font-weight-regular subtitle-1 pa-3 pb-0"
-        >{{ senderName }}</v-card-title
-      >
+        v-if="isShowingMessageName"
+        class="font-weight-bold subtitle-1 pa-3 pt-2 pb-0">
+        {{ senderName }}
+      </v-card-title>
 
-      <ChatMessageText v-if="message.type === 'TEXT'" :message="message" />
+      <ChatMessageText
+        v-if="message.type === 'TEXT'"
+        :class="isShowingMessageName ? 'pt-0' : ''"
+        :message="message" />
       <ChatMessageImage
         v-else-if="message.type === 'IMAGE'"
         :message="message" />
@@ -25,7 +28,11 @@
       <ChatMessageAudio
         v-else-if="message.type === 'AUDIO'"
         :message="message" />
-      <ChatMessageFile v-else :message="message" />
+      <ChatMessageFile v-else-if="message.type === 'FILE'" :message="message" />
+      <StickerPlayer
+        v-else-if="message.type === 'STICKER'"
+        :sticker="message?.content"
+        animate-on-click />
       <v-card-actions class="justify-end pt-0">
         <span class="text--secondary text-caption">{{ timestamp }}</span>
       </v-card-actions>
@@ -34,13 +41,14 @@
 </template>
 
 <script>
-import Message from '@/classes/message';
+import { Chat } from '@/classes/chat';
 import { formatTime } from '@/utils';
 import ChatMessageText from '@/components/message/ChatMessageText';
 import ChatMessageImage from '@/components/message/ChatMessageImage';
 import ChatMessageVideo from '@/components/message/ChatMessageVideo';
 import ChatMessageAudio from '@/components/message/ChatMessageAudio';
 import ChatMessageFile from '@/components/message/ChatMessageFile';
+import StickerPlayer from '@/components/StickerPlayer';
 
 export default {
   name: 'ChatMessage',
@@ -50,6 +58,7 @@ export default {
     ChatMessageText,
     ChatMessageAudio,
     ChatMessageFile,
+    StickerPlayer,
   },
   data() {
     return {
@@ -58,21 +67,24 @@ export default {
   },
   props: {
     message: {
-      type: Message,
+      type: Object,
+      required: true,
+    },
+    chat: {
+      type: Chat,
       required: true,
     },
   },
+  methods: {},
   computed: {
+    isShowingMessageName() {
+      return this.chat.isGroup && !this.isSelf;
+    },
     maxChars() {
       return 500;
     },
     isSelf() {
       return this.$props.message.sender === this.$store.getters.user._id;
-    },
-    isGroup() {
-      // TODO: M3 pass also the chat class
-      // this.$props.chat instanceof Group
-      return null;
     },
     selfClass() {
       return this.isSelf ? 'self' : '';
@@ -84,7 +96,13 @@ export default {
       return formatTime(time);
     },
     senderName() {
-      if (this.isGroup) return null; // this.$props.chat.title;
+      if (this.$props.chat.isGroup) {
+        const sender = this.$props.chat.members.find(
+          (member) => member._id === this.$props.message.sender
+        );
+        return sender.name;
+      }
+
       console.error(
         'this function should never be reached',
         this.$props.message

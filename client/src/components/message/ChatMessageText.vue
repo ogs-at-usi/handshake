@@ -11,14 +11,13 @@
 </template>
 
 <script>
-import Message from '@/classes/message';
 const MAX_CHARS = 500;
 
 export default {
   name: 'ChatMessageText',
   props: {
     message: {
-      type: Message,
+      type: Object,
       required: true,
     },
   },

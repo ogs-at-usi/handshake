@@ -8,7 +8,9 @@
         <div
           class="primary d-flex flex-row justify-space-between align-center pa-3">
           <h1 class="white--text">HandShake</h1>
-          <router-link style='text-decoration:none!important' to='/about'><v-btn color="white" outlined>About us</v-btn></router-link>
+          <router-link style="text-decoration: none !important" to="/about"
+            ><v-btn color="white" outlined>About us</v-btn></router-link
+          >
         </div>
         <router-view class="background"></router-view>
         <footer class="d-flex justify-center align-center pa-3">
@@ -119,6 +121,12 @@ h4 {
 .v-main .v-input * {
   color: var(--v-textPrimary-base) !important;
 }
+
+.v-text-field__slot label {
+  color: var(--v-textPrimary-base) !important;
+  filter: brightness(0.5);
+}
+
 .v-main .v-messages__message,
 .v-application .error--text {
   color: var(--v-error-base) !important;

@@ -57,6 +57,38 @@ class ApiClient {
   }
 
   /**
+   * Create chat if it does not exist.
+   * @param chatId {string | null} The ID of the current chat
+   * @param otherId {string} The ID of the other user
+   * @returns {Promise<string>} The promise with the response
+   */
+  async createChatIfNotExist(chatId, otherId) {
+    if (chatId) {
+      return chatId;
+    }
+
+    const response = await this.createChat(otherId);
+    return response.data._id;
+  }
+
+  /**
+   * create a group with the logged user and the select user ids list given a title.
+   * @param group {Group} The group to create
+   */
+  createGroup(group) {
+    if (!group?.isGroup) {
+      console.error('group must be an instance of Group');
+      return;
+    }
+
+    const body = {
+      title: group.title,
+      membersId: group.members.map((m) => m._id),
+    };
+    return this.axiosInstance.post('/api/group', body);
+  }
+
+  /**
    * Create a message in a chat.
    * @param chatId {string} The ID of the chat
    * @param message {Message} The message to create
@@ -65,6 +97,18 @@ class ApiClient {
   sendMessage(chatId, message) {
     return this.axiosInstance.post(`/api/chats/${chatId}/messages`, {
       message,
+    });
+  }
+
+  /**
+   * Send a sticker in a chat.
+   * @param chatId {string} The ID of the chat
+   * @param sticker {string} The sticker to send
+   * @returns {Promise<AxiosResponse<any>>} The promise with the response
+   */
+  sendSticker(chatId, sticker) {
+    return this.axiosInstance.post(`/api/chats/${chatId}/stickers`, {
+      sticker,
     });
   }
 
