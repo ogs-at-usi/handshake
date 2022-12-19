@@ -101,6 +101,7 @@ router.post('/signup', async (req, res) => {
   const { email, username, password } = req.body;
   if (!email || !username || !password) {
     return res.status(400).json({
+      password: 'Email, username and password are required',
       message: 'Email, username and password are required',
     });
   }
@@ -114,6 +115,7 @@ router.post('/signup', async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
+        username: 'Something went wrong',
         message: 'Something went wrong',
       });
     }
@@ -123,6 +125,7 @@ router.post('/signup', async (req, res) => {
     });
   } catch (e) {
     return res.status(400).json({
+      email: 'Username or email already taken',
       message: 'Username or email already taken',
     });
   }
