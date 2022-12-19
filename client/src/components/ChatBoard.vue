@@ -5,7 +5,7 @@
     class="w-100 pa-0 d-flex flex-column"
     fluid
     style="height: 100vh; overflow: hidden">
-    <!-- image & name of the chat: other user image or group image -->
+    <!-- image & name of the chat:her user image or group image -->
     <v-toolbar
       class="flex-shrink-1 elevation-3"
       style="z-index: 10"
