@@ -50,8 +50,10 @@ router.post('/chats', async function (req, res) {
   const userChat = userChatRelations.map((ucr) => ucr.chat);
 
   // find the chat between the two users
-  const commonChats = otherUserChat.filter((ouc) =>
-    !ouc.is_group && userChat.some((uc) => uc._id.toString() === ouc._id.toString())
+  const commonChats = otherUserChat.filter(
+    (ouc) =>
+      !ouc.is_group &&
+      userChat.some((uc) => uc._id.toString() === ouc._id.toString())
   );
 
   if (commonChats.length > 0) {
