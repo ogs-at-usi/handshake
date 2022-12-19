@@ -3,7 +3,7 @@
     <template v-slot:default="{ active }">
       <!-- image of the other user or group chat -->
       <v-list-item-avatar class="mr-0">
-        <img alt="pfp" class="pfp" src="/icons/default_pfp.png" />
+        <img :src="`/upload/avatar/${user._id}`" alt="pfp" class="pfp" />
       </v-list-item-avatar>
 
       <!-- name of the other user or group chat -->
