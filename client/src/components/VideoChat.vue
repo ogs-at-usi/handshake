@@ -25,7 +25,7 @@
         ref="you"
         :aspect-ratio="16 / 9"
         :src-object.prop.camel="myStream"
-        class="elevation-7"
+        class="elevation-7 myVideo"
         muted
         src="/icons/default_pfp.png"
         width="300px"
@@ -289,36 +289,22 @@ export default {
   right: 32px;
 }
 
-.video-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  /*grid-template-rows: 1fr 1fr;*/
-  grid-template-areas:
-    'myVideo-grid other-grid'
-    'button-bar button-bar';
-  height: 100vh;
-  width: 100vw;
-  background-color: #000;
-}
-
-.myVideo-grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  height: 100%;
-  width: 100%;
-}
-
 .myVideo {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+  margin-bottom: 72px;
 }
-
-.videoOther {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+@media only screen and (max-width: 1000px) {
+  .myVideo {
+    width: 200px !important;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .myVideo {
+    width: 150px !important;
+  }
+  .floatingbar {
+    width: 100% !important;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
 }
 </style>
