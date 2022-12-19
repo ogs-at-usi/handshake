@@ -20,7 +20,6 @@ app.use(
   express.static(path.join(__dirname, 'public'), { index: 'index.html' })
 );
 app.use('/media', express.static(path.join(__dirname, 'media')));
-
 app.set('view engine', 'html');
 
 // TODO - controllers

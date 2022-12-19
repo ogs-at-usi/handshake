@@ -3,17 +3,22 @@
     class="overflow-hidden pa-0 d-flex flex-row justify-start h-100 w-100 background"
     fluid
     style="max-width: 1450px; position: relative">
-    <!-- content for the left hand side of the app main page -->
-    <!-- about profile contact and image, search bar and contact chat list -->
+    <VideocallPopup
+      v-if="this.$store.getters.popup != null"
+      id="videocallPopup" />
+
     <AppMenu
       v-if="!($store.getters.isMobile && activeChat !== null)"
       class="col-12 col-sm-5 col-md-4 col-lg-4"
       :chats="chats"
       @userSelected="userSelected($event)"
       @createGroup="createGroup($event)" />
-    <!-- content for the right hand side of the app main page -->
-    <!-- chat board containing the chat header, messages and input bar -->
-    <ChatBoard ref="chatBoard" :chat="activeChat" class="flex-grow-1" />
+    <VideoChat v-if="this.$store.getters.calling != null"> </VideoChat>
+    <ChatBoard
+      v-else
+      ref="chatBoard"
+      :chat="activeChat"
+      class="flex-grow-1"></ChatBoard>
   </v-container>
 </template>
 
@@ -24,6 +29,8 @@ import { Chat } from '@/classes/chat';
 import { Group } from '@/classes/group';
 import { Message } from '@/classes/message';
 import { io } from 'socket.io-client';
+import VideoChat from '@/components/VideoChat.vue';
+import VideocallPopup from '@/components/VideocallPopup.vue';
 import {
   askNotificationPermission,
   sendNotification,
@@ -129,6 +136,11 @@ export default {
         this.activeChat = chat;
       }
     });
+
+    socket.on('videochat:notify', (chatName, roomId) => {
+      console.log('popup!');
+      this.$store.commit('setPopup', { chatName: chatName, roomId: roomId });
+    });
   },
   methods: {
     userSelected(otherUser) {
@@ -164,10 +176,15 @@ export default {
       },
     },
   },
-  components: { AppMenu, ChatBoard },
+  components: { VideocallPopup, AppMenu, ChatBoard, VideoChat },
 };
 </script>
 
 <style scoped>
-/* put div as flex */
+#videocallPopup {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  z-index: 100;
+}
 </style>

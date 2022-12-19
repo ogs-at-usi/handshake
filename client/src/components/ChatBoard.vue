@@ -5,7 +5,7 @@
     class="w-100 pa-0 d-flex flex-column"
     fluid
     style="height: 100vh; overflow: hidden">
-    <!-- image & name of the chat: other user image or group image -->
+    <!-- image & name of the chat:her user image or group image -->
     <v-toolbar
       class="flex-shrink-1 elevation-3"
       style="z-index: 10"
@@ -14,7 +14,7 @@
       color="secondary">
       <v-app-bar-nav-icon
         class="me-3 d-block d-sm-none"
-        @click="$store.commit('setActiveChat', { chat: null })">
+        @click="$store.commit('setActiveChat', { chat: this.$props.chat._id })">
         <v-icon>mdi-arrow-left</v-icon>
       </v-app-bar-nav-icon>
       <v-avatar>
@@ -29,7 +29,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn class="me-2" icon>
+      <v-btn v-if="!this.chat.isGroup" class="me-2" icon @click="call()">
         <v-icon>mdi-video</v-icon>
       </v-btn>
       <v-btn icon>
@@ -92,6 +92,8 @@ export default {
   data() {
     return {
       messageString: '',
+      showPopup: false,
+      buttonState: true,
       typingTimeout: null,
     };
   },
@@ -143,6 +145,9 @@ export default {
         alert('Could not send the message. Check your internet connection');
         console.error(err);
       }
+    },
+    call() {
+      this.$store.dispatch('call', this.$props.chat._id);
     },
   },
   created() {
@@ -224,6 +229,7 @@ export default {
       });
     },
   },
+  mounted() {},
 };
 </script>
 

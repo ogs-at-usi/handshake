@@ -115,6 +115,7 @@ function init(server, onlineUsers) {
 
     socket.on('disconnect', () => {
       console.log('⛔User disconnected with id ' + socket.id);
+
       onlineUsers.delete(socket.userId);
       io.emit('users:offline', socket.userId);
     });
@@ -127,6 +128,32 @@ function init(server, onlineUsers) {
     socket.on('user:notTyping', (data) => {
       const { chatId } = data;
       io.to(chatId).emit('user:notTyping', { chatId, userId: socket.userId });
+    });
+
+    socket.on('videochat:join', async (roomId, userId, chatName) => {
+      const newRoom = 'videocall_' + roomId;
+      socket.join(newRoom);
+      const sockets = await io.to(newRoom).fetchSockets();
+      if (sockets.length === 1) {
+        socket.broadcast.to(roomId).emit('videochat:notify', chatName, roomId);
+      }
+      socket.broadcast.to(newRoom).emit('videochat:joined', userId, roomId);
+
+      socket.on('disconnect', () => {
+        socket.leave(newRoom);
+        socket.broadcast.to(newRoom).emit('videochat:left', userId);
+      });
+
+      socket.on('videochat:quit', () => {
+        // socket.broadcast.to(newRoom).emit('videochat:left');
+
+        socket.leave(newRoom);
+        io.to(newRoom).emit('videochat:left');
+        // print all the sockets in the room
+        console.log(io.sockets.adapter.rooms.get(newRoom));
+        console.log('leave-room: ', newRoom);
+        console.log(io.sockets.adapter.sids.get(socket.id));
+      });
     });
   });
 }
