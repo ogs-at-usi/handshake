@@ -97,7 +97,9 @@ function init(server, onlineUsers) {
 
       socket.on('videochat:quit', () => {
         // socket.broadcast.to(newRoom).emit('videochat:left');
+
         socket.leave(newRoom);
+        io.to(newRoom).emit('videochat:left');
         // print all the sockets in the room
         console.log(io.sockets.adapter.rooms.get(newRoom));
         console.log('leave-room: ', newRoom);
