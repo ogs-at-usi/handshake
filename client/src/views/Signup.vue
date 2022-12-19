@@ -50,8 +50,9 @@
             required
             type="password"></v-text-field>
         </v-card-text>
-        <v-card-actions class="justify-center">
+        <v-card-actions class="justify-center d-flex flex-column gap-3">
           <v-btn color="primary" large type="submit">Sign Up</v-btn>
+          <span>Already have an account? <router-link to='/login'>Login</router-link></span>
         </v-card-actions>
       </v-form>
     </v-card>
