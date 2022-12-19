@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Path = require('path');
+const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
@@ -49,7 +49,7 @@ const multerUploads = Object.freeze({
   video: multer({
     storage: diskStorage(
       'videos',
-      (file) => Date.now() + Path.extname(file.originalname)
+      (file) => Date.now() + path.extname(file.originalname)
     ),
   }).single(REQUEST_FILE_NAMES.video),
 
@@ -67,22 +67,15 @@ const multerUploads = Object.freeze({
     }
   ).single(REQUEST_FILE_NAMES.file),
 
-  avatar: multer({
-    storage: SharpMulter({
-      destination: (req, file, cb) => cb(null, './media/avatars/'),
-      filename: (req, file, cb) => cb(null, req.userId + '.jpg'),
-      imageOptions: {
-        fileFormat: 'jpg',
-        quality: 80,
-        resize: { width: 500, height: 500 },
-      },
-    }),
-  }).single(REQUEST_FILE_NAMES.avatar),
+  avatar: multer(
+    { storage: memoryStorage },
+    { limits: { fileSize: MAX_SIZES.image } }
+  ).single(REQUEST_FILE_NAMES.avatar),
 });
 
 const validateUpload = (req, res, next) => {
   const { chatId, type } = req.body;
-  if (!chatId && type !== 'avatar') {
+  if (type !== 'avatar' && !chatId) {
     return res.status(400).send('No chatId provided');
   }
   if (!ObjectId.isValid(chatId) && type !== 'avatar') {
@@ -234,18 +227,26 @@ router.post(
   multerUploads.avatar,
   validateUpload,
   async function (req, res) {
-    console.log(req.file);
+    try {
+      await sharp(req.file.buffer)
+        .flatten({ background: '#ffffff' })
+        .jpeg({ quality: 60 })
+        .toFile(`./media/avatars/${req.userId}.jpg`);
+    } catch (e) {
+      return res.status(500).end();
+    }
     res.send(req.file);
   }
 );
 
 router.get('/avatar/:id', async function (req, res) {
   const id = req.params.id;
-  const path = './media/avatars/' + id + '.jpg';
-  if (fs.existsSync(path)) {
-    res.sendFile(path);
+  const avatarPath = './media/avatars/' + id + '.jpg';
+  const serverDir = path.join(__dirname, '../');
+  if (fs.existsSync(avatarPath)) {
+    res.sendFile(avatarPath, { root: serverDir });
   } else {
-    res.sendFile('./public/icons/default_pfp.png');
+    res.sendFile('./public/icons/default_pfp.png', { root: serverDir });
   }
 });
 
