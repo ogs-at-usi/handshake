@@ -195,6 +195,8 @@ export default {
     },
     quitCall() {
 
+      this.dialog = false;
+
       this.$store.getters.socket.off('videochat:joined');
       this.$store.getters.socket.off('videochat:left');
 
@@ -202,6 +204,10 @@ export default {
       this.$store.commit('setCalling', null);
 
 
+      if (this.call) {
+        this.call.close();
+        this.call = null;
+      }
       clearInterval(this.lagInterval);
       this.otherStream?.getTracks()?.forEach((track) => {
         track?.stop();
@@ -209,10 +215,6 @@ export default {
       this.myStream?.getTracks()?.forEach((track) => {
         track?.stop();
       });
-      // this.call?.close()/;
-
-      this.call.close();
-      this.call = null;
 
     },
     checkLag(call) {
@@ -268,8 +270,13 @@ export default {
     }
 
     await this.checkAvailableMedia();
-    this.myStream = await this.askMediaPermission();
-    await this.initCall();
+    this.myStream = await this.askMediaPermission().then (async (stream) => {
+      await this.initCall();
+      return stream;
+    }).catch((e) => {
+      console.log(e);
+      this.quitCall();
+    });
   },
 };
 </script>

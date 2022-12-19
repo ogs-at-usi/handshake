@@ -103,6 +103,7 @@ export default new Vuex.Store({
         myName,
         eventData: [roomId, myPeer.id, myName],
       });
+      console.log("setCalling: ", roomId, myPeer.id, myName);
     },
   },
   modules: {},
