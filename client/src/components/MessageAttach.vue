@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  name: 'FileUploader',
+  name: 'MessageAttach',
   props: {
     chatId: {
       type: String,
