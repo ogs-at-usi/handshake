@@ -30,7 +30,7 @@ import { Group } from '@/classes/group';
 import { Message } from '@/classes/message';
 import { io } from 'socket.io-client';
 import VideoChat from '@/components/VideoChat.vue';
-import VideocallPopup from '@/components/Videocal';
+import VideocallPopup from '@/components/VideocallPopup.vue';
 import {
   askNotificationPermission,
   sendNotification,
@@ -181,9 +181,6 @@ export default {
 </script>
 
 <style scoped>
->>> .v-dialog {
-  overflow-y: visible;
-}
 #videocallPopup {
   position: absolute;
   bottom: 32px;

@@ -29,7 +29,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn class="me-2" icon @click="call()">
+      <v-btn v-if="!this.chat.isGroup" class="me-2" icon @click="call()">
         <v-icon>mdi-video</v-icon>
       </v-btn>
       <v-btn icon>
