@@ -133,7 +133,7 @@ export default {
       this.paused = this.playing = false;
     },
     init: function () {
-      this.audio.volume = 0.1;
+      this.audio.volume = 1;
       this.audio.addEventListener('timeupdate', this._handlePlayingUI);
       this.audio.addEventListener('loadeddata', this._handleLoaded);
       this.audio.addEventListener('pause', this._handlePlayPause);
