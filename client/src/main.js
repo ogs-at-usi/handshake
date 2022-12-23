@@ -13,9 +13,16 @@ import VueGtag from 'vue-gtag';
 Vue.use(apiClient, axios);
 Vue.use(VueAxios, axios);
 Vue.use(VuePeerJS, new Peer({}));
-Vue.use(VueGtag, {
-  config: { id: 'G-HB1WBXH9CV' },
-})
+Vue.use(
+  VueGtag,
+  {
+    config: { id: 'G-HB1WBXH9CV' },
+    onReady: () => {
+      console.log('Google Analytics is ready');
+    },
+  },
+  router
+);
 
 Vue.config.productionTip = false;
 
