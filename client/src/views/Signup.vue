@@ -87,6 +87,9 @@ export default {
       this.$api
         .signup(this.email, this.username, this.password)
         .then(() => {
+          this.$gtag.event('sign_up', {
+            method: 'password',
+          });
           this.$router.push('/login');
         })
         .catch((err) => {
