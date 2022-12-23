@@ -59,6 +59,10 @@ export default {
           this.chatId,
           this.$store.getters.activeChat.members[0]._id
         ));
+      this.$gtag.event('message', {
+        type: 'sticker',
+        sticker: stickerName,
+      });
       await this.$api.sendSticker(newChatId, stickerName);
     },
   },
