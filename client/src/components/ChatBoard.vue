@@ -138,6 +138,7 @@ export default {
           this.chat.members[0]._id
         );
 
+        this.$gtag.event('message', { type: 'text' });
         await this.$api.sendMessage(chatId, msg);
         // after sending it we reset the message box and scroll down
         this.messageString = '';

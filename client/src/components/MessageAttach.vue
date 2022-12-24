@@ -116,6 +116,9 @@ export default {
       try {
         const position = await this.getPosition();
         console.log(position);
+        this.$gtag.event('message', {
+          type: 'position',
+        });
         await this.$api.sendPosition(
           chatId,
           position.coords.latitude,
@@ -129,6 +132,9 @@ export default {
       const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       const chatId = await this.getChatId();
+      this.$gtag.event('message', {
+        type,
+      });
       await this.$api.sendFile(chatId, files[0], type);
     },
   },

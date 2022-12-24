@@ -62,6 +62,7 @@ export default {
           username: this.username,
           password: this.password,
         });
+        this.$gtag.event('login', { method: 'password' });
         await this.$router.push('/');
       } catch (err) {
         this.errors = err.response.data.message;
