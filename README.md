@@ -27,7 +27,8 @@ HandShake
     - Read / received status
     - A message can be:
       - Plain text
-      - File (images formats, video formats, .txt, .zip)
+      - File (image, video, audio, files of other formats)
+      - Sticker
       - Game (future update)
 5. The chat has these properties:
     - Single chat or group chat
@@ -36,7 +37,10 @@ HandShake
 7. Videocall your friends in real time
 
 ### Future features
-- Game (single / multiplayer)
+- Games (single / multiplayer)
 - End-To-End encryption
 - Add user status / groupchat info
 - Custom themes
+
+## Acknowledgements
+Stickers created by [WestActon.2D](https://lottiefiles.com/dxk7htkd95) on LottieFiles.
