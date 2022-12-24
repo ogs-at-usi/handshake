@@ -30,8 +30,8 @@ HandShake
       - File (images formats, video formats, .txt, .zip)
       - Game (future update)
 5. The chat has these properties:
-  - Single chat or group chat
-  - File upload
+    - Single chat or group chat
+    - File upload
 6. Customize the website by picking from 8 colorful themes
 7. Videocall your friends in real time
 
